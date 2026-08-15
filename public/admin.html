@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة الإدارة - مدرسة الوطن</title>
+<style>
+  :root{--ink:#1B2126;--ink-soft:#3A434B;--paper:#F6F3EC;--paper-dim:#EDE8DB;--route:#E9B93E;--olive:#4F6F52;--olive-soft:#E4EAE2;--rust:#B3492B;--rust-soft:#F3E0D8;--line:rgba(27,33,38,.14);}
+  *{box-sizing:border-box;}
+  body{font-family:'Tajawal',Arial,sans-serif;background:var(--paper);color:var(--ink);margin:0;padding:0 0 40px 0;}
+  .navbar{background:var(--ink);padding:14px 20px;display:flex;gap:18px;align-items:center;flex-wrap:wrap;}
+  .navbar a{color:var(--paper);text-decoration:none;font-size:14px;font-weight:700;}
+  .navbar a:hover{color:var(--route);}
+  .navbar .brand{color:var(--route);font-size:16px;font-weight:800;margin-left:auto;}
+  .container{max-width:950px;margin:0 auto;padding:0 18px;}
+  .hero{background:var(--ink);color:var(--paper);border-radius:0 0 20px 20px;padding:26px 24px;margin-bottom:24px;}
+  .hero .title{font-size:22px;font-weight:800;}
+  .hero .sub{font-size:13px;color:var(--route);margin-top:4px;}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:10px;}
+  @media(max-width:700px){.stats{grid-template-columns:1fr 1fr;}}
+  .stat{background:#fff;border:1px solid var(--line);border-radius:13px;padding:18px 14px;text-align:center;}
+  .stat .value{font-size:26px;font-weight:800;}
+  .stat .label{font-size:12px;color:var(--ink-soft);margin-top:4px;}
+  h2{font-size:17px;margin:28px 0 12px 0;font-weight:800;}
+  table{width:100%;border-collapse:collapse;background:#fff;border-radius:13px;overflow:hidden;font-size:13.5px;border:1px solid var(--line);}
+  th,td{padding:13px 15px;text-align:right;border-bottom:1px solid var(--line);}
+  th{background:var(--paper-dim);font-weight:700;font-size:12px;color:var(--ink-soft);}
+  tr:last-child td{border-bottom:none;}
+  .pill{font-size:11px;font-weight:700;padding:5px 11px;border-radius:20px;display:inline-block;}
+  .pill-review{background:var(--rust-soft);color:var(--rust);}
+  .pill-answered{background:var(--olive-soft);color:var(--olive);}
+  .mark-btn{background:var(--olive);color:#fff;border:none;border-radius:7px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
+  .empty{color:var(--ink-soft);font-size:14px;padding:20px;text-align:center;background:#fff;border:1px solid var(--line);border-radius:13px;}
+  .avail-card{background:#fff;border:1px solid var(--line);border-radius:13px;padding:18px;margin-bottom:12px;}
+  .avail-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+  .avail-name{font-weight:700;font-size:15px;}
+  .avail-days{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+  .day-chip{font-size:11.5px;padding:6px 12px;border-radius:20px;font-weight:700;}
+  .day-chip.on{background:var(--olive-soft);color:var(--olive);}
+  .day-chip.off{background:var(--paper-dim);color:var(--ink-soft);opacity:.5;}
+  .avail-time{font-size:13px;color:var(--ink-soft);}
+</style>
+</head>
+<body>
+
+<div class="navbar">
+  <a href="/">الرئيسية</a>
+  <a href="/login.html">دخول الطالب</a>
+  <a href="/dashboard.html">حسابي</a>
+  <a href="/admin.html">الإدارة</a>
+  <span class="brand">🚗 مدرسة الوطن</span>
+</div>
+
+<div class="hero">
+  <div class="title">لوحة تحكم الإدارة</div>
+  <div class="sub">مدرسة الوطن لتعليم القيادة</div>
+</div>
+
+<div class="container">
+  <div class="stats">
+    <div class="stat"><div class="value" id="statStudents">0</div><div class="label">طالب مسجل</div></div>
+    <div class="stat"><div class="value" id="statBookings">0</div><div class="label">حجز إجمالي</div></div>
+    <div class="stat"><div class="value" id="statTeachers">0</div><div class="label">معلم</div></div>
+    <div class="stat"><div class="value" id="statIncome">0 ₪</div><div class="label">الدخل الإجمالي</div></div>
+  </div>
+
+  <h2>الطلاب</h2>
+  <div id="studentsTable">جاري التحميل...</div>
+
+  <h2>الحجوزات</h2>
+  <div id="bookingsTable">جاري التحميل...</div>
+
+  <h2>المعلمون</h2>
+  <div id="teachersTable">جاري التحميل...</div>
+
+  <h2>أوقات تفرغ المعلمين</h2>
+  <div id="availabilityTable">جاري التحميل...</div>
+
+  <h2>الشكاوى</h2>
+  <div id="complaintsTable">جاري التحميل...</div>
+</div>
+
+<script>
+const typeNames = { automatic: 'أوتوماتيك', manual: 'جير', heavy: 'شحن خفيف' };
+const subjectNames = { teacher: 'ملاحظة عن المعلم', schedule: 'مشكلة بالمواعيد', payment: 'مشكلة بالدفع', other: 'شي تاني' };
+const dayNames = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+
+const ADMIN_PASSWORD = 'alwatan2026';
+let isAdmin = sessionStorage.getItem('adminAuth') === 'yes';
+
+if (!isAdmin) {
+  const pass = prompt('أدخل كلمة سر الإدارة:');
+  if (pass === ADMIN_PASSWORD) {
+    sessionStorage.setItem('adminAuth', 'yes');
+    isAdmin = true;
+  } else {
+    alert('كلمة السر غير صحيحة');
+    document.body.innerHTML = '<h2 style="text-align:center;margin-top:100px">غير مصرح لك بالدخول</h2>';
+    window.location.href = '/';
+  }
+}
+
+async function loadAll() {
+  const [studentsRes, bookingsRes, teachersRes, complaintsRes, availRes] = await Promise.all([
+    fetch('/api/students'), fetch('/api/bookings'), fetch('/api/teachers'),
+    fetch('/api/complaints'), fetch('/api/availability')
+  ]);
+
+  const students = await studentsRes.json();
+  const bookings = await bookingsRes.json();
+  const teachers = await teachersRes.json();
+  const complaints = await complaintsRes.json();
+  const avail = await availRes.json();
+
+  document.getElementById('statStudents').textContent = students.length;
+  document.getElementById('statBookings').textContent = bookings.length;
+  document.getElementById('statTeachers').textContent = teachers.length;
+  document.getElementById('statIncome').textContent = bookings.reduce((s,b) => s+b.price, 0) + ' ₪';
+
+  document.getElementById('studentsTable').innerHTML = students.length === 0
+    ? '<div class="empty">ما في طلاب مسجلين</div>'
+    : `<table><thead><tr><th>الاسم</th><th>الموبايل</th><th>نوع الرخصة</th><th>موعد التيست</th><th></th></tr></thead>
+       <tbody>${students.map(s => `<tr><td>${s.name}</td><td>${s.phone}</td><td>${typeNames[s.license_type]}</td><td>${s.test_date || '—'}</td><td><button class="mark-btn" onclick="setTestDate(${s.id})">تحديد موعد</button></td></tr>`).join('')}</tbody></table>`;
+
+  document.getElementById('bookingsTable').innerHTML = bookings.length === 0
+    ? '<div class="empty">ما في حجوزات</div>'
+    : `<table><thead><tr><th>الطالب</th><th>النوع</th><th>التاريخ</th><th>الوقت</th><th>السعر</th></tr></thead>
+       <tbody>${bookings.map(b => `<tr><td>${b.student_name}</td><td>${typeNames[b.lesson_type]}</td><td>${b.date}</td><td>${b.time}</td><td>${b.price} ₪</td></tr>`).join('')}</tbody></table>`;
+
+  document.getElementById('teachersTable').innerHTML = `<table><thead><tr><th>الاسم</th><th>الأنواع اللي بعلمها</th></tr></thead>
+    <tbody>${teachers.map(t => `<tr><td>${t.name}</td><td>${t.types.split(',').map(x => typeNames[x]).join(' • ')}</td></tr>`).join('')}</tbody></table>`;
+
+  const byTeacher = {};
+  avail.forEach(a => {
+    if (!byTeacher[a.teacher_name]) byTeacher[a.teacher_name] = [];
+    byTeacher[a.teacher_name].push(a);
+  });
+
+  document.getElementById('availabilityTable').innerHTML = teachers.map(t => {
+    const slots = byTeacher[t.name] || [];
+    return `<div class="avail-card">
+      <div class="avail-head">
+        <span class="avail-name">${t.name}</span>
+        <button class="mark-btn" onclick="editAvailability(${t.id}, '${t.name}')">تعديل</button>
+      </div>
+      <div class="avail-days">${dayNames.map((d,i) => `<span class="day-chip ${slots.some(s => s.day_of_week === i) ? 'on' : 'off'}">${d}</span>`).join('')}</div>
+      <div class="avail-time">${slots.length > 0 ? `الدوام: ${slots[0].start_time} - ${slots[0].end_time}` : 'ما في دوام محدد'}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('complaintsTable').innerHTML = complaints.length === 0
+    ? '<div class="empty">ما في شكاوى</div>'
+    : `<table><thead><tr><th>الطالب</th><th>الموضوع</th><th>التفاصيل</th><th>الحالة</th><th></th></tr></thead>
+       <tbody>${complaints.map(c => `<tr><td>${c.student_name}</td><td>${subjectNames[c.subject]}</td><td>${c.body}</td><td><span class="pill pill-${c.status}">${c.status === 'answered' ? 'تم الرد' : 'قيد المراجعة'}</span></td><td>${c.status === 'review' ? `<button class="mark-btn" onclick="markAnswered(${c.id})">تم الرد</button>` : ''}</td></tr>`).join('')}</tbody></table>`;
+}
+
+async function markAnswered(id) {
+  await fetch(`/api/complaints/${id}`, { method: 'PUT' });
+  loadAll();
+}
+
+async function setTestDate(id) {
+  const date = prompt('أدخل موعد التيست (مثال: 2026-09-15):');
+  if (!date) return;
+  await fetch(`/api/students/${id}/test-date`, {
+    method: 'PUT', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ test_date: date })
+  });
+  loadAll();
+}
+
+async function editAvailability(teacherId, teacherName) {
+  const daysInput = prompt(`أيام دوام ${teacherName}\n(0=أحد، 1=اثنين، 2=ثلاثاء، 3=أربعاء، 4=خميس، 5=جمعة، 6=سبت)\n\nمثال: 0,1,2,3,4`);
+  if (!daysInput) return;
+  const startTime = prompt('وقت البداية:', '08:00');
+  if (!startTime) return;
+  const endTime = prompt('وقت النهاية:', '17:00');
+  if (!endTime) return;
+
+  const days = daysInput.split(',').map(d => parseInt(d.trim())).filter(d => !isNaN(d) && d >= 0 && d <= 6);
+  const slots = days.map(day => ({ day_of_week: day, start_time: startTime, end_time: endTime }));
+
+  await fetch(`/api/availability/${teacherId}`, {
+    method: 'PUT', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ slots })
+  });
+  loadAll();
+}
+
+if (isAdmin) loadAll();
+</script>
+</body>
+</html>

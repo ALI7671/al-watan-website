@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>حسابي - مدرسة الوطن</title>
+<style>
+  :root {
+    --ink: #1B2126;
+    --ink-soft: #3A434B;
+    --paper: #F6F3EC;
+    --paper-dim: #EDE8DB;
+    --route: #E9B93E;
+    --olive: #4F6F52;
+    --olive-soft: #E4EAE2;
+    --rust: #B3492B;
+    --rust-soft: #F3E0D8;
+    --line: rgba(27,33,38,.14);
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Tajawal', Arial, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    margin: 0;
+    padding: 0 0 40px 0;
+  }
+  .navbar {
+    background: var(--ink);
+    padding: 14px 20px;
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .navbar a { color: var(--paper); text-decoration: none; font-size: 14px; font-weight: 700; }
+  .navbar a:hover { color: var(--route); }
+  .navbar .brand { color: var(--route); font-size: 16px; font-weight: 800; margin-left: auto; }
+
+  .container { max-width: 620px; margin: 0 auto; padding: 0 18px; }
+
+  .hero {
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 0 0 20px 20px;
+    padding: 26px 24px;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+  }
+  .hero .name { font-size: 21px; font-weight: 800; }
+  .hero .type { font-size: 13px; color: var(--route); margin-top: 4px; }
+  .logout {
+    background: transparent;
+    border: 1.5px solid rgba(246,243,236,.3);
+    color: var(--paper);
+    border-radius: 9px;
+    padding: 9px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    flex-shrink: 0;
+  }
+
+  h2 { font-size: 17px; margin: 26px 0 12px 0; font-weight: 800; }
+
+  .card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 22px;
+    margin-bottom: 12px;
+  }
+
+  label {
+    display: block;
+    font-size: 12.5px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--ink-soft);
+  }
+  select, textarea {
+    width: 100%;
+    padding: 13px;
+    border-radius: 9px;
+    border: 1.5px solid var(--line);
+    font-family: inherit;
+    font-size: 15px;
+    margin-bottom: 16px;
+    background: #fff;
+  }
+  textarea { min-height: 95px; resize: vertical; }
+  select:focus, textarea:focus { outline: 2px solid var(--route); border-color: var(--route); }
+
+  .submit-btn {
+    background: var(--ink);
+    color: var(--route);
+    border: none;
+    border-radius: 11px;
+    padding: 14px;
+    font-size: 15px;
+    font-weight: 700;
+    width: 100%;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .booking-item {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 15px 17px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+  .booking-info .t { font-weight: 700; margin-bottom: 3px; }
+  .booking-info .s { font-size: 12.5px; color: var(--ink-soft); }
+
+  .cancel-btn {
+    background: var(--rust);
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    padding: 7px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    flex-shrink: 0;
+    font-family: inherit;
+  }
+
+  .complaint-item {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 15px 17px;
+    margin-bottom: 10px;
+  }
+  .complaint-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 10px; }
+  .complaint-head .subj { font-weight: 700; font-size: 14px; }
+  .complaint-body { font-size: 13.5px; color: var(--ink-soft); }
+
+  .status-pill { font-size: 11px; font-weight: 700; padding: 5px 11px; border-radius: 20px; flex-shrink: 0; }
+  .status-review { background: var(--rust-soft); color: var(--rust); }
+  .status-answered { background: var(--olive-soft); color: var(--olive); }
+
+  .msg { padding: 13px; border-radius: 9px; margin-bottom: 16px; display: none; font-size: 14px; font-weight: 700; }
+  .msg.success { background: var(--olive-soft); color: var(--olive); display: block; }
+  .msg.error { background: var(--rust-soft); color: var(--rust); display: block; }
+
+  .empty { color: var(--ink-soft); font-size: 14px; padding: 18px; text-align: center; background: #fff; border: 1px solid var(--line); border-radius: 12px; }
+input[type="date"], input[type="time"] {
+    width: 100%;
+    padding: 13px;
+    border-radius: 9px;
+    border: 1.5px solid var(--line);
+    font-family: inherit;
+    font-size: 15px;
+    margin-bottom: 16px;
+    background: #fff;
+  }
+  .price-box {
+    background: var(--paper-dim);
+    padding: 14px;
+    border-radius: 9px;
+    text-align: center;
+    font-weight: 800;
+    font-size: 17px;
+    margin-bottom: 16px;
+  }
+  .notif-item {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-right: 4px solid var(--route);
+    border-radius: 12px;
+    padding: 14px 17px;
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+  .notif-item.unread { background: #FFFBF0; }
+  .notif-date { font-size: 11.5px; color: var(--ink-soft); margin-top: 5px; }
+</style>
+</head>
+<body>
+
+<div class="navbar">
+  <a href="/">الرئيسية</a>
+  <a href="/login.html">دخول الطالب</a>
+  <a href="/dashboard.html">حسابي</a>
+  <a href="/admin.html">الإدارة</a>
+  <span class="brand">🚗 مدرسة الوطن</span>
+</div>
+
+<div class="hero">
+  <div>
+    <div class="name" id="studentName">...</div>
+    <div class="type" id="studentType">...</div>
+  </div>
+  <button class="logout" onclick="logout()">خروج</button>
+</div>
+
+<div class="container">
+ <h2>احجز درس جديد</h2>
+  <div class="card">
+    <div id="bookMsg" class="msg"></div>
+
+    <label>نوع الدرس</label>
+    <select id="bookType" onchange="updateBookPrice()">
+      <option value="automatic">أوتوماتيك</option>
+      <option value="manual">جير</option>
+      <option value="heavy">شحن خفيف</option>
+    </select>
+
+    <label>المعلم</label>
+    <select id="bookTeacher"><option>جاري التحميل...</option></select>
+
+    <label>التاريخ</label>
+    <input type="date" id="bookDate">
+
+    <label>الوقت</label>
+    <input type="time" id="bookTime">
+
+    <div class="price-box" id="bookPrice">السعر: 110 ₪</div>
+
+    <button class="submit-btn" onclick="bookLesson()">تأكيد الحجز</button>
+  </div>
+  <h2>الإشعارات</h2>
+  <div id="notifications">جاري التحميل...</div>
+  
+  <h2>مواعيدي</h2>
+  <div id="myBookings">جاري التحميل...</div>
+
+  <h2>إرسال شكوى أو ملاحظة</h2>
+  <div class="card">
+    <div id="complaintMsg" class="msg"></div>
+
+    <label>الموضوع</label>
+    <select id="complaintSubject">
+      <option value="teacher">ملاحظة عن المعلم</option>
+      <option value="schedule">مشكلة بالمواعيد</option>
+      <option value="payment">مشكلة بالدفع</option>
+      <option value="other">شي تاني</option>
+    </select>
+
+    <label>التفاصيل</label>
+    <textarea id="complaintBody" placeholder="اكتب ملاحظتك هون..."></textarea>
+
+    <button class="submit-btn" onclick="submitComplaint()">إرسال</button>
+  </div>
+
+  <h2>شكاويّ السابقة</h2>
+  <div id="myComplaints">جاري التحميل...</div>
+</div>
+
+<script>
+const typeNames = { automatic: 'أوتوماتيك', manual: 'جير', heavy: 'شحن خفيف' };
+const subjectNames = {
+  teacher: 'ملاحظة عن المعلم',
+  schedule: 'مشكلة بالمواعيد',
+  payment: 'مشكلة بالدفع',
+  other: 'شي تاني'
+};
+
+const student = JSON.parse(sessionStorage.getItem('student') || 'null');
+if (!student) window.location.href = '/login.html';
+
+document.getElementById('studentName').textContent = `مرحباً، ${student.name}`;
+document.getElementById('studentType').textContent = `رخصة: ${typeNames[student.license_type]}`;
+
+async function loadMyBookings() {
+  const res = await fetch(`/api/bookings/student/${encodeURIComponent(student.name)}`);
+  const bookings = await res.json();
+
+  document.getElementById('myBookings').innerHTML = bookings.length === 0
+    ? '<div class="empty">ما عندك مواعيد حالياً</div>'
+    : bookings.map(b => `
+      <div class="booking-item">
+        <div class="booking-info">
+          <div class="t">${typeNames[b.lesson_type]}</div>
+          <div class="s">${b.date} • ${b.time} • ${b.price} ₪</div>
+        </div>
+        <button class="cancel-btn" onclick="cancelBooking(${b.id})">إلغاء</button>
+      </div>
+    `).join('');
+}
+
+async function cancelBooking(id) {
+  if (!confirm('متأكد بدك تلغي هالحجز؟')) return;
+  await fetch(`/api/bookings/${id}`, { method: 'DELETE' });
+  loadMyBookings();
+}
+
+async function submitComplaint() {
+  const subject = document.getElementById('complaintSubject').value;
+  const body = document.getElementById('complaintBody').value.trim();
+  const msgEl = document.getElementById('complaintMsg');
+
+  if (!body) {
+    msgEl.className = 'msg error';
+    msgEl.textContent = 'يرجى كتابة تفاصيل الملاحظة';
+    return;
+  }
+
+  await fetch('/api/complaints', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ student_name: student.name, subject, body })
+  });
+
+  msgEl.className = 'msg success';
+  msgEl.textContent = 'تم إرسال ملاحظتك، رح نرد عليك قريب';
+  document.getElementById('complaintBody').value = '';
+  loadMyComplaints();
+}
+
+async function loadMyComplaints() {
+  const res = await fetch(`/api/complaints/student/${encodeURIComponent(student.name)}`);
+  const complaints = await res.json();
+
+  document.getElementById('myComplaints').innerHTML = complaints.length === 0
+    ? '<div class="empty">ما في شكاوى مرسلة</div>'
+    : complaints.map(c => `
+      <div class="complaint-item">
+        <div class="complaint-head">
+          <span class="subj">${subjectNames[c.subject]}</span>
+          <span class="status-pill status-${c.status}">${c.status === 'answered' ? 'تم الرد' : 'قيد المراجعة'}</span>
+        </div>
+        <div class="complaint-body">${c.body}</div>
+      </div>
+    `).join('');
+}
+
+function logout() {
+  sessionStorage.removeItem('student');
+  window.location.href = '/login.html';
+}
+function updateBookPrice() {
+  const type = document.getElementById('bookType').value;
+  const price = type === 'heavy' ? 130 : 110;
+  document.getElementById('bookPrice').textContent = `السعر: ${price} ₪`;
+}
+
+async function loadTeachers() {
+  const res = await fetch('/api/teachers');
+  const teachers = await res.json();
+  document.getElementById('bookTeacher').innerHTML = teachers
+    .map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+}
+
+async function bookLesson() {
+  const lesson_type = document.getElementById('bookType').value;
+  const teacher_id = document.getElementById('bookTeacher').value;
+  const date = document.getElementById('bookDate').value;
+  const time = document.getElementById('bookTime').value;
+  const msgEl = document.getElementById('bookMsg');
+
+  if (!date || !time) {
+    msgEl.className = 'msg error';
+    msgEl.textContent = 'يرجى اختيار التاريخ والوقت';
+    return;
+  }
+
+  const res = await fetch('/api/bookings', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ teacher_id, student_name: student.name, lesson_type, date, time })
+  });
+
+  const result = await res.json();
+
+  if (result.success) {
+    msgEl.className = 'msg success';
+    msgEl.textContent = `تم الحجز بنجاح! المبلغ: ${result.price} ₪`;
+    document.getElementById('bookDate').value = '';
+    document.getElementById('bookTime').value = '';
+    loadMyBookings();
+  } else {
+    msgEl.className = 'msg error';
+    msgEl.textContent = result.message || 'صار خطأ، جرب تاني';
+  }
+}
+async function loadNotifications() {
+  const res = await fetch(`/api/notifications/${encodeURIComponent(student.name)}`);
+  const notifs = await res.json();
+
+  document.getElementById('notifications').innerHTML = notifs.length === 0
+    ? '<div class="empty">ما في إشعارات</div>'
+    : notifs.map(n => `
+      <div class="notif-item ${n.is_read ? '' : 'unread'}">
+        🔔 ${n.message}
+        <div class="notif-date">${n.created_at}</div>
+      </div>
+    `).join('');
+}
+loadNotifications();
+loadTeachers();
+loadMyBookings();
+loadMyComplaints();
+</script>
+</body>
+</html>

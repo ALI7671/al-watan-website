@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تسجيل الدخول - مدرسة الوطن</title>
+<style>
+  :root {
+    --ink: #1B2126;
+    --ink-soft: #3A434B;
+    --paper: #F6F3EC;
+    --route: #E9B93E;
+    --rust: #B3492B;
+    --rust-soft: #F3E0D8;
+    --line: rgba(27,33,38,.14);
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Tajawal', Arial, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    margin: 0;
+    padding: 0;
+  }
+  .navbar {
+    background: var(--ink);
+    padding: 14px 20px;
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .navbar a { color: var(--paper); text-decoration: none; font-size: 14px; font-weight: 700; }
+  .navbar a:hover { color: var(--route); }
+  .navbar .brand { color: var(--route); font-size: 16px; font-weight: 800; margin-left: auto; }
+
+  .login-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 75vh;
+    padding: 30px 18px;
+  }
+  .login-box {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 34px 28px;
+    max-width: 390px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .road {
+    height: 110px;
+    border-radius: 13px;
+    background: linear-gradient(180deg, var(--ink) 0%, #2A333B 100%);
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .road .strip {
+    position: absolute;
+    bottom: 26px;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background-image: repeating-linear-gradient(90deg, var(--route) 0 22px, transparent 22px 40px);
+    animation: drive 1.4s linear infinite;
+  }
+  @keyframes drive { from { background-position: 0 0; } to { background-position: -62px 0; } }
+  .road .car { position: absolute; bottom: 32px; right: 34px; font-size: 26px; }
+
+  h1 { font-size: 21px; margin: 0 0 8px 0; font-weight: 800; }
+  .sub { color: var(--ink-soft); font-size: 14px; margin: 0 0 24px 0; }
+
+  label {
+    display: block;
+    text-align: right;
+    font-size: 12.5px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--ink-soft);
+  }
+  input {
+    width: 100%;
+    padding: 14px;
+    border-radius: 9px;
+    border: 1.5px solid var(--line);
+    font-size: 15px;
+    margin-bottom: 18px;
+    font-family: inherit;
+  }
+  input:focus { outline: 2px solid var(--route); border-color: var(--route); }
+
+  button {
+    background: var(--ink);
+    color: var(--route);
+    border: none;
+    border-radius: 11px;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: 700;
+    width: 100%;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .msg { padding: 13px; border-radius: 9px; margin-bottom: 16px; display: none; font-size: 14px; font-weight: 700; }
+  .msg.error { background: var(--rust-soft); color: var(--rust); display: block; }
+</style>
+</head>
+<body>
+
+<div class="navbar">
+  <a href="/">الرئيسية</a>
+  <a href="/login.html">دخول الطالب</a>
+  <a href="/dashboard.html">حسابي</a>
+  <a href="/admin.html">الإدارة</a>
+  <span class="brand">🚗 مدرسة الوطن</span>
+</div>
+
+<div class="login-wrap">
+  <div class="login-box">
+    <div class="road">
+      <div class="strip"></div>
+      <div class="car">🚗</div>
+    </div>
+
+    <h1>مدرسة الوطن</h1>
+    <p class="sub">سجّل دخولك برقم موبايلك</p>
+
+    <div id="loginMessage" class="msg"></div>
+
+    <label>رقم الموبايل</label>
+    <input type="tel" id="loginPhone" placeholder="0599123456">
+
+    <button onclick="login()">دخول</button>
+  </div>
+</div>
+
+<script>
+async function login() {
+  const phone = document.getElementById('loginPhone').value.trim();
+  const msgEl = document.getElementById('loginMessage');
+
+  if (!phone) {
+    msgEl.className = 'msg error';
+    msgEl.textContent = 'يرجى إدخال رقم الموبايل';
+    return;
+  }
+
+  const res = await fetch('/api/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ phone })
+  });
+
+  const result = await res.json();
+
+  if (result.success) {
+    sessionStorage.setItem('student', JSON.stringify(result.student));
+    window.location.href = '/dashboard.html';
+  } else {
+    msgEl.className = 'msg error';
+    msgEl.textContent = result.message;
+  }
+}
+</script>
+</body>
+</html>
