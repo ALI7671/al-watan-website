@@ -8,11 +8,13 @@
   :root {
     --ink: #1B2126;
     --ink-soft: #3A434B;
-    --paper: #F6F3EC;
+    --paper: #F8F6F0;
+    --paper-card: #FFFFFF;
     --route: #E9B93E;
     --rust: #B3492B;
     --rust-soft: #F3E0D8;
-    --line: rgba(27,33,38,.14);
+    --line: rgba(27,33,38,.10);
+    --shadow: 0 10px 30px -5px rgba(27,33,38,0.06), 0 1px 3px rgba(27,33,38,0.03);
   }
   * { box-sizing: border-box; }
   body {
@@ -24,40 +26,43 @@
   }
   .navbar {
     background: var(--ink);
-    padding: 14px 20px;
+    padding: 14px 24px;
     display: flex;
-    gap: 18px;
+    gap: 20px;
     align-items: center;
     flex-wrap: wrap;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   }
-  .navbar a { color: var(--paper); text-decoration: none; font-size: 14px; font-weight: 700; }
+  .navbar a { color: var(--paper); text-decoration: none; font-size: 14px; font-weight: 700; transition: color 0.2s; }
   .navbar a:hover { color: var(--route); }
-  .navbar .brand { color: var(--route); font-size: 16px; font-weight: 800; margin-left: auto; }
+  .navbar .brand { color: var(--route); font-size: 17px; font-weight: 800; margin-left: auto; letter-spacing: -0.3px; }
 
   .login-wrap {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 75vh;
+    min-height: 80vh;
     padding: 30px 18px;
   }
   .login-box {
-    background: #fff;
+    background: var(--paper-card);
     border: 1px solid var(--line);
-    border-radius: 16px;
-    padding: 34px 28px;
-    max-width: 390px;
+    border-radius: 20px;
+    padding: 40px 32px;
+    max-width: 420px;
     width: 100%;
     text-align: center;
+    box-shadow: var(--shadow);
   }
 
   .road {
     height: 110px;
-    border-radius: 13px;
-    background: linear-gradient(180deg, var(--ink) 0%, #2A333B 100%);
-    margin-bottom: 24px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--ink) 0%, #2A333B 100%);
+    margin-bottom: 28px;
     position: relative;
     overflow: hidden;
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.2);
   }
   .road .strip {
     position: absolute;
@@ -69,45 +74,51 @@
     animation: drive 1.4s linear infinite;
   }
   @keyframes drive { from { background-position: 0 0; } to { background-position: -62px 0; } }
-  .road .car { position: absolute; bottom: 32px; right: 34px; font-size: 26px; }
+  .road .car { position: absolute; bottom: 32px; right: 34px; font-size: 26px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
 
-  h1 { font-size: 21px; margin: 0 0 8px 0; font-weight: 800; }
-  .sub { color: var(--ink-soft); font-size: 14px; margin: 0 0 24px 0; }
+  h1 { font-size: 23px; margin: 0 0 8px 0; font-weight: 800; color: var(--ink); }
+  .sub { color: var(--ink-soft); font-size: 14px; margin: 0 0 28px 0; font-weight: 500; }
 
   label {
     display: block;
     text-align: right;
-    font-size: 12.5px;
+    font-size: 13px;
     font-weight: 700;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
     color: var(--ink-soft);
   }
   input {
     width: 100%;
-    padding: 14px;
-    border-radius: 9px;
+    padding: 14px 16px;
+    border-radius: 12px;
     border: 1.5px solid var(--line);
     font-size: 15px;
-    margin-bottom: 18px;
+    margin-bottom: 20px;
     font-family: inherit;
+    background: #faf8f5;
+    transition: all 0.2s ease;
   }
-  input:focus { outline: 2px solid var(--route); border-color: var(--route); }
+  input:focus { outline: none; background: #fff; border-color: var(--route); box-shadow: 0 0 0 3px rgba(233, 185, 62, 0.15); }
 
   button {
     background: var(--ink);
     color: var(--route);
     border: none;
-    border-radius: 11px;
-    padding: 14px;
+    border-radius: 12px;
+    padding: 15px;
     font-size: 16px;
     font-weight: 700;
     width: 100%;
     cursor: pointer;
     font-family: inherit;
+    box-shadow: 0 4px 12px rgba(27,33,38,0.12);
+    transition: transform 0.1s ease, background 0.2s ease;
   }
+  button:hover { background: #2A333B; }
+  button:active { transform: scale(0.98); }
 
-  .msg { padding: 13px; border-radius: 9px; margin-bottom: 16px; display: none; font-size: 14px; font-weight: 700; }
-  .msg.error { background: var(--rust-soft); color: var(--rust); display: block; }
+  .msg { padding: 13px; border-radius: 10px; margin-bottom: 20px; display: none; font-size: 14px; font-weight: 700; }
+  .msg.error { background: var(--rust-soft); color: var(--rust); display: block; border: 1px solid rgba(179,73,43,0.15); }
 </style>
 </head>
 <body>

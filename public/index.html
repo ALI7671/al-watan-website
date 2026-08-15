@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>مدرسة الوطن لتعليم القيادة</title>
+<title>مدرسة الوطن</title>
 <style>
   :root {
     --ink: #1B2126;
@@ -12,9 +12,6 @@
     --paper-dim: #EDE8DB;
     --route: #E9B93E;
     --olive: #4F6F52;
-    --olive-soft: #E4EAE2;
-    --rust: #B3492B;
-    --rust-soft: #F3E0D8;
     --line: rgba(27,33,38,.14);
   }
   * { box-sizing: border-box; }
@@ -57,14 +54,10 @@
     margin-bottom: 26px;
     text-align: center;
   }
-  .hero h1 { font-size: 26px; margin: 0 0 8px 0; font-weight: 800; }
-  .hero p { font-size: 14px; color: var(--route); margin: 0; }
+  .hero h1 { font-size: 26px; margin: 0 0 8px 0; font-weight: 800; color: var(--route); }
+  .hero p { font-size: 14px; color: #cbd5e1; margin: 0; }
 
-  h2 {
-    font-size: 17px;
-    margin: 28px 0 12px 0;
-    font-weight: 800;
-  }
+  h2 { font-size: 17px; margin: 28px 0 12px 0; font-weight: 800; }
 
   .card {
     background: #fff;
@@ -72,15 +65,10 @@
     border-radius: 14px;
     padding: 22px;
     margin-bottom: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
   }
 
-  label {
-    display: block;
-    font-size: 12.5px;
-    font-weight: 700;
-    margin-bottom: 6px;
-    color: var(--ink-soft);
-  }
+  label { display: block; font-size: 12.5px; font-weight: 700; margin-bottom: 6px; color: var(--ink-soft); }
   input, select {
     width: 100%;
     padding: 13px;
@@ -91,10 +79,7 @@
     margin-bottom: 16px;
     background: #fff;
   }
-  input:focus, select:focus {
-    outline: 2px solid var(--route);
-    border-color: var(--route);
-  }
+  input:focus, select:focus { outline: 2px solid var(--route); border-color: var(--route); }
 
   button {
     background: var(--ink);
@@ -111,154 +96,96 @@
   }
   button:active { transform: scale(.98); }
 
-  .price-box {
-    background: var(--paper-dim);
-    padding: 14px;
-    border-radius: 9px;
-    text-align: center;
-    font-weight: 800;
-    font-size: 17px;
-    margin-bottom: 16px;
+  .price-box { background: var(--paper-dim); padding: 14px; border-radius: 9px; text-align: center; font-weight: 800; font-size: 17px; margin-bottom: 16px; }
+
+  #toast {
+    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
+    background: var(--ink); color: var(--paper); padding: 12px 24px; border-radius: 30px;
+    font-size: 14px; font-weight: 700; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease; z-index: 1000; border: 1.5px solid var(--route);
   }
-
-  .booking-item {
-    background: #fff;
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 15px 17px;
-    margin-bottom: 10px;
-    font-size: 14px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-  }
-  .booking-info .t { font-weight: 700; margin-bottom: 3px; }
-  .booking-info .s { font-size: 12.5px; color: var(--ink-soft); }
-
-  .cancel-btn {
-    background: var(--rust);
-    color: #fff;
-    border: none;
-    border-radius: 7px;
-    padding: 7px 14px;
-    font-size: 12px;
-    font-weight: 700;
-    cursor: pointer;
-    width: auto;
-    flex-shrink: 0;
-    font-family: inherit;
-  }
-
-  .msg { padding: 13px; border-radius: 9px; margin-bottom: 16px; display: none; font-size: 14px; font-weight: 700; }
-  .msg.success { background: var(--olive-soft); color: var(--olive); display: block; }
-  .msg.error { background: var(--rust-soft); color: var(--rust); display: block; }
-
-  .empty { color: var(--ink-soft); font-size: 14px; padding: 18px; text-align: center; background: #fff; border: 1px solid var(--line); border-radius: 12px; }
+  #toast.show { transform: translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
+
+<div id="toast">تم</div>
 
 <div class="navbar">
   <a href="/">الرئيسية</a>
   <a href="/login.html">دخول الطالب</a>
   <a href="/dashboard.html">حسابي</a>
+  <a href="/about.html">من نحن</a>
+  <a href="/faq.html">الأسئلة الشائعة</a>
   <a href="/admin.html">الإدارة</a>
   <span class="brand">🚗 مدرسة الوطن</span>
 </div>
 
 <div class="hero">
-  <h1>مدرسة الوطن لتعليم القيادة</h1>
+  <h1>مدرسة الوطن لتعليم السياقة</h1>
   <p>احجز درسك بسهولة • أوتوماتيك • جير • شحن خفيف</p>
 </div>
 
 <div class="container">
   <h2>احجز درسك</h2>
   <div class="card">
-    <div id="message" class="msg"></div>
-
     <label>اسمك</label>
     <input type="text" id="studentName" placeholder="مثال: محمد أحمد">
-
     <label>نوع الرخصة</label>
     <select id="lessonType" onchange="updatePrice()">
       <option value="automatic">أوتوماتيك</option>
       <option value="manual">جير</option>
       <option value="heavy">شحن خفيف</option>
     </select>
-
     <label>المعلم</label>
     <select id="teacherSelect"><option>جاري التحميل...</option></select>
-
     <label>التاريخ</label>
     <input type="date" id="lessonDate">
-
     <label>الوقت</label>
     <input type="time" id="lessonTime">
-
     <div class="price-box" id="priceBox">السعر: 110 ₪</div>
-
     <button onclick="submitBooking()">تأكيد الحجز</button>
   </div>
 
   <h2>تسجيل طالب جديد</h2>
   <div class="card">
-    <div id="studentMessage" class="msg"></div>
-
     <label>الاسم</label>
     <input type="text" id="newStudentName" placeholder="مثال: أحمد يوسف">
-
     <label>رقم الموبايل</label>
     <input type="tel" id="newStudentPhone" placeholder="0599123456">
-
     <label>نوع الرخصة</label>
     <select id="newStudentType">
       <option value="automatic">أوتوماتيك</option>
       <option value="manual">جير</option>
       <option value="heavy">شحن خفيف</option>
     </select>
-
     <button onclick="registerStudent()">تسجيل</button>
   </div>
-
-  <h2>الحجوزات الحالية</h2>
-  <div id="bookingsList">جاري التحميل...</div>
-
-  <h2>الطلاب المسجلون</h2>
-  <div id="studentsList">جاري التحميل...</div>
 </div>
 
 <script>
-const typeNames = { automatic: 'أوتوماتيك', manual: 'جير', heavy: 'شحن خفيف' };
+document.getElementById('lessonDate').min = new Date().toISOString().split('T')[0];
+
+function showToast(text) {
+  const toast = document.getElementById('toast');
+  toast.textContent = text;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
 
 function updatePrice() {
   const type = document.getElementById('lessonType').value;
-  const price = type === 'heavy' ? 130 : 110;
-  document.getElementById('priceBox').textContent = `السعر: ${price} ₪`;
+  document.getElementById('priceBox').textContent = `السعر: ${type === 'heavy' ? 130 : 110} ₪`;
 }
 
 async function loadTeachers() {
-  const res = await fetch('/api/teachers');
-  const teachers = await res.json();
-  document.getElementById('teacherSelect').innerHTML = teachers
-    .map(t => `<option value="${t.id}">${t.name}</option>`).join('');
-}
-
-async function loadBookings() {
-  const res = await fetch('/api/bookings');
-  const bookings = await res.json();
-
-  document.getElementById('bookingsList').innerHTML = bookings.length === 0
-    ? '<div class="empty">ما في حجوزات بعد</div>'
-    : bookings.map(b => `
-      <div class="booking-item">
-        <div class="booking-info">
-          <div class="t">${b.student_name} — ${typeNames[b.lesson_type]}</div>
-          <div class="s">${b.date} • ${b.time} • ${b.price} ₪</div>
-        </div>
-        <button class="cancel-btn" onclick="cancelBooking(${b.id})">إلغاء</button>
-      </div>
-    `).join('');
+  try {
+    const res = await fetch('/api/teachers');
+    const teachers = await res.json();
+    document.getElementById('teacherSelect').innerHTML = teachers.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+  } catch (e) {
+    document.getElementById('teacherSelect').innerHTML = '<option value="">خطأ في تحميل المعلمين</option>';
+  }
 }
 
 async function submitBooking() {
@@ -267,11 +194,9 @@ async function submitBooking() {
   const teacher_id = document.getElementById('teacherSelect').value;
   const date = document.getElementById('lessonDate').value;
   const time = document.getElementById('lessonTime').value;
-  const msgEl = document.getElementById('message');
 
   if (!student_name || !date || !time) {
-    msgEl.className = 'msg error';
-    msgEl.textContent = 'يرجى تعبئة كل الحقول';
+    showToast('يرجى تعبئة الحقول المطلوبة');
     return;
   }
 
@@ -283,28 +208,22 @@ async function submitBooking() {
 
   const result = await res.json();
   if (result.success) {
-    msgEl.className = 'msg success';
-    msgEl.textContent = `تم الحجز بنجاح! المبلغ: ${result.price} ₪`;
-    document.getElementById('studentName').value = '';
-    loadBookings();
+    showToast('تم الحجز بنجاح!');
+    const phoneNo = "970599254574"; 
+    const text = `مرحباً، تم حجز درس: ${student_name}، التاريخ: ${date}، ${time}`;
+    window.open(`https://wa.me/${phoneNo}?text=${encodeURIComponent(text)}`, '_blank');
+  } else {
+    showToast('حدث خطأ أثناء الحجز');
   }
-}
-
-async function cancelBooking(id) {
-  if (!confirm('متأكد بدك تلغي هالحجز؟')) return;
-  await fetch(`/api/bookings/${id}`, { method: 'DELETE' });
-  loadBookings();
 }
 
 async function registerStudent() {
   const name = document.getElementById('newStudentName').value.trim();
   const phone = document.getElementById('newStudentPhone').value.trim();
   const license_type = document.getElementById('newStudentType').value;
-  const msgEl = document.getElementById('studentMessage');
 
   if (!name || !phone) {
-    msgEl.className = 'msg error';
-    msgEl.textContent = 'يرجى تعبئة الاسم ورقم الموبايل';
+    showToast('يرجى تعبئة الاسم ورقم الموبايل');
     return;
   }
 
@@ -314,38 +233,14 @@ async function registerStudent() {
     body: JSON.stringify({ name, phone, license_type })
   });
 
-  const result = await res.json();
-  if (result.success) {
-    msgEl.className = 'msg success';
-    msgEl.textContent = 'تم تسجيل الطالب بنجاح!';
-    document.getElementById('newStudentName').value = '';
-    document.getElementById('newStudentPhone').value = '';
-    loadStudents();
+  if ((await res.json()).success) {
+    showToast('تم تسجيل الطالب بنجاح!');
   } else {
-    msgEl.className = 'msg error';
-    msgEl.textContent = result.message;
+    showToast('حدث خطأ أثناء التسجيل');
   }
 }
 
-async function loadStudents() {
-  const res = await fetch('/api/students');
-  const students = await res.json();
-
-  document.getElementById('studentsList').innerHTML = students.length === 0
-    ? '<div class="empty">ما في طلاب مسجلين بعد</div>'
-    : students.map(s => `
-      <div class="booking-item">
-        <div class="booking-info">
-          <div class="t">${s.name}</div>
-          <div class="s">${typeNames[s.license_type]} • ${s.phone}</div>
-        </div>
-      </div>
-    `).join('');
-}
-
 loadTeachers();
-loadBookings();
-loadStudents();
 </script>
 </body>
 </html>

@@ -39,9 +39,56 @@
   .day-chip.on{background:var(--olive-soft);color:var(--olive);}
   .day-chip.off{background:var(--paper-dim);color:var(--ink-soft);opacity:.5;}
   .avail-time{font-size:13px;color:var(--ink-soft);}
+
+  /* تصميم شاشة تسجيل الدخول الجديدة الخاصة بالإدارة */
+  #authOverlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100vh;
+    background: linear-gradient(135deg, #1f2937, #111827);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+  .auth-card {
+    background: #fff;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+  }
+  .auth-card h2 { margin-top: 0; color: var(--ink); }
+  .auth-card p { color: var(--ink-soft); font-size: 14px; margin-bottom: 20px; }
+  .auth-card input {
+    width: 100%; padding: 14px; border-radius: 9px;
+    border: 1.5px solid var(--line); font-size: 15px;
+    margin-bottom: 15px; font-family: inherit; text-align: center;
+  }
+  .auth-card input:focus { outline: 2px solid var(--route); border-color: var(--route); }
+  .auth-card button {
+    background: var(--ink); color: var(--route); border: none;
+    border-radius: 11px; padding: 14px; font-size: 16px;
+    font-weight: 700; width: 100%; cursor: pointer; font-family: inherit;
+  }
+  .auth-error { color: var(--rust); background: var(--rust-soft); padding: 10px; border-radius: 8px; font-size: 13px; margin-bottom: 15px; display: none; }
 </style>
 </head>
 <body>
+
+<!-- شاشة تسجيل دخول الإدارة -->
+<div id="authOverlay">
+  <div class="auth-card">
+    <h2>لوحة الإدارة</h2>
+    <p>مدرسة الوطن لتعليم السياقة</p>
+    <div id="authError" class="auth-error">كلمة السر غير صحيحة</div>
+    <form onsubmit="handleAdminAuth(event)">
+      <input type="password" id="adminPassInput" placeholder="أدخل كلمة سر الإدارة" required>
+      <button type="submit">دخول</button>
+    </form>
+  </div>
+</div>
 
 <div class="navbar">
   <a href="/">الرئيسية</a>
@@ -53,7 +100,7 @@
 
 <div class="hero">
   <div class="title">لوحة تحكم الإدارة</div>
-  <div class="sub">مدرسة الوطن لتعليم القيادة</div>
+  <div class="sub">مدرسة الوطن لتعليم السياقة</div>
 </div>
 
 <div class="container">
@@ -88,15 +135,20 @@ const dayNames = ['الأحد','الاثنين','الثلاثاء','الأربع
 const ADMIN_PASSWORD = 'alwatan2026';
 let isAdmin = sessionStorage.getItem('adminAuth') === 'yes';
 
-if (!isAdmin) {
-  const pass = prompt('أدخل كلمة سر الإدارة:');
+if (isAdmin) {
+  document.getElementById('authOverlay').style.display = 'none';
+}
+
+function handleAdminAuth(e) {
+  e.preventDefault();
+  const pass = document.getElementById('adminPassInput').value;
   if (pass === ADMIN_PASSWORD) {
     sessionStorage.setItem('adminAuth', 'yes');
     isAdmin = true;
+    document.getElementById('authOverlay').style.display = 'none';
+    loadAll();
   } else {
-    alert('كلمة السر غير صحيحة');
-    document.body.innerHTML = '<h2 style="text-align:center;margin-top:100px">غير مصرح لك بالدخول</h2>';
-    window.location.href = '/';
+    document.getElementById('authError').style.display = 'block';
   }
 }
 
