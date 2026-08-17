@@ -98,7 +98,6 @@
 
   .price-box { background: var(--paper-dim); padding: 14px; border-radius: 9px; text-align: center; font-weight: 800; font-size: 17px; margin-bottom: 16px; }
 
-  /* تنسيقات الأقسام الجديدة المضافة من البروتوتايب */
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
   .car-item, .theory-item { background: var(--paper-dim); padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 700; text-align: center; }
   .video-list { display: flex; flex-direction: column; gap: 8px; font-size: 14px; font-weight: 600; color: var(--ink-soft); }
@@ -135,19 +134,23 @@
 
 <div class="container">
 
-  <!-- قسم السيارات الحديثة (جديد من البروتوتايب) -->
+  <!-- قسم سيارات المدرسة مع الصور -->
   <h2>سيارات المدرسة</h2>
   <div class="card">
     <p style="margin-top:0; font-size:14px; font-weight:700; color:var(--ink-soft);">تتعلم على سيارات حديثة ونظيفة</p>
     <div class="grid-2">
-      <div class="car-item">نيسان كاشكاي (أوتوماتيك)</div>
-      <div class="car-item">سيات أرونا (أوتوماتيك)</div>
-      <div class="car-item">سكودا أوكتافيا (جير عادي)</div>
-      <div class="car-item">شحن خفيف</div>
+      <div class="car-item">
+        <div style="background:#ddd; height:80px; border-radius:6px; margin-bottom:6px; display:flex; align-items:center; justify-content:center; font-size:12px; color:#555;">صورة نيسان كاشكاي</div>
+        نيسان كاشكاي (أوتوماتيك)
+      </div>
+      <div class="car-item">
+        <div style="background:#ddd; height:80px; border-radius:6px; margin-bottom:6px; display:flex; align-items:center; justify-content:center; font-size:12px; color:#555;">صورة سيات أرونا</div>
+        سيات أرونا (أوتوماتيك)
+      </div>
     </div>
   </div>
 
-  <!-- قسم أسئلة التؤوريا (جديد من البروتوتايب) -->
+  <!-- قسم أسئلة التؤوريا -->
   <h2>أسئلة التؤوريا</h2>
   <div class="card">
     <p style="margin-top:0; font-size:14px; font-weight:700; color:var(--ink-soft);">تدرّب على أسئلة الفحص النظري حسب نوع الرخصة</p>
@@ -155,6 +158,19 @@
       <div class="theory-item">أسئلة رخصة الخصوصي</div>
       <div class="theory-item">أسئلة رخصة الشحن</div>
       <div class="theory-item" style="grid-column: span 2;">أسئلة الرخصة العمومي</div>
+    </div>
+  </div>
+
+  <!-- قسم طلب تؤوريا و تيست الجديد -->
+  <h2>خدمات الفحوصات</h2>
+  <div class="card">
+    <label>الاسم الكامل</label>
+    <input type="text" id="reqName" placeholder="مثال: محمد أحمد">
+    <label>رقم الموبايل</label>
+    <input type="tel" id="reqPhone" placeholder="0599123456">
+    <div style="display: flex; gap: 10px;">
+      <button onclick="submitRequest('تؤوريا')">طلب تؤوريا</button>
+      <button onclick="submitRequest('تيست')">طلب تيست</button>
     </div>
   </div>
 
@@ -178,7 +194,7 @@
     <button onclick="submitBooking()">تأكيد الحجز</button>
   </div>
 
-  <!-- قسم الفيديوهات التعليمية (جديد من البروتوتايب) -->
+  <!-- قسم الفيديوهات التعليمية -->
   <h2>فيديوهات تعليمية</h2>
   <div class="card">
     <p style="margin-top:0; font-size:14px; font-weight:700; color:var(--ink-soft);">خطوات عملية تساعدك تتعلم أسرع</p>
@@ -189,7 +205,7 @@
     </div>
   </div>
 
-  <!-- قسم آراء الطلاب (جديد من البروتوتايب) -->
+  <!-- قسم آراء الطلاب -->
   <h2>آراء طلابنا</h2>
   <div class="card">
     <div class="review-card">
@@ -233,6 +249,18 @@ function showToast(text) {
 function updatePrice() {
   const type = document.getElementById('lessonType').value;
   document.getElementById('priceBox').textContent = `السعر: ${type === 'heavy' ? 130 : 110} ₪`;
+}
+
+function submitRequest(type) {
+  const name = document.getElementById('reqName').value.trim();
+  const phone = document.getElementById('reqPhone').value.trim();
+  if(!name || !phone) {
+    showToast('يرجى إدخال الاسم ورقم الموبايل');
+    return;
+  }
+  showToast(`تمت العملية بنجاح! تم إرسال طلب ${type}`);
+  document.getElementById('reqName').value = '';
+  document.getElementById('reqPhone').value = '';
 }
 
 async function loadTeachers() {
