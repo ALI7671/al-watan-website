@@ -98,6 +98,13 @@
 
   .price-box { background: var(--paper-dim); padding: 14px; border-radius: 9px; text-align: center; font-weight: 800; font-size: 17px; margin-bottom: 16px; }
 
+  /* تنسيقات الأقسام الجديدة المضافة من البروتوتايب */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .car-item, .theory-item { background: var(--paper-dim); padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 700; text-align: center; }
+  .video-list { display: flex; flex-direction: column; gap: 8px; font-size: 14px; font-weight: 600; color: var(--ink-soft); }
+  .review-card { border-right: 4px solid var(--route); padding-right: 12px; margin-bottom: 12px; font-size: 14px; }
+  .review-author { font-weight: 800; color: var(--ink); margin-top: 4px; font-size: 13px; }
+
   #toast {
     position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
     background: var(--ink); color: var(--paper); padding: 12px 24px; border-radius: 30px;
@@ -127,6 +134,30 @@
 </div>
 
 <div class="container">
+
+  <!-- قسم السيارات الحديثة (جديد من البروتوتايب) -->
+  <h2>سيارات المدرسة</h2>
+  <div class="card">
+    <p style="margin-top:0; font-size:14px; font-weight:700; color:var(--ink-soft);">تتعلم على سيارات حديثة ونظيفة</p>
+    <div class="grid-2">
+      <div class="car-item">نيسان كاشكاي (أوتوماتيك)</div>
+      <div class="car-item">سيات أرونا (أوتوماتيك)</div>
+      <div class="car-item">سكودا أوكتافيا (جير عادي)</div>
+      <div class="car-item">شحن خفيف</div>
+    </div>
+  </div>
+
+  <!-- قسم أسئلة التؤوريا (جديد من البروتوتايب) -->
+  <h2>أسئلة التؤوريا</h2>
+  <div class="card">
+    <p style="margin-top:0; font-size:14px; font-weight:700; color:var(--ink-soft);">تدرّب على أسئلة الفحص النظري حسب نوع الرخصة</p>
+    <div class="grid-2">
+      <div class="theory-item">أسئلة رخصة الخصوصي</div>
+      <div class="theory-item">أسئلة رخصة الشحن</div>
+      <div class="theory-item" style="grid-column: span 2;">أسئلة الرخصة العمومي</div>
+    </div>
+  </div>
+
   <h2>احجز درسك</h2>
   <div class="card">
     <label>اسمك</label>
@@ -145,6 +176,32 @@
     <input type="time" id="lessonTime">
     <div class="price-box" id="priceBox">السعر: 110 ₪</div>
     <button onclick="submitBooking()">تأكيد الحجز</button>
+  </div>
+
+  <!-- قسم الفيديوهات التعليمية (جديد من البروتوتايب) -->
+  <h2>فيديوهات تعليمية</h2>
+  <div class="card">
+    <p style="margin-top:0; font-size:14px; font-weight:700; color:var(--ink-soft);">خطوات عملية تساعدك تتعلم أسرع</p>
+    <div class="video-list">
+      <div>🎥 كيف تصِفّ سيارتك والإنعطاف يميناً بشكل صحيح</div>
+      <div>🎥 الانعطاف يساراً بشكل صحيح</div>
+      <div>🎥 الرجوع للخلف (باركنج)</div>
+    </div>
+  </div>
+
+  <!-- قسم آراء الطلاب (جديد من البروتوتايب) -->
+  <h2>آراء طلابنا</h2>
+  <div class="card">
+    <div class="review-card">
+      <div>★★★★★</div>
+      <p style="margin:6px 0;">أفضل مدرسة تعلمت فيها، المدرب صبور كتير ونجحت من أول مرة بالفحص.</p>
+      <div class="review-author">— محمد أحمد</div>
+    </div>
+    <div class="review-card" style="margin-bottom:0;">
+      <div>★★★★★</div>
+      <p style="margin:6px 0;">السيارات جديدة ونظيفة، والتعامل محترم. أنصح فيها بشدة.</p>
+      <div class="review-author">— لينا سمير</div>
+    </div>
   </div>
 
   <h2>تسجيل طالب جديد</h2>
