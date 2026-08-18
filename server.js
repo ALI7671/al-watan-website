@@ -75,9 +75,15 @@ app.post('/api/students', (req, res) => {
   res.json({ success: true, studentId: result.lastInsertRowid });
 });
 
-// عرض كل الطلاب
+// عرض كل الطلاب (مع عدد الدروس والمدفوعات والباقي على كل طالب)
 app.get('/api/students', (req, res) => {
-  const students = db.prepare('SELECT * FROM students').all();
+  const students = db.prepare(`
+    SELECT s.*,
+      (SELECT COUNT(*) FROM bookings b WHERE b.student_name = s.name) AS lessons_taken,
+      COALESCE((SELECT SUM(p.amount) FROM payments p WHERE p.student_id = s.id), 0) AS total_paid,
+      (COALESCE(s.total_package, 0) - COALESCE((SELECT SUM(p.amount) FROM payments p WHERE p.student_id = s.id), 0)) AS remaining
+    FROM students s
+  `).all();
   res.json(students);
 });
 // تسجيل دخول برقم الموبايل
@@ -186,6 +192,36 @@ app.put('/api/students/:id/test-date', (req, res) => {
       .run(student.name, `تم تحديد موعد التيست تبعك: ${test_date}`);
   }
 
+  res.json({ success: true });
+});
+
+// تسجيل دفعة جديدة لطالب
+app.post('/api/payments', (req, res) => {
+  const { student_id, amount, date, note } = req.body;
+
+  const student = db.prepare('SELECT id FROM students WHERE id = ?').get(student_id);
+  if (!student) {
+    return res.json({ success: false, message: 'هذا الطالب غير موجود' });
+  }
+
+  const insert = db.prepare('INSERT INTO payments (student_id, amount, date, note) VALUES (?, ?, ?, ?)');
+  const result = insert.run(student_id, amount, date, note || null);
+
+  res.json({ success: true, paymentId: result.lastInsertRowid });
+});
+
+// عرض دفعات طالب معين
+app.get('/api/payments/:studentId', (req, res) => {
+  const { studentId } = req.params;
+  const payments = db.prepare('SELECT * FROM payments WHERE student_id = ? ORDER BY date DESC, id DESC').all(studentId);
+  res.json(payments);
+});
+
+// تحديث سعر باقة الطالب
+app.put('/api/students/:id/package', (req, res) => {
+  const { id } = req.params;
+  const { total_package } = req.body;
+  db.prepare('UPDATE students SET total_package = ? WHERE id = ?').run(total_package, id);
   res.json({ success: true });
 });
 

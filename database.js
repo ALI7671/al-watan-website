@@ -72,6 +72,25 @@ try {
   // العمود موجود أصلاً، عادي
 }
 
+// نضيف عمود سعر الباقة الكاملة لو مش موجود
+try {
+  db.exec('ALTER TABLE students ADD COLUMN total_package INTEGER');
+  console.log('تمت إضافة عمود سعر الباقة ✅');
+} catch (e) {
+  // العمود موجود أصلاً، عادي
+}
+
+// جدول الدفعات
+db.exec(`
+  CREATE TABLE IF NOT EXISTS payments (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    student_id INTEGER NOT NULL,
+    amount INTEGER NOT NULL,
+    date TEXT NOT NULL,
+    note TEXT
+  )
+`);
+
 const teacherCount = db.prepare('SELECT COUNT(*) as count FROM teachers').get();
 if (teacherCount.count === 0) {
   const insertTeacher = db.prepare('INSERT INTO teachers (name, types) VALUES (?, ?)');
