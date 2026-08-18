@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>مدرسة الوطن لتعليم السياقة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   :root {
     --ink: #1B2126;
@@ -13,15 +16,20 @@
     --route: #E9B93E;
     --olive: #4F6F52;
     --line: rgba(27,33,38,.14);
+    --line-dark: rgba(246,243,236,.16);
     --wa-green: #25D366;
+    --shadow-md: 0 12px 30px rgba(27,33,38,.10);
+    --shadow-lg: 0 22px 48px rgba(27,33,38,.22);
+    --shadow-gold: 0 0 0 2px var(--route), 0 26px 52px rgba(27,33,38,.28);
   }
   * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   body {
-    font-family: 'Tajawal', Arial, sans-serif;
+    font-family: 'Cairo', 'Tajawal', Arial, sans-serif;
     background: var(--paper);
     color: var(--ink);
     margin: 0;
-    padding: 0 0 40px 0;
+    padding: 0;
     overflow-x: hidden;
   }
   img { max-width: 100%; display: block; }
@@ -29,32 +37,36 @@
   /* ===== Navbar ===== */
   .navbar {
     background: var(--ink);
-    padding: 14px 20px;
+    padding: 16px 24px;
     display: flex;
     align-items: center;
     gap: 18px;
     position: sticky;
     top: 0;
     z-index: 500;
+    box-shadow: 0 6px 20px rgba(0,0,0,.18);
   }
   .navbar .brand {
     color: var(--route);
-    font-size: 16px;
-    font-weight: 800;
+    font-size: 17px;
+    font-weight: 900;
     margin-left: auto;
     white-space: nowrap;
+    letter-spacing: -.3px;
   }
   .navbar .nav-links {
     display: flex;
-    gap: 18px;
+    gap: 20px;
     align-items: center;
     flex-wrap: wrap;
   }
   .navbar a {
     color: var(--paper);
     text-decoration: none;
-    font-size: 14px;
-    font-weight: 700;
+    font-size: 14.5px;
+    font-weight: 800;
+    position: relative;
+    transition: color .2s ease;
   }
   .navbar a:hover { color: var(--route); }
   .nav-toggle {
@@ -62,69 +74,117 @@
     background: none;
     border: none;
     color: var(--route);
-    font-size: 24px;
+    font-size: 26px;
     cursor: pointer;
     padding: 0 4px;
   }
 
-  .container { max-width: 960px; margin: 0 auto; padding: 0 18px; }
+  .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
 
-  h2 { font-size: 19px; margin: 30px 0 12px 0; font-weight: 800; }
-  h2 .sub { display:block; font-size: 12.5px; font-weight: 600; color: var(--ink-soft); margin-top: 3px; }
+  /* ===== Section rhythm (dark / light alternation) ===== */
+  .section { padding: 84px 0; }
+  .section-light { background: var(--paper); color: var(--ink); }
+  .section-dark { background: var(--ink); color: var(--paper); }
+
+  .reveal { opacity: 0; transform: translateY(38px); transition: opacity .8s cubic-bezier(.2,.8,.2,1), transform .8s cubic-bezier(.2,.8,.2,1); }
+  .reveal.in-view { opacity: 1; transform: none; }
+
+  .section-header { text-align: center; margin-bottom: 46px; }
+  .section-header::after {
+    content: '';
+    display: block;
+    width: 64px; height: 4px;
+    background: var(--route);
+    margin: 18px auto 0;
+    border-radius: 4px;
+  }
+
+  h2 {
+    font-size: 17px;
+    margin: 0;
+    font-weight: 900;
+    color: var(--ink);
+    letter-spacing: -.3px;
+  }
+  h2 .sub { display: block; font-size: 13px; font-weight: 700; color: var(--ink-soft); margin-top: 6px; }
+  .section-header h2 { font-size: clamp(24px, 3.6vw, 36px); }
+  .section-header h2 .sub { font-size: clamp(13.5px, 1.6vw, 16px); margin-top: 12px; }
+  .section-dark .section-header h2 { color: var(--paper); }
+  .section-dark .section-header h2 .sub { color: #B7C0C7; }
 
   .card {
     background: #fff;
+    color: var(--ink);
     border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 22px;
+    border-radius: 18px;
+    padding: 26px;
     margin-bottom: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    box-shadow: var(--shadow-md);
   }
 
-  label { display: block; font-size: 12.5px; font-weight: 700; margin-bottom: 6px; color: var(--ink-soft); }
+  label { display: block; font-size: 12.5px; font-weight: 800; margin-bottom: 6px; color: var(--ink-soft); }
   input, select {
     width: 100%;
-    padding: 13px;
-    border-radius: 9px;
+    padding: 14px;
+    border-radius: 11px;
     border: 1.5px solid var(--line);
     font-family: inherit;
     font-size: 15px;
+    color: var(--ink);
     margin-bottom: 16px;
     background: #fff;
+    transition: border-color .2s ease, box-shadow .2s ease;
   }
-  input:focus, select:focus { outline: 2px solid var(--route); border-color: var(--route); }
+  input:focus, select:focus { outline: none; border-color: var(--route); box-shadow: 0 0 0 4px rgba(233,185,62,.18); }
 
   button {
-    background: var(--ink);
-    color: var(--route);
-    border: none;
-    border-radius: 11px;
-    padding: 14px;
-    font-size: 15px;
-    font-weight: 700;
-    width: 100%;
-    cursor: pointer;
     font-family: inherit;
-    transition: transform .12s ease;
+    font-weight: 800;
+    cursor: pointer;
+    border: none;
+    transition: transform .2s cubic-bezier(.2,.8,.2,1), box-shadow .25s ease, background .2s ease;
   }
-  button:active { transform: scale(.98); }
+  button:active { transform: scale(.97); }
 
-  .price-box { background: var(--paper-dim); padding: 14px; border-radius: 9px; text-align: center; font-weight: 800; font-size: 17px; margin-bottom: 16px; }
+  .btn-gold {
+    background: var(--route);
+    color: var(--ink);
+    border-radius: 13px;
+    padding: 17px 20px;
+    font-size: 16px;
+    width: 100%;
+    box-shadow: 0 12px 26px rgba(233,185,62,.35);
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .btn-gold::after {
+    content: '';
+    position: absolute; inset: 0 auto 0 -60%;
+    width: 50%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,.6), transparent);
+    transform: skewX(-20deg);
+    transition: left .6s ease;
+  }
+  .btn-gold:hover::after { left: 130%; }
+  .btn-gold:hover { transform: translateY(-3px) scale(1.025); background: #f0c458; box-shadow: 0 18px 36px rgba(233,185,62,.5); }
 
-  /* ===== Hero Slider ===== */
+  .price-box { background: var(--paper-dim); color: var(--ink); padding: 15px; border-radius: 11px; text-align: center; font-weight: 900; font-size: 17px; margin-bottom: 16px; }
+
+  /* ===== Hero Slider (full height) ===== */
   .slider {
     position: relative;
     width: 100%;
-    height: 46vw;
-    max-height: 420px;
-    min-height: 200px;
+    height: 100vh;
+    min-height: 560px;
     overflow: hidden;
     background: var(--ink);
   }
+  @supports (height: 100svh) { .slider { height: 100svh; } }
   .slider-track {
     display: flex;
     height: 100%;
-    transition: transform .6s ease;
+    transition: transform .7s cubic-bezier(.2,.8,.2,1);
   }
   .slide {
     position: relative;
@@ -136,159 +196,217 @@
     height: 100%;
     object-fit: cover;
   }
+  .slide::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(27,33,38,.45) 0%, rgba(27,33,38,.35) 40%, rgba(27,33,38,.88) 100%);
+    z-index: 1;
+  }
   .slide .slide-caption {
-    position: absolute;
-    inset: auto 0 0 0;
-    padding: 22px 24px 26px;
-    background: linear-gradient(to top, rgba(27,33,38,.92), rgba(27,33,38,0));
-    color: var(--paper);
+    position: absolute; inset: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 24px;
   }
   .slide .slide-caption h1 {
-    color: var(--route);
-    font-size: clamp(20px, 4vw, 30px);
-    margin: 0 0 6px;
-    font-weight: 800;
+    color: #fff;
+    font-size: clamp(32px, 7vw, 78px);
+    line-height: 1.12;
+    margin: 0 0 16px;
+    font-weight: 900;
+    letter-spacing: -1px;
+    text-shadow: 0 4px 24px rgba(0,0,0,.35);
+    animation: heroUp .9s cubic-bezier(.2,.8,.2,1) both;
   }
+  .slide .slide-caption h1 span { color: var(--route); }
   .slide .slide-caption p {
     margin: 0;
-    font-size: 14px;
-    color: #d8dee3;
+    font-size: clamp(15px, 2.1vw, 21px);
+    font-weight: 700;
+    color: #E7EAED;
+    max-width: 640px;
+    animation: heroUp .9s cubic-bezier(.2,.8,.2,1) .16s both;
+  }
+  @keyframes heroUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: none; }
+  }
+  .scroll-cue {
+    position: absolute;
+    bottom: 26px; left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+    color: var(--paper);
+    font-size: 30px;
+    text-decoration: none;
+    opacity: .85;
+    animation: bounceCue 1.8s infinite;
+  }
+  @keyframes bounceCue {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(10px); }
   }
   .slider-dots {
     position: absolute;
-    bottom: 12px;
+    bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
-    gap: 8px;
+    gap: 10px;
     z-index: 5;
   }
   .slider-dots button {
-    width: 9px; height: 9px; padding: 0;
+    width: 10px; height: 10px; padding: 0;
     border-radius: 50%;
-    background: rgba(246,243,236,.5);
+    background: rgba(246,243,236,.45);
     border: none;
     cursor: pointer;
+    transition: all .25s ease;
   }
-  .slider-dots button.active { background: var(--route); }
+  .slider-dots button.active { background: var(--route); width: 26px; border-radius: 6px; box-shadow: 0 0 12px rgba(233,185,62,.7); }
   .slider-arrow {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(27,33,38,.55);
+    background: rgba(27,33,38,.4);
+    border: 1.5px solid rgba(246,243,236,.25);
     color: var(--paper);
-    border: none;
-    width: 36px; height: 36px;
+    width: 48px; height: 48px;
     border-radius: 50%;
-    font-size: 18px;
+    font-size: 20px;
     cursor: pointer;
     z-index: 5;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: all .25s ease;
   }
-  .slider-arrow.prev { right: 12px; }
-  .slider-arrow.next { left: 12px; }
+  .slider-arrow:hover { background: var(--route); color: var(--ink); border-color: var(--route); transform: translateY(-50%) scale(1.08); }
+  .slider-arrow.prev { right: 22px; }
+  .slider-arrow.next { left: 22px; }
 
   /* ===== Cars Grid ===== */
   .cars-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 14px;
+    gap: 20px;
   }
   .car-card {
     background: #fff;
+    color: var(--ink);
     border: 1px solid var(--line);
-    border-radius: 14px;
+    border-radius: 18px;
     overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    box-shadow: var(--shadow-md);
+    transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease;
   }
+  .car-card:hover { transform: translateY(-10px) scale(1.03); box-shadow: var(--shadow-gold); }
   .car-card .car-photo {
     width: 100%;
-    height: 110px;
+    height: 130px;
     object-fit: cover;
     background: var(--paper-dim);
   }
-  .car-card .car-info { padding: 12px; text-align: center; }
-  .car-card .car-name { font-weight: 800; font-size: 13.5px; margin-bottom: 4px; }
+  .car-card .car-info { padding: 15px; text-align: center; }
+  .car-card .car-name { font-weight: 800; font-size: 14px; margin-bottom: 6px; }
   .car-card .car-tags { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
   .car-card .tag {
-    font-size: 11px; font-weight: 700;
+    font-size: 11px; font-weight: 800;
     background: var(--paper-dim); color: var(--ink-soft);
-    padding: 3px 8px; border-radius: 20px;
+    padding: 4px 10px; border-radius: 20px;
   }
   .car-card .tag.gold { background: var(--route); color: var(--ink); }
 
   /* ===== Theory cards ===== */
-  .theory-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .theory-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
   .theory-card {
-    background: var(--paper-dim);
-    border-radius: 12px;
-    padding: 20px 12px;
+    background: #fff;
+    color: var(--ink);
+    border-radius: 18px;
+    padding: 32px 18px;
     text-align: center;
     cursor: pointer;
     border: 1.5px solid transparent;
-    transition: border-color .15s ease, transform .12s ease;
+    box-shadow: var(--shadow-md);
+    transition: transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s ease, border-color .3s ease;
   }
-  .theory-card:hover { border-color: var(--route); transform: translateY(-2px); }
-  .theory-card .icon { font-size: 26px; margin-bottom: 8px; }
-  .theory-card .title { font-weight: 800; font-size: 14px; margin-bottom: 4px; }
-  .theory-card .desc { font-size: 11.5px; color: var(--ink-soft); font-weight: 600; }
+  .theory-card:hover { border-color: var(--route); transform: translateY(-10px) scale(1.03); box-shadow: var(--shadow-gold); }
+  .theory-card .icon { font-size: 32px; margin-bottom: 12px; }
+  .theory-card .title { font-weight: 800; font-size: 15.5px; margin-bottom: 6px; }
+  .theory-card .desc { font-size: 12px; color: var(--ink-soft); font-weight: 600; }
 
   /* ===== Videos ===== */
-  .video-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-  .video-card { background: #fff; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+  .video-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .video-card { background: #fff; color: var(--ink); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; box-shadow: var(--shadow-md); transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease; }
+  .video-card:hover { transform: translateY(-10px) scale(1.03); box-shadow: var(--shadow-gold); }
   .video-card video, .video-card .video-fallback {
-    width: 100%; height: 130px; object-fit: cover; background: var(--ink); display: block;
+    width: 100%; height: 150px; object-fit: cover; background: var(--ink); display: block;
   }
   .video-card .video-fallback {
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     color: var(--route); gap: 6px; font-size: 12px; text-align: center; padding: 8px;
   }
-  .video-card .video-fallback .play { font-size: 26px; }
-  .video-card .video-title { padding: 10px 12px; font-size: 13px; font-weight: 700; }
+  .video-card .video-fallback .play { font-size: 28px; }
+  .video-card .video-title { padding: 12px 14px; font-size: 13.5px; font-weight: 800; }
 
   /* ===== Reviews ===== */
-  .review-card { border-right: 4px solid var(--route); padding-right: 12px; margin-bottom: 12px; font-size: 14px; }
+  .review-card { border-right: 4px solid var(--route); padding-right: 14px; margin-bottom: 14px; font-size: 14px; }
   .review-author { font-weight: 800; color: var(--ink); margin-top: 4px; font-size: 13px; }
-  .stars { color: var(--route); letter-spacing: 2px; }
+  .stars { color: var(--route); letter-spacing: 3px; font-size: 15px; }
 
   /* ===== WhatsApp floating button ===== */
   .wa-float {
     position: fixed;
     bottom: 24px;
     left: 20px;
-    width: 58px; height: 58px;
+    width: 60px; height: 60px;
     background: var(--wa-green);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 8px 20px rgba(37,211,102,.45);
+    box-shadow: 0 8px 22px rgba(37,211,102,.5);
     z-index: 900;
     text-decoration: none;
-    animation: waPulse 2.4s infinite;
+    animation: waPulse 2.2s infinite;
+    transition: transform .2s ease;
   }
+  .wa-float:hover { transform: scale(1.08); }
   .wa-float svg { width: 30px; height: 30px; }
   @keyframes waPulse {
-    0% { box-shadow: 0 0 0 0 rgba(37,211,102,.55); }
-    70% { box-shadow: 0 0 0 14px rgba(37,211,102,0); }
+    0% { box-shadow: 0 0 0 0 rgba(37,211,102,.6); }
+    70% { box-shadow: 0 0 0 16px rgba(37,211,102,0); }
     100% { box-shadow: 0 0 0 0 rgba(37,211,102,0); }
   }
 
   #toast {
     position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
-    background: var(--ink); color: var(--paper); padding: 12px 24px; border-radius: 30px;
-    font-size: 14px; font-weight: 700; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    background: var(--ink); color: var(--paper); padding: 13px 26px; border-radius: 30px;
+    font-size: 14px; font-weight: 800; box-shadow: 0 12px 28px rgba(0,0,0,0.25);
     transition: transform 0.3s ease; z-index: 1000; border: 1.5px solid var(--route);
     max-width: 90%; text-align: center;
   }
   #toast.show { transform: translateX(-50%) translateY(0); }
 
-  .grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+  footer {
+    background: var(--ink);
+    color: #9AA4AB;
+    text-align: center;
+    padding: 26px 18px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  footer span { color: var(--route); }
 
   /* ===== Responsive ===== */
   @media (max-width: 760px) {
+    .section { padding: 60px 0; }
     .cars-grid { grid-template-columns: repeat(2, 1fr); }
     .video-grid { grid-template-columns: repeat(2, 1fr); }
     .theory-grid { grid-template-columns: 1fr; }
@@ -303,8 +421,8 @@
       background: var(--ink);
       flex-direction: column;
       align-items: flex-start;
-      padding: 12px 20px 18px;
-      gap: 14px;
+      padding: 14px 20px 20px;
+      gap: 16px;
       border-top: 1px solid rgba(246,243,236,.1);
     }
     .navbar .nav-links.open { display: flex; }
@@ -312,7 +430,10 @@
     .navbar .brand { font-size: 15px; }
     .cars-grid { grid-template-columns: repeat(2, 1fr); }
     .video-grid { grid-template-columns: 1fr; }
-    .wa-float { width: 52px; height: 52px; left: 14px; bottom: 18px; }
+    .wa-float { width: 54px; height: 54px; left: 14px; bottom: 18px; }
+    .slider-arrow { width: 40px; height: 40px; font-size: 17px; }
+    .slider-arrow.prev { right: 10px; }
+    .slider-arrow.next { left: 10px; }
   }
 </style>
 </head>
@@ -340,117 +461,155 @@
   <button class="slider-arrow prev" onclick="changeSlide(1)">‹</button>
   <button class="slider-arrow next" onclick="changeSlide(-1)">›</button>
   <div class="slider-dots" id="sliderDots"></div>
+  <a href="#cars" class="scroll-cue" aria-label="انتقل للأسفل">⌄</a>
 </div>
 
-<div class="container">
-
-  <!-- (3) قسم سيارات المدرسة -->
-  <h2>سيارات المدرسة<span class="sub">تتعلم على سيارات حديثة ونظيفة لكل أنواع الرخص</span></h2>
-  <div class="cars-grid" id="carsGrid"></div>
-
-  <!-- (4) قسم أسئلة التؤوريا -->
-  <h2>أسئلة التؤوريا<span class="sub">تدرّب على أسئلة الفحص النظري حسب نوع الرخصة</span></h2>
-  <div class="theory-grid">
-    <div class="theory-card" onclick="theoryClick('خصوصي')">
-      <div class="icon">🚘</div>
-      <div class="title">رخصة خصوصي</div>
-      <div class="desc">أسئلة الفحص النظري للرخصة الخصوصية</div>
+<!-- (3) قسم سيارات المدرسة -->
+<section class="section section-light" id="cars">
+  <div class="container reveal">
+    <div class="section-header">
+      <h2>سيارات المدرسة<span class="sub">تتعلم على سيارات حديثة ونظيفة لكل أنواع الرخص</span></h2>
     </div>
-    <div class="theory-card" onclick="theoryClick('شحن')">
-      <div class="icon">🚚</div>
-      <div class="title">رخصة شحن</div>
-      <div class="desc">أسئلة الفحص النظري لرخصة الشحن الخفيف</div>
+    <div class="cars-grid" id="carsGrid"></div>
+  </div>
+</section>
+
+<!-- (4) قسم أسئلة التؤوريا -->
+<section class="section section-dark">
+  <div class="container reveal">
+    <div class="section-header">
+      <h2>أسئلة التؤوريا<span class="sub">تدرّب على أسئلة الفحص النظري حسب نوع الرخصة</span></h2>
     </div>
-    <div class="theory-card" onclick="theoryClick('عمومي')">
-      <div class="icon">🚌</div>
-      <div class="title">رخصة عمومي</div>
-      <div class="desc">أسئلة الفحص النظري للرخصة العمومية</div>
+    <div class="theory-grid">
+      <div class="theory-card" onclick="theoryClick('خصوصي')">
+        <div class="icon">🚘</div>
+        <div class="title">رخصة خصوصي</div>
+        <div class="desc">أسئلة الفحص النظري للرخصة الخصوصية</div>
+      </div>
+      <div class="theory-card" onclick="theoryClick('شحن')">
+        <div class="icon">🚚</div>
+        <div class="title">رخصة شحن</div>
+        <div class="desc">أسئلة الفحص النظري لرخصة الشحن الخفيف</div>
+      </div>
+      <div class="theory-card" onclick="theoryClick('عمومي')">
+        <div class="icon">🚌</div>
+        <div class="title">رخصة عمومي</div>
+        <div class="desc">أسئلة الفحص النظري للرخصة العمومية</div>
+      </div>
     </div>
   </div>
+</section>
 
-  <!-- (5) قسم طلب موعد فحص نظري -->
-  <h2>طلب موعد فحص نظري (تؤوريا)</h2>
-  <div class="card">
-    <label>الاسم الكامل</label>
-    <input type="text" id="theoryName" placeholder="مثال: محمد أحمد">
-    <label>رقم الموبايل</label>
-    <input type="tel" id="theoryPhone" placeholder="0599123456">
-    <button onclick="submitRequest('theory')">طلب موعد فحص نظري</button>
-  </div>
-
-  <!-- (6) قسم طلب موعد فحص عملي (تيست) -->
-  <h2>طلب موعد فحص عملي (تيست)</h2>
-  <div class="card">
-    <label>الاسم الكامل</label>
-    <input type="text" id="testName" placeholder="مثال: محمد أحمد">
-    <label>رقم الموبايل</label>
-    <input type="tel" id="testPhone" placeholder="0599123456">
-    <button onclick="submitRequest('test')">طلب موعد فحص عملي</button>
-  </div>
-
-  <!-- (7) قسم فيديوهات تعليمية -->
-  <h2>فيديوهات تعليمية<span class="sub">خطوات عملية تساعدك تتعلم أسرع</span></h2>
-  <div class="video-grid" id="videoGrid"></div>
-
-  <!-- (8) قسم آراء الطلاب -->
-  <h2>آراء طلابنا</h2>
-  <div class="card">
-    <div class="review-card">
-      <div class="stars">★★★★★</div>
-      <p style="margin:6px 0;">أفضل مدرسة تعلمت فيها، المدرب صبور كتير ونجحت من أول مرة بالفحص.</p>
-      <div class="review-author">— محمد أحمد</div>
+<!-- (5+6) قسم طلب مواعيد الفحص -->
+<section class="section section-light">
+  <div class="container reveal">
+    <div class="section-header">
+      <h2>احجز موعد فحصك<span class="sub">اطلب موعد الفحص النظري (تؤوريا) أو العملي (تيست)</span></h2>
     </div>
-    <div class="review-card">
-      <div class="stars">★★★★★</div>
-      <p style="margin:6px 0;">السيارات جديدة ونظيفة، والتعامل محترم. أنصح فيها بشدة.</p>
-      <div class="review-author">— لينا سمير</div>
-    </div>
-    <div class="review-card" style="margin-bottom:0;">
-      <div class="stars">★★★★☆</div>
-      <p style="margin:6px 0;">أسعار مناسبة ومواعيد مرنة، ساعدوني ألحق التيست بوقت قصير.</p>
-      <div class="review-author">— يوسف كمال</div>
+    <div class="grid-2col">
+      <div class="card">
+        <h2 style="margin:0 0 14px; font-size:15px;">طلب موعد فحص نظري (تؤوريا)</h2>
+        <label>الاسم الكامل</label>
+        <input type="text" id="theoryName" placeholder="مثال: محمد أحمد">
+        <label>رقم الموبايل</label>
+        <input type="tel" id="theoryPhone" placeholder="0599123456">
+        <button class="btn-gold" onclick="submitRequest('theory')">طلب موعد فحص نظري</button>
+      </div>
+
+      <div class="card">
+        <h2 style="margin:0 0 14px; font-size:15px;">طلب موعد فحص عملي (تيست)</h2>
+        <label>الاسم الكامل</label>
+        <input type="text" id="testName" placeholder="مثال: محمد أحمد">
+        <label>رقم الموبايل</label>
+        <input type="tel" id="testPhone" placeholder="0599123456">
+        <button class="btn-gold" onclick="submitRequest('test')">طلب موعد فحص عملي</button>
+      </div>
     </div>
   </div>
+</section>
 
-  <!-- (10) قسم حجز الدرس وتسجيل الطالب -->
-  <h2>حجز الدرس وتسجيل الطالب</h2>
-  <div class="grid-2col">
+<!-- (7) قسم فيديوهات تعليمية -->
+<section class="section section-dark">
+  <div class="container reveal">
+    <div class="section-header">
+      <h2>فيديوهات تعليمية<span class="sub">خطوات عملية تساعدك تتعلم أسرع</span></h2>
+    </div>
+    <div class="video-grid" id="videoGrid"></div>
+  </div>
+</section>
+
+<!-- (8) قسم آراء الطلاب -->
+<section class="section section-light">
+  <div class="container reveal">
+    <div class="section-header">
+      <h2>آراء طلابنا<span class="sub">شو بيقول طلابنا عن تجربتهم معنا</span></h2>
+    </div>
     <div class="card">
-      <h2 style="margin:0 0 12px; font-size:15px;">احجز درسك</h2>
-      <label>اسمك</label>
-      <input type="text" id="studentName" placeholder="مثال: محمد أحمد">
-      <label>نوع الرخصة</label>
-      <select id="lessonType" onchange="updatePrice()">
-        <option value="automatic">أوتوماتيك</option>
-        <option value="manual">جير</option>
-        <option value="heavy">شحن خفيف</option>
-      </select>
-      <label>المعلم</label>
-      <select id="teacherSelect"><option>جاري التحميل...</option></select>
-      <label>التاريخ</label>
-      <input type="date" id="lessonDate">
-      <label>الوقت</label>
-      <input type="time" id="lessonTime">
-      <div class="price-box" id="priceBox">السعر: 110 ₪</div>
-      <button onclick="submitBooking()">تأكيد الحجز</button>
-    </div>
-
-    <div class="card">
-      <h2 style="margin:0 0 12px; font-size:15px;">تسجيل طالب جديد</h2>
-      <label>الاسم</label>
-      <input type="text" id="newStudentName" placeholder="مثال: أحمد يوسف">
-      <label>رقم الموبايل</label>
-      <input type="tel" id="newStudentPhone" placeholder="0599123456">
-      <label>نوع الرخصة</label>
-      <select id="newStudentType">
-        <option value="automatic">أوتوماتيك</option>
-        <option value="manual">جير</option>
-        <option value="heavy">شحن خفيف</option>
-      </select>
-      <button onclick="registerStudent()">تسجيل</button>
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <p style="margin:6px 0;">أفضل مدرسة تعلمت فيها، المدرب صبور كتير ونجحت من أول مرة بالفحص.</p>
+        <div class="review-author">— محمد أحمد</div>
+      </div>
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <p style="margin:6px 0;">السيارات جديدة ونظيفة، والتعامل محترم. أنصح فيها بشدة.</p>
+        <div class="review-author">— لينا سمير</div>
+      </div>
+      <div class="review-card" style="margin-bottom:0;">
+        <div class="stars">★★★★☆</div>
+        <p style="margin:6px 0;">أسعار مناسبة ومواعيد مرنة، ساعدوني ألحق التيست بوقت قصير.</p>
+        <div class="review-author">— يوسف كمال</div>
+      </div>
     </div>
   </div>
-</div>
+</section>
+
+<!-- (10) قسم حجز الدرس وتسجيل الطالب -->
+<section class="section section-dark">
+  <div class="container reveal">
+    <div class="section-header">
+      <h2>حجز الدرس وتسجيل الطالب<span class="sub">ابدأ رحلتك مع مدرسة الوطن اليوم</span></h2>
+    </div>
+    <div class="grid-2col">
+      <div class="card">
+        <h2 style="margin:0 0 14px; font-size:15px;">احجز درسك</h2>
+        <label>اسمك</label>
+        <input type="text" id="studentName" placeholder="مثال: محمد أحمد">
+        <label>نوع الرخصة</label>
+        <select id="lessonType" onchange="updatePrice()">
+          <option value="automatic">أوتوماتيك</option>
+          <option value="manual">جير</option>
+          <option value="heavy">شحن خفيف</option>
+        </select>
+        <label>المعلم</label>
+        <select id="teacherSelect"><option>جاري التحميل...</option></select>
+        <label>التاريخ</label>
+        <input type="date" id="lessonDate">
+        <label>الوقت</label>
+        <input type="time" id="lessonTime">
+        <div class="price-box" id="priceBox">السعر: 110 ₪</div>
+        <button class="btn-gold" onclick="submitBooking()">تأكيد الحجز</button>
+      </div>
+
+      <div class="card">
+        <h2 style="margin:0 0 14px; font-size:15px;">تسجيل طالب جديد</h2>
+        <label>الاسم</label>
+        <input type="text" id="newStudentName" placeholder="مثال: أحمد يوسف">
+        <label>رقم الموبايل</label>
+        <input type="tel" id="newStudentPhone" placeholder="0599123456">
+        <label>نوع الرخصة</label>
+        <select id="newStudentType">
+          <option value="automatic">أوتوماتيك</option>
+          <option value="manual">جير</option>
+          <option value="heavy">شحن خفيف</option>
+        </select>
+        <button class="btn-gold" onclick="registerStudent()">تسجيل</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>مدرسة الوطن لتعليم السياقة — رام الله <span>★</span> جميع الحقوق محفوظة</footer>
 
 <!-- (9) زر واتساب عائم -->
 <a class="wa-float" id="waFloat" href="#" target="_blank" aria-label="تواصل عبر واتساب">
@@ -482,16 +641,27 @@ function placeholderImg(label, bg1 = '1B2126', bg2 = '3A434B') {
     </linearGradient></defs>
     <rect width="100%" height="100%" fill="url(#g)"/>
     <text x="50%" y="46%" font-size="46" text-anchor="middle" dominant-baseline="middle">🚗</text>
-    <text x="50%" y="72%" font-size="16" fill="#E9B93E" font-family="Tajawal,Arial,sans-serif" font-weight="700" text-anchor="middle">${label}</text>
+    <text x="50%" y="72%" font-size="16" fill="#E9B93E" font-family="Cairo,Tajawal,Arial,sans-serif" font-weight="700" text-anchor="middle">${label}</text>
+  </svg>`;
+  return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+}
+
+function heroPlaceholderImg(bg1 = '1B2126', bg2 = '3A434B') {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900">
+    <defs><linearGradient id="hg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#${bg1}"/><stop offset="100%" stop-color="#${bg2}"/>
+    </linearGradient></defs>
+    <rect width="100%" height="100%" fill="url(#hg)"/>
+    <text x="50%" y="54%" font-size="240" text-anchor="middle" dominant-baseline="middle" opacity="0.16">🚗</text>
   </svg>`;
   return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
 }
 
 /* ===== (2) Hero slider — reads car photos from /images in the public folder ===== */
 const sliderImages = [
-  { src: '/images/hero-1.jpg', title: 'مدرسة الوطن لتعليم السياقة', text: 'احجز درسك بسهولة • أوتوماتيك • جير • شحن خفيف' },
-  { src: '/images/hero-2.jpg', title: 'مدربون محترفون وسيارات حديثة', text: 'نساعدك تنجح من أول مرة بالفحص النظري والعملي' },
-  { src: '/images/hero-3.jpg', title: 'مواعيد مرنة تناسبك', text: 'احجز فحص التؤوريا والتيست بضغطة زر' },
+  { src: '/images/hero-1.jpg', title: 'مدرسة الوطن <span>لتعليم السياقة</span>', text: 'احجز درسك بسهولة • أوتوماتيك • جير • شحن خفيف' },
+  { src: '/images/hero-2.jpg', title: 'مدربون محترفون <span>وسيارات حديثة</span>', text: 'نساعدك تنجح من أول مرة بالفحص النظري والعملي' },
+  { src: '/images/hero-3.jpg', title: 'مواعيد مرنة <span>تناسبك</span>', text: 'احجز فحص التؤوريا والتيست بضغطة زر' },
 ];
 
 let currentSlide = 0;
@@ -502,7 +672,7 @@ function buildSlider() {
   const dots = document.getElementById('sliderDots');
   track.innerHTML = sliderImages.map((s, i) => `
     <div class="slide">
-      <img src="${s.src}" onerror="this.onerror=null; this.src=placeholderImg('${s.title}');" alt="${s.title}">
+      <img src="${s.src}" onerror="this.onerror=null; this.src=heroPlaceholderImg();" alt="${s.title.replace(/<[^>]*>/g,'')}">
       <div class="slide-caption">
         <h1>${s.title}</h1>
         <p>${s.text}</p>
@@ -675,10 +845,25 @@ async function registerStudent() {
   }
 }
 
+/* ===== Scroll reveal animation ===== */
+function initReveal() {
+  const els = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  els.forEach(el => io.observe(el));
+}
+
 buildSlider();
 buildCars();
 buildVideos();
 loadTeachers();
+initReveal();
 </script>
 </body>
 </html>

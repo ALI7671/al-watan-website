@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>حسابي - مدرسة الوطن</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   :root {
     --ink: #1B2126;
@@ -16,10 +19,12 @@
     --rust: #B3492B;
     --rust-soft: #F3E0D8;
     --line: rgba(27,33,38,.14);
+    --shadow-md: 0 12px 30px rgba(27,33,38,.10);
+    --shadow-gold: 0 0 0 2px var(--route), 0 22px 44px rgba(27,33,38,.22);
   }
   * { box-sizing: border-box; }
   body {
-    font-family: 'Tajawal', Arial, sans-serif;
+    font-family: 'Cairo', 'Tajawal', Arial, sans-serif;
     background: var(--paper);
     color: var(--ink);
     margin: 0;
@@ -27,53 +32,63 @@
   }
   .navbar {
     background: var(--ink);
-    padding: 14px 20px;
+    padding: 16px 20px;
     display: flex;
     gap: 18px;
     align-items: center;
     flex-wrap: wrap;
+    position: sticky;
+    top: 0;
+    z-index: 500;
+    box-shadow: 0 6px 20px rgba(0,0,0,.18);
   }
-  .navbar a { color: var(--paper); text-decoration: none; font-size: 14px; font-weight: 700; }
+  .navbar a { color: var(--paper); text-decoration: none; font-size: 14.5px; font-weight: 800; }
   .navbar a:hover { color: var(--route); }
-  .navbar .brand { color: var(--route); font-size: 16px; font-weight: 800; margin-left: auto; }
+  .navbar .brand { color: var(--route); font-size: 17px; font-weight: 900; margin-left: auto; }
 
   .container { max-width: 620px; margin: 0 auto; padding: 0 18px; }
 
   .hero {
     background: var(--ink);
     color: var(--paper);
-    border-radius: 0 0 20px 20px;
-    padding: 26px 24px;
-    margin-bottom: 24px;
+    border-radius: 0 0 26px 26px;
+    padding: 30px 24px;
+    margin-bottom: 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 14px;
+    box-shadow: var(--shadow-md);
   }
-  .hero .name { font-size: 21px; font-weight: 800; }
-  .hero .type { font-size: 13px; color: var(--route); margin-top: 4px; }
+  .hero .name { font-size: 22px; font-weight: 900; }
+  .hero .type { font-size: 13px; color: var(--route); margin-top: 4px; font-weight: 700; }
   .logout {
     background: transparent;
     border: 1.5px solid rgba(246,243,236,.3);
     color: var(--paper);
-    border-radius: 9px;
-    padding: 9px 16px;
+    border-radius: 10px;
+    padding: 10px 18px;
     font-size: 13px;
-    font-weight: 700;
+    font-weight: 800;
     cursor: pointer;
     font-family: inherit;
     flex-shrink: 0;
+    transition: all .2s ease;
   }
+  .logout:hover { background: var(--route); border-color: var(--route); color: var(--ink); transform: translateY(-2px); }
 
-  h2 { font-size: 17px; margin: 26px 0 12px 0; font-weight: 800; }
+  h2 { font-size: 18px; margin: 30px 0 14px 0; font-weight: 900; }
 
   .card {
     background: #fff;
     border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 22px;
-    margin-bottom: 12px;
+    border-radius: 18px;
+    padding: 24px;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow-md);
+    transition: box-shadow .3s ease;
   }
+  .card:hover { box-shadow: var(--shadow-gold); }
 
   label {
     display: block;
@@ -96,52 +111,74 @@
   select:focus, textarea:focus { outline: 2px solid var(--route); border-color: var(--route); }
 
   .submit-btn {
-    background: var(--ink);
-    color: var(--route);
+    background: var(--route);
+    color: var(--ink);
     border: none;
-    border-radius: 11px;
-    padding: 14px;
-    font-size: 15px;
-    font-weight: 700;
+    border-radius: 13px;
+    padding: 16px;
+    font-size: 16px;
+    font-weight: 800;
     width: 100%;
     cursor: pointer;
     font-family: inherit;
+    box-shadow: 0 12px 26px rgba(233,185,62,.35);
+    transition: transform 0.2s cubic-bezier(.2,.8,.2,1), box-shadow 0.25s ease, background 0.2s ease;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
   }
+  .submit-btn::after {
+    content: '';
+    position: absolute; inset: 0 auto 0 -60%;
+    width: 50%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,.6), transparent);
+    transform: skewX(-20deg);
+    transition: left .6s ease;
+  }
+  .submit-btn:hover::after { left: 130%; }
+  .submit-btn:hover { background: #f0c458; transform: translateY(-3px) scale(1.02); box-shadow: 0 18px 36px rgba(233,185,62,.5); }
+  .submit-btn:active { transform: scale(0.97); }
 
   .booking-item {
     background: #fff;
     border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 15px 17px;
+    border-radius: 14px;
+    padding: 16px 18px;
     margin-bottom: 10px;
     font-size: 14px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 12px;
+    box-shadow: var(--shadow-md);
+    transition: transform .25s ease, box-shadow .25s ease;
   }
-  .booking-info .t { font-weight: 700; margin-bottom: 3px; }
+  .booking-item:hover { transform: translateY(-3px); box-shadow: var(--shadow-gold); }
+  .booking-info .t { font-weight: 800; margin-bottom: 3px; }
   .booking-info .s { font-size: 12.5px; color: var(--ink-soft); }
 
   .cancel-btn {
     background: var(--rust);
     color: #fff;
     border: none;
-    border-radius: 7px;
-    padding: 7px 14px;
+    border-radius: 8px;
+    padding: 8px 16px;
     font-size: 12px;
-    font-weight: 700;
+    font-weight: 800;
     cursor: pointer;
     flex-shrink: 0;
     font-family: inherit;
+    transition: transform .2s ease, box-shadow .2s ease;
   }
+  .cancel-btn:hover { transform: scale(1.05); box-shadow: 0 8px 18px rgba(179,73,43,.35); }
 
   .complaint-item {
     background: #fff;
     border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 15px 17px;
+    border-radius: 14px;
+    padding: 16px 18px;
     margin-bottom: 10px;
+    box-shadow: var(--shadow-md);
   }
   .complaint-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 10px; }
   .complaint-head .subj { font-weight: 700; font-size: 14px; }

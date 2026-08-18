@@ -6,6 +6,9 @@
 <meta name="description" content="الأسئلة الشائعة حول دروس السياقة، شروط الترخيص، والرسوم في مدرسة الوطن - رام الله.">
 <link rel="icon" href="/favicon.png" type="image/png">
 <title>الأسئلة الشائعة - مدرسة الوطن</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   :root {
     --ink: #1B2126;
@@ -13,10 +16,13 @@
     --paper: #F6F3EC;
     --route: #E9B93E;
     --line: rgba(27,33,38,.14);
+    --shadow-md: 0 12px 30px rgba(27,33,38,.10);
+    --shadow-gold: 0 0 0 2px var(--route), 0 22px 44px rgba(27,33,38,.22);
   }
   * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   body {
-    font-family: 'Tajawal', Arial, sans-serif;
+    font-family: 'Cairo', 'Tajawal', Arial, sans-serif;
     background: var(--paper);
     color: var(--ink);
     margin: 0;
@@ -24,49 +30,59 @@
   }
   .navbar {
     background: var(--ink);
-    padding: 14px 20px;
+    padding: 16px 24px;
     display: flex;
-    gap: 18px;
+    gap: 20px;
     align-items: center;
     flex-wrap: wrap;
+    position: sticky;
+    top: 0;
+    z-index: 500;
+    box-shadow: 0 6px 20px rgba(0,0,0,.18);
   }
   .navbar a {
     color: var(--paper);
     text-decoration: none;
-    font-size: 14px;
-    font-weight: 700;
+    font-size: 14.5px;
+    font-weight: 800;
   }
   .navbar a:hover { color: var(--route); }
   .navbar .brand {
     color: var(--route);
-    font-size: 16px;
-    font-weight: 800;
+    font-size: 17px;
+    font-weight: 900;
     margin-left: auto;
   }
 
-  .container { max-width: 700px; margin: 0 auto; padding: 20px 18px; }
+  .container { max-width: 720px; margin: 0 auto; padding: 40px 18px; }
+
+  .reveal { opacity: 0; transform: translateY(36px); transition: opacity .8s cubic-bezier(.2,.8,.2,1), transform .8s cubic-bezier(.2,.8,.2,1); }
+  .reveal.in-view { opacity: 1; transform: none; }
 
   .hero {
     background: var(--ink);
     color: var(--paper);
-    border-radius: 16px;
-    padding: 30px 24px;
-    margin-bottom: 24px;
+    border-radius: 22px;
+    padding: 44px 28px;
+    margin-bottom: 30px;
     text-align: center;
+    box-shadow: var(--shadow-md);
   }
-  .hero h1 { font-size: 26px; margin: 0 0 8px 0; color: var(--route); }
-  .hero p { font-size: 14.5px; color: #cbd5e1; margin: 0; }
+  .hero h1 { font-size: clamp(26px, 4.5vw, 38px); margin: 0 0 10px 0; color: var(--route); font-weight: 900; letter-spacing: -.5px; }
+  .hero p { font-size: 15px; color: #cbd5e1; margin: 0; font-weight: 600; }
 
   .card {
     background: #fff;
     border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 20px;
+    border-radius: 16px;
+    padding: 22px;
     margin-bottom: 16px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    box-shadow: var(--shadow-md);
+    transition: transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s ease;
   }
-  .card h3 { margin-top: 0; color: var(--ink); font-size: 17px; margin-bottom: 8px; }
-  .card p { margin: 0; font-size: 14px; color: var(--ink-soft); line-height: 1.6; }
+  .card:hover { transform: translateY(-6px); box-shadow: var(--shadow-gold); }
+  .card h3 { margin-top: 0; color: var(--ink); font-size: 17.5px; margin-bottom: 8px; font-weight: 800; }
+  .card p { margin: 0; font-size: 14px; color: var(--ink-soft); line-height: 1.7; font-weight: 500; }
 </style>
 </head>
 <body>
@@ -82,26 +98,35 @@
 </div>
 
 <div class="container">
-  <div class="hero">
+  <div class="hero reveal">
     <h1>الأسئلة الشائعة</h1>
     <p>إجابات على أبرز الاستفسارات المتعلقة بتعليم السياقة ورخص القيادة</p>
   </div>
 
-  <div class="card">
+  <div class="card reveal">
     <h3>كم عدد دروس السياقة المطلوبة قانونياً؟</h3>
     <p>الحد الأدنى القانوني في فلسطين هو 28 درساً عملياً، ولكل طالب مدة زمنية تناسب استيعابه ومهارته المكتسبة على الشارع.</p>
   </div>
 
-  <div class="card">
+  <div class="card reveal">
     <h3>ما هي الأوراق المطلوبة لفتح فحص النظري (التؤوري)؟</h3>
     <p>صورة الهوية الشخصية (أو هوية ولي الأمر لمن هم تحت سن ১৮)، وفحص عيون طبي، وتعبئة نموذج طلب الرخصة.</p>
   </div>
 
-  <div class="card">
+  <div class="card reveal">
     <h3>كيف يمكنني حجز موعد درس سياقة جديد؟</h3>
     <p>يمكنك حجز الموعد مباشرة من الصفحة الرئيسية للموقع باختيار المعلم، التاريخ، والوقت المناسب، وسيتأكيد الحجز عبر ربط الواتساب مع إدارة المدرسة.</p>
   </div>
 </div>
 
+<script>
+  const els = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) { entry.target.classList.add('in-view'); io.unobserve(entry.target); }
+    });
+  }, { threshold: 0.12 });
+  els.forEach(el => io.observe(el));
+</script>
 </body>
 </html>

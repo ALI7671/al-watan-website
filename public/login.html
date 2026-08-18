@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>تسجيل الدخول - مدرسة الوطن</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   :root {
     --ink: #1B2126;
@@ -14,11 +17,11 @@
     --rust: #B3492B;
     --rust-soft: #F3E0D8;
     --line: rgba(27,33,38,.10);
-    --shadow: 0 10px 30px -5px rgba(27,33,38,0.06), 0 1px 3px rgba(27,33,38,0.03);
+    --shadow: 0 20px 45px -10px rgba(27,33,38,0.16), 0 1px 3px rgba(27,33,38,0.05);
   }
   * { box-sizing: border-box; }
   body {
-    font-family: 'Tajawal', Arial, sans-serif;
+    font-family: 'Cairo', 'Tajawal', Arial, sans-serif;
     background: var(--paper);
     color: var(--ink);
     margin: 0;
@@ -26,16 +29,19 @@
   }
   .navbar {
     background: var(--ink);
-    padding: 14px 24px;
+    padding: 16px 24px;
     display: flex;
     gap: 20px;
     align-items: center;
     flex-wrap: wrap;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    position: sticky;
+    top: 0;
+    z-index: 500;
+    box-shadow: 0 6px 20px rgba(0,0,0,.18);
   }
-  .navbar a { color: var(--paper); text-decoration: none; font-size: 14px; font-weight: 700; transition: color 0.2s; }
+  .navbar a { color: var(--paper); text-decoration: none; font-size: 14.5px; font-weight: 800; transition: color 0.2s; }
   .navbar a:hover { color: var(--route); }
-  .navbar .brand { color: var(--route); font-size: 17px; font-weight: 800; margin-left: auto; letter-spacing: -0.3px; }
+  .navbar .brand { color: var(--route); font-size: 17px; font-weight: 900; margin-left: auto; letter-spacing: -0.3px; }
 
   .login-wrap {
     display: flex;
@@ -47,13 +53,15 @@
   .login-box {
     background: var(--paper-card);
     border: 1px solid var(--line);
-    border-radius: 20px;
-    padding: 40px 32px;
+    border-radius: 24px;
+    padding: 44px 32px;
     max-width: 420px;
     width: 100%;
     text-align: center;
     box-shadow: var(--shadow);
+    transition: transform .3s ease, box-shadow .3s ease;
   }
+  .login-box:hover { transform: translateY(-4px); box-shadow: 0 0 0 2px var(--route), var(--shadow); }
 
   .road {
     height: 110px;
@@ -76,8 +84,8 @@
   @keyframes drive { from { background-position: 0 0; } to { background-position: -62px 0; } }
   .road .car { position: absolute; bottom: 32px; right: 34px; font-size: 26px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
 
-  h1 { font-size: 23px; margin: 0 0 8px 0; font-weight: 800; color: var(--ink); }
-  .sub { color: var(--ink-soft); font-size: 14px; margin: 0 0 28px 0; font-weight: 500; }
+  h1 { font-size: 25px; margin: 0 0 8px 0; font-weight: 900; color: var(--ink); letter-spacing: -.4px; }
+  .sub { color: var(--ink-soft); font-size: 14px; margin: 0 0 28px 0; font-weight: 600; }
 
   label {
     display: block;
@@ -101,21 +109,33 @@
   input:focus { outline: none; background: #fff; border-color: var(--route); box-shadow: 0 0 0 3px rgba(233, 185, 62, 0.15); }
 
   button {
-    background: var(--ink);
-    color: var(--route);
+    background: var(--route);
+    color: var(--ink);
     border: none;
-    border-radius: 12px;
-    padding: 15px;
+    border-radius: 13px;
+    padding: 17px;
     font-size: 16px;
-    font-weight: 700;
+    font-weight: 800;
     width: 100%;
     cursor: pointer;
     font-family: inherit;
-    box-shadow: 0 4px 12px rgba(27,33,38,0.12);
-    transition: transform 0.1s ease, background 0.2s ease;
+    box-shadow: 0 12px 26px rgba(233,185,62,.35);
+    transition: transform 0.2s cubic-bezier(.2,.8,.2,1), box-shadow 0.25s ease, background 0.2s ease;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
   }
-  button:hover { background: #2A333B; }
-  button:active { transform: scale(0.98); }
+  button::after {
+    content: '';
+    position: absolute; inset: 0 auto 0 -60%;
+    width: 50%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,.6), transparent);
+    transform: skewX(-20deg);
+    transition: left .6s ease;
+  }
+  button:hover::after { left: 130%; }
+  button:hover { background: #f0c458; transform: translateY(-3px) scale(1.02); box-shadow: 0 18px 36px rgba(233,185,62,.5); }
+  button:active { transform: scale(0.97); }
 
   .msg { padding: 13px; border-radius: 10px; margin-bottom: 20px; display: none; font-size: 14px; font-weight: 700; }
   .msg.error { background: var(--rust-soft); color: var(--rust); display: block; border: 1px solid rgba(179,73,43,0.15); }
