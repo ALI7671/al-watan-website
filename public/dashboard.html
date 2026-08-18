@@ -23,6 +23,7 @@
     --shadow-gold: 0 0 0 2px var(--route), 0 22px 44px rgba(27,33,38,.22);
   }
   * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   body {
     font-family: 'Cairo', 'Tajawal', Arial, sans-serif;
     background: var(--paper);
@@ -32,36 +33,65 @@
   }
   .navbar {
     background: var(--ink);
-    padding: 16px 20px;
+    padding: 16px 24px;
     display: flex;
-    gap: 18px;
     align-items: center;
-    flex-wrap: wrap;
+    gap: 18px;
     position: sticky;
     top: 0;
     z-index: 500;
     box-shadow: 0 6px 20px rgba(0,0,0,.18);
   }
+  .navbar .brand { color: var(--route); font-size: 17px; font-weight: 900; margin-left: auto; white-space: nowrap; }
+  .navbar .nav-links { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
   .navbar a { color: var(--paper); text-decoration: none; font-size: 14.5px; font-weight: 800; }
   .navbar a:hover { color: var(--route); }
-  .navbar .brand { color: var(--route); font-size: 17px; font-weight: 900; margin-left: auto; }
+  .nav-toggle { display: none; background: none; border: none; color: var(--route); font-size: 26px; cursor: pointer; padding: 0 4px; }
+  @media (max-width: 640px) {
+    .navbar .nav-links {
+      display: none; position: absolute; top: 100%; right: 0; left: 0;
+      background: var(--ink); flex-direction: column; align-items: flex-start;
+      padding: 14px 20px 20px; gap: 16px; border-top: 1px solid rgba(246,243,236,.1);
+    }
+    .navbar .nav-links.open { display: flex; }
+    .nav-toggle { display: block; }
+    .navbar .brand { font-size: 15px; }
+  }
+
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity .7s cubic-bezier(.2,.8,.2,1), transform .7s cubic-bezier(.2,.8,.2,1); }
+  .reveal.in-view { opacity: 1; transform: none; }
 
   .container { max-width: 620px; margin: 0 auto; padding: 0 18px; }
 
   .hero {
-    background: var(--ink);
+    background: linear-gradient(135deg, var(--ink) 0%, #2A333B 100%);
     color: var(--paper);
-    border-radius: 0 0 26px 26px;
-    padding: 30px 24px;
-    margin-bottom: 30px;
+    border-radius: 0 0 32px 32px;
+    padding: 40px 26px 34px;
+    margin-bottom: 34px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 14px;
+    gap: 16px;
     box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
   }
-  .hero .name { font-size: 22px; font-weight: 900; }
-  .hero .type { font-size: 13px; color: var(--route); margin-top: 4px; font-weight: 700; }
+  .hero::before {
+    content: '';
+    position: absolute; top: -60%; left: -10%; width: 260px; height: 260px;
+    background: radial-gradient(circle, rgba(233,185,62,.22), transparent 70%);
+    border-radius: 50%; pointer-events: none;
+  }
+  .hero-info { display: flex; align-items: center; gap: 16px; position: relative; z-index: 1; }
+  .hero-avatar {
+    width: 58px; height: 58px; border-radius: 50%; background: var(--route); color: var(--ink);
+    display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 22px;
+    flex-shrink: 0; box-shadow: 0 8px 20px rgba(233,185,62,.35);
+  }
+  .hero .greeting { font-size: 13px; color: #B7C0C7; font-weight: 700; margin-bottom: 3px; }
+  .hero .name { font-size: clamp(21px, 4vw, 28px); font-weight: 900; letter-spacing: -.3px; }
+  .hero .type { font-size: 13px; color: var(--route); margin-top: 5px; font-weight: 700; }
   .logout {
     background: transparent;
     border: 1.5px solid rgba(246,243,236,.3);
@@ -74,6 +104,7 @@
     font-family: inherit;
     flex-shrink: 0;
     transition: all .2s ease;
+    position: relative; z-index: 1;
   }
   .logout:hover { background: var(--route); border-color: var(--route); color: var(--ink); transform: translateY(-2px); }
 
@@ -86,9 +117,9 @@
     padding: 24px;
     margin-bottom: 14px;
     box-shadow: var(--shadow-md);
-    transition: box-shadow .3s ease;
+    transition: box-shadow .3s ease, transform .3s ease;
   }
-  .card:hover { box-shadow: var(--shadow-gold); }
+  .card:hover { box-shadow: var(--shadow-gold); transform: translateY(-4px); }
 
   label {
     display: block;
@@ -228,72 +259,92 @@ input[type="date"], input[type="time"] {
 <body>
 
 <div class="navbar">
-  <a href="/">الرئيسية</a>
-  <a href="/login.html">دخول الطالب</a>
-  <a href="/dashboard.html">حسابي</a>
-  <a href="/admin.html">الإدارة</a>
+  <button class="nav-toggle" id="navToggle" aria-label="القائمة">☰</button>
   <span class="brand">🚗 مدرسة الوطن</span>
+  <div class="nav-links" id="navLinks">
+    <a href="/">الرئيسية</a>
+    <a href="/login.html">دخول الطالب</a>
+    <a href="/dashboard.html">حسابي</a>
+    <a href="/about.html">من نحن</a>
+    <a href="/faq.html">الأسئلة الشائعة</a>
+    <a href="/admin.html">الإدارة</a>
+  </div>
 </div>
 
 <div class="hero">
-  <div>
-    <div class="name" id="studentName">...</div>
-    <div class="type" id="studentType">...</div>
+  <div class="hero-info">
+    <div class="hero-avatar" id="studentAvatar">؟</div>
+    <div>
+      <div class="greeting">مرحباً بعودتك 👋</div>
+      <div class="name" id="studentName">...</div>
+      <div class="type" id="studentType">...</div>
+    </div>
   </div>
   <button class="logout" onclick="logout()">خروج</button>
 </div>
 
 <div class="container">
- <h2>احجز درس جديد</h2>
-  <div class="card">
-    <div id="bookMsg" class="msg"></div>
+  <div class="reveal">
+    <h2>احجز درس جديد</h2>
+    <div class="card">
+      <div id="bookMsg" class="msg"></div>
 
-    <label>نوع الدرس</label>
-    <select id="bookType" onchange="updateBookPrice()">
-      <option value="automatic">أوتوماتيك</option>
-      <option value="manual">جير</option>
-      <option value="heavy">شحن خفيف</option>
-    </select>
+      <label>نوع الدرس</label>
+      <select id="bookType" onchange="updateBookPrice()">
+        <option value="automatic">أوتوماتيك</option>
+        <option value="manual">جير</option>
+        <option value="heavy">شحن خفيف</option>
+      </select>
 
-    <label>المعلم</label>
-    <select id="bookTeacher"><option>جاري التحميل...</option></select>
+      <label>المعلم</label>
+      <select id="bookTeacher"><option>جاري التحميل...</option></select>
 
-    <label>التاريخ</label>
-    <input type="date" id="bookDate">
+      <label>التاريخ</label>
+      <input type="date" id="bookDate">
 
-    <label>الوقت</label>
-    <input type="time" id="bookTime">
+      <label>الوقت</label>
+      <input type="time" id="bookTime">
 
-    <div class="price-box" id="bookPrice">السعر: 110 ₪</div>
+      <div class="price-box" id="bookPrice">السعر: 110 ₪</div>
 
-    <button class="submit-btn" onclick="bookLesson()">تأكيد الحجز</button>
-  </div>
-  <h2>الإشعارات</h2>
-  <div id="notifications">جاري التحميل...</div>
-  
-  <h2>مواعيدي</h2>
-  <div id="myBookings">جاري التحميل...</div>
-
-  <h2>إرسال شكوى أو ملاحظة</h2>
-  <div class="card">
-    <div id="complaintMsg" class="msg"></div>
-
-    <label>الموضوع</label>
-    <select id="complaintSubject">
-      <option value="teacher">ملاحظة عن المعلم</option>
-      <option value="schedule">مشكلة بالمواعيد</option>
-      <option value="payment">مشكلة بالدفع</option>
-      <option value="other">شي تاني</option>
-    </select>
-
-    <label>التفاصيل</label>
-    <textarea id="complaintBody" placeholder="اكتب ملاحظتك هون..."></textarea>
-
-    <button class="submit-btn" onclick="submitComplaint()">إرسال</button>
+      <button class="submit-btn" onclick="bookLesson()">تأكيد الحجز</button>
+    </div>
   </div>
 
-  <h2>شكاويّ السابقة</h2>
-  <div id="myComplaints">جاري التحميل...</div>
+  <div class="reveal">
+    <h2>الإشعارات</h2>
+    <div id="notifications">جاري التحميل...</div>
+  </div>
+
+  <div class="reveal">
+    <h2>مواعيدي</h2>
+    <div id="myBookings">جاري التحميل...</div>
+  </div>
+
+  <div class="reveal">
+    <h2>إرسال شكوى أو ملاحظة</h2>
+    <div class="card">
+      <div id="complaintMsg" class="msg"></div>
+
+      <label>الموضوع</label>
+      <select id="complaintSubject">
+        <option value="teacher">ملاحظة عن المعلم</option>
+        <option value="schedule">مشكلة بالمواعيد</option>
+        <option value="payment">مشكلة بالدفع</option>
+        <option value="other">شي تاني</option>
+      </select>
+
+      <label>التفاصيل</label>
+      <textarea id="complaintBody" placeholder="اكتب ملاحظتك هون..."></textarea>
+
+      <button class="submit-btn" onclick="submitComplaint()">إرسال</button>
+    </div>
+  </div>
+
+  <div class="reveal">
+    <h2>شكاويّ السابقة</h2>
+    <div id="myComplaints">جاري التحميل...</div>
+  </div>
 </div>
 
 <script>
@@ -308,8 +359,21 @@ const subjectNames = {
 const student = JSON.parse(sessionStorage.getItem('student') || 'null');
 if (!student) window.location.href = '/login.html';
 
-document.getElementById('studentName').textContent = `مرحباً، ${student.name}`;
+document.getElementById('studentName').textContent = student.name;
 document.getElementById('studentType').textContent = `رخصة: ${typeNames[student.license_type]}`;
+document.getElementById('studentAvatar').textContent = student.name.charAt(0);
+
+document.getElementById('navToggle').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+const revealEls = document.querySelectorAll('.reveal');
+const revealIO = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) { entry.target.classList.add('in-view'); revealIO.unobserve(entry.target); }
+  });
+}, { threshold: 0.12 });
+revealEls.forEach(el => revealIO.observe(el));
 
 async function loadMyBookings() {
   const res = await fetch(`/api/bookings/student/${encodeURIComponent(student.name)}`);

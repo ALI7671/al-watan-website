@@ -11,7 +11,7 @@
   :root {
     --ink: #1B2126;
     --ink-soft: #3A434B;
-    --paper: #F8F6F0;
+    --paper: #F6F3EC;
     --paper-card: #FFFFFF;
     --route: #E9B93E;
     --rust: #B3492B;
@@ -20,6 +20,7 @@
     --shadow: 0 20px 45px -10px rgba(27,33,38,0.16), 0 1px 3px rgba(27,33,38,0.05);
   }
   * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   body {
     font-family: 'Cairo', 'Tajawal', Arial, sans-serif;
     background: var(--paper);
@@ -31,17 +32,31 @@
     background: var(--ink);
     padding: 16px 24px;
     display: flex;
-    gap: 20px;
     align-items: center;
-    flex-wrap: wrap;
+    gap: 18px;
     position: sticky;
     top: 0;
     z-index: 500;
     box-shadow: 0 6px 20px rgba(0,0,0,.18);
   }
+  .navbar .brand { color: var(--route); font-size: 17px; font-weight: 900; margin-left: auto; white-space: nowrap; letter-spacing: -.3px; }
+  .navbar .nav-links { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
   .navbar a { color: var(--paper); text-decoration: none; font-size: 14.5px; font-weight: 800; transition: color 0.2s; }
   .navbar a:hover { color: var(--route); }
-  .navbar .brand { color: var(--route); font-size: 17px; font-weight: 900; margin-left: auto; letter-spacing: -0.3px; }
+  .nav-toggle { display: none; background: none; border: none; color: var(--route); font-size: 26px; cursor: pointer; padding: 0 4px; }
+  @media (max-width: 640px) {
+    .navbar .nav-links {
+      display: none; position: absolute; top: 100%; right: 0; left: 0;
+      background: var(--ink); flex-direction: column; align-items: flex-start;
+      padding: 14px 20px 20px; gap: 16px; border-top: 1px solid rgba(246,243,236,.1);
+    }
+    .navbar .nav-links.open { display: flex; }
+    .nav-toggle { display: block; }
+    .navbar .brand { font-size: 15px; }
+  }
+
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity .7s cubic-bezier(.2,.8,.2,1), transform .7s cubic-bezier(.2,.8,.2,1); }
+  .reveal.in-view { opacity: 1; transform: none; }
 
   .login-wrap {
     display: flex;
@@ -49,6 +64,7 @@
     justify-content: center;
     min-height: 80vh;
     padding: 30px 18px;
+    background: radial-gradient(ellipse at top, rgba(233,185,62,.10), transparent 60%), var(--paper);
   }
   .login-box {
     background: var(--paper-card);
@@ -144,15 +160,20 @@
 <body>
 
 <div class="navbar">
-  <a href="/">الرئيسية</a>
-  <a href="/login.html">دخول الطالب</a>
-  <a href="/dashboard.html">حسابي</a>
-  <a href="/admin.html">الإدارة</a>
+  <button class="nav-toggle" id="navToggle" aria-label="القائمة">☰</button>
   <span class="brand">🚗 مدرسة الوطن</span>
+  <div class="nav-links" id="navLinks">
+    <a href="/">الرئيسية</a>
+    <a href="/login.html">دخول الطالب</a>
+    <a href="/dashboard.html">حسابي</a>
+    <a href="/about.html">من نحن</a>
+    <a href="/faq.html">الأسئلة الشائعة</a>
+    <a href="/admin.html">الإدارة</a>
+  </div>
 </div>
 
 <div class="login-wrap">
-  <div class="login-box">
+  <div class="login-box reveal">
     <div class="road">
       <div class="strip"></div>
       <div class="car">🚗</div>
@@ -171,6 +192,18 @@
 </div>
 
 <script>
+document.getElementById('navToggle').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+const revealEls = document.querySelectorAll('.reveal');
+const revealIO = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) { entry.target.classList.add('in-view'); revealIO.unobserve(entry.target); }
+  });
+}, { threshold: 0.12 });
+revealEls.forEach(el => revealIO.observe(el));
+
 async function login() {
   const phone = document.getElementById('loginPhone').value.trim();
   const msgEl = document.getElementById('loginMessage');

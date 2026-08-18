@@ -6,75 +6,105 @@
 <title>لوحة الإدارة - مدرسة الوطن</title>
 <!-- إضافة مكتبة SweetAlert2 للنافذة المنبثقة الاحترافية -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-  :root{--ink:#1B2126;--ink-soft:#3A434B;--paper:#F6F3EC;--paper-dim:#EDE8DB;--route:#E9B93E;--olive:#4F6F52;--olive-soft:#E4EAE2;--rust:#B3492B;--rust-soft:#F3E0D8;--line:rgba(27,33,38,.14);}
+  :root{--ink:#1B2126;--ink-soft:#3A434B;--paper:#F6F3EC;--paper-dim:#EDE8DB;--route:#E9B93E;--olive:#4F6F52;--olive-soft:#E4EAE2;--rust:#B3492B;--rust-soft:#F3E0D8;--line:rgba(27,33,38,.14);--shadow-md:0 12px 30px rgba(27,33,38,.10);--shadow-gold:0 0 0 2px var(--route), 0 22px 44px rgba(27,33,38,.22);}
   *{box-sizing:border-box;}
-  body{font-family:'Tajawal',Arial,sans-serif;background:var(--paper);color:var(--ink);margin:0;padding:0 0 40px 0;}
-  .navbar{background:var(--ink);padding:14px 20px;display:flex;gap:18px;align-items:center;flex-wrap:wrap;}
-  .navbar a{color:var(--paper);text-decoration:none;font-size:14px;font-weight:700;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'Cairo','Tajawal',Arial,sans-serif;background:var(--paper);color:var(--ink);margin:0;padding:0 0 40px 0;}
+  .navbar{background:var(--ink);padding:16px 24px;display:flex;align-items:center;gap:18px;position:sticky;top:0;z-index:500;box-shadow:0 6px 20px rgba(0,0,0,.18);}
+  .navbar .brand{color:var(--route);font-size:17px;font-weight:900;margin-left:auto;white-space:nowrap;}
+  .navbar .nav-links{display:flex;gap:20px;align-items:center;flex-wrap:wrap;}
+  .navbar a{color:var(--paper);text-decoration:none;font-size:14.5px;font-weight:800;}
   .navbar a:hover{color:var(--route);}
-  .navbar .brand{color:var(--route);font-size:16px;font-weight:800;margin-left:auto;}
+  .nav-toggle{display:none;background:none;border:none;color:var(--route);font-size:26px;cursor:pointer;padding:0 4px;}
+  @media(max-width:640px){
+    .navbar .nav-links{display:none;position:absolute;top:100%;right:0;left:0;background:var(--ink);flex-direction:column;align-items:flex-start;padding:14px 20px 20px;gap:16px;border-top:1px solid rgba(246,243,236,.1);}
+    .navbar .nav-links.open{display:flex;}
+    .nav-toggle{display:block;}
+    .navbar .brand{font-size:15px;}
+  }
+  .reveal{opacity:0;transform:translateY(30px);transition:opacity .7s cubic-bezier(.2,.8,.2,1), transform .7s cubic-bezier(.2,.8,.2,1);}
+  .reveal.in-view{opacity:1;transform:none;}
   .container{max-width:950px;margin:0 auto;padding:0 18px;}
-  .hero{background:var(--ink);color:var(--paper);border-radius:0 0 20px 20px;padding:26px 24px;margin-bottom:24px;}
-  .hero .title{font-size:22px;font-weight:800;}
-  .hero .sub{font-size:13px;color:var(--route);margin-top:4px;}
-  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:10px;}
+  .hero{background:var(--ink);color:var(--paper);border-radius:0 0 24px 24px;padding:32px 24px;margin-bottom:28px;box-shadow:var(--shadow-md);}
+  .hero .title{font-size:24px;font-weight:900;letter-spacing:-.3px;}
+  .hero .sub{font-size:13px;color:var(--route);margin-top:6px;font-weight:700;}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:10px;}
   @media(max-width:700px){.stats{grid-template-columns:1fr 1fr;}}
-  .stat{background:#fff;border:1px solid var(--line);border-radius:13px;padding:18px 14px;text-align:center;}
-  .stat .value{font-size:26px;font-weight:800;}
-  .stat .label{font-size:12px;color:var(--ink-soft);margin-top:4px;}
-  h2{font-size:17px;margin:28px 0 12px 0;font-weight:800;}
-  table{width:100%;border-collapse:collapse;background:#fff;border-radius:13px;overflow:hidden;font-size:13.5px;border:1px solid var(--line);}
-  th,td{padding:13px 15px;text-align:right;border-bottom:1px solid var(--line);}
-  th{background:var(--paper-dim);font-weight:700;font-size:12px;color:var(--ink-soft);}
+  .stat{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px 14px;text-align:center;box-shadow:var(--shadow-md);transition:transform .25s ease,box-shadow .25s ease;}
+  .stat:hover{transform:translateY(-5px);box-shadow:var(--shadow-gold);}
+  .stat .value{font-size:27px;font-weight:900;}
+  .stat .label{font-size:12px;color:var(--ink-soft);margin-top:4px;font-weight:700;}
+  h2{font-size:18px;margin:32px 0 14px 0;font-weight:900;}
+  table{width:100%;border-collapse:collapse;background:#fff;border-radius:16px;overflow:hidden;font-size:13.5px;border:1px solid var(--line);box-shadow:var(--shadow-md);}
+  th,td{padding:14px 16px;text-align:right;border-bottom:1px solid var(--line);}
+  th{background:var(--paper-dim);font-weight:800;font-size:12px;color:var(--ink-soft);}
   tr:last-child td{border-bottom:none;}
-  .pill{font-size:11px;font-weight:700;padding:5px 11px;border-radius:20px;display:inline-block;}
+  .pill{font-size:11px;font-weight:800;padding:5px 11px;border-radius:20px;display:inline-block;}
   .pill-review{background:var(--rust-soft);color:var(--rust);}
   .pill-answered{background:var(--olive-soft);color:var(--olive);}
-  .mark-btn{background:var(--olive);color:#fff;border:none;border-radius:7px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
-  .empty{color:var(--ink-soft);font-size:14px;padding:20px;text-align:center;background:#fff;border:1px solid var(--line);border-radius:13px;}
-  .avail-card{background:#fff;border:1px solid var(--line);border-radius:13px;padding:18px;margin-bottom:12px;}
+  .mark-btn{background:var(--olive);color:#fff;border:none;border-radius:9px;padding:9px 16px;font-size:12.5px;font-weight:800;cursor:pointer;font-family:inherit;transition:transform .2s ease,box-shadow .2s ease;}
+  .mark-btn:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(79,111,82,.35);}
+  .empty{color:var(--ink-soft);font-size:14px;padding:22px;text-align:center;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow-md);}
+  .avail-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:14px;box-shadow:var(--shadow-md);transition:transform .25s ease,box-shadow .25s ease;}
+  .avail-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-gold);}
   .avail-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
-  .avail-name{font-weight:700;font-size:15px;}
+  .avail-name{font-weight:800;font-size:15px;}
   .avail-days{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
   .day-chip{font-size:11.5px;padding:6px 12px;border-radius:20px;font-weight:700;}
   .day-chip.on{background:var(--olive-soft);color:var(--olive);}
   .day-chip.off{background:var(--paper-dim);color:var(--ink-soft);opacity:.5;}
   .avail-time{font-size:13px;color:var(--ink-soft);}
 
-  /* تصميم شاشة تسجيل الدخول الجديدة الخاصة بالإدارة */
+  /* تصميم شاشة تسجيل الدخول الخاصة بالإدارة */
   #authOverlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100vh;
-    background: linear-gradient(135deg, #1f2937, #111827);
+    background: radial-gradient(ellipse at top, rgba(233,185,62,.14), transparent 55%), linear-gradient(135deg, var(--ink) 0%, #2A333B 100%);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 9999;
+    padding: 20px;
   }
   .auth-card {
     background: #fff;
-    padding: 40px;
-    border-radius: 16px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    padding: 44px 36px;
+    border-radius: 22px;
+    box-shadow: 0 30px 60px rgba(0,0,0,.35);
     width: 100%;
     max-width: 420px;
     text-align: center;
   }
-  .auth-card h2 { margin-top: 0; color: var(--ink); }
-  .auth-card p { color: var(--ink-soft); font-size: 14px; margin-bottom: 20px; }
+  .auth-card h2 { margin-top: 0; color: var(--ink); font-size: 24px; font-weight: 900; }
+  .auth-card p { color: var(--ink-soft); font-size: 14px; margin-bottom: 24px; font-weight: 600; }
   .auth-card input {
-    width: 100%; padding: 14px; border-radius: 9px;
+    width: 100%; padding: 14px; border-radius: 11px;
     border: 1.5px solid var(--line); font-size: 15px;
-    margin-bottom: 15px; font-family: inherit; text-align: center;
+    margin-bottom: 16px; font-family: inherit; text-align: center;
+    background: #faf8f5; transition: all .2s ease;
   }
-  .auth-card input:focus { outline: 2px solid var(--route); border-color: var(--route); }
+  .auth-card input:focus { outline: none; background: #fff; border-color: var(--route); box-shadow: 0 0 0 3px rgba(233,185,62,.18); }
   .auth-card button {
-    background: var(--ink); color: var(--route); border: none;
-    border-radius: 11px; padding: 14px; font-size: 16px;
-    font-weight: 700; width: 100%; cursor: pointer; font-family: inherit;
+    background: var(--route); color: var(--ink); border: none;
+    border-radius: 13px; padding: 16px; font-size: 16px;
+    font-weight: 800; width: 100%; cursor: pointer; font-family: inherit;
+    box-shadow: 0 12px 26px rgba(233,185,62,.35);
+    transition: transform .2s cubic-bezier(.2,.8,.2,1), box-shadow .25s ease, background .2s ease;
+    position: relative; overflow: hidden; isolation: isolate;
   }
-  .auth-error { color: var(--rust); background: var(--rust-soft); padding: 10px; border-radius: 8px; font-size: 13px; margin-bottom: 15px; display: none; }
+  .auth-card button::after {
+    content: ''; position: absolute; inset: 0 auto 0 -60%; width: 50%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,.6), transparent);
+    transform: skewX(-20deg); transition: left .6s ease;
+  }
+  .auth-card button:hover::after { left: 130%; }
+  .auth-card button:hover { background: #f0c458; transform: translateY(-3px) scale(1.02); box-shadow: 0 18px 36px rgba(233,185,62,.5); }
+  .auth-card button:active { transform: scale(.97); }
+  .auth-error { color: var(--rust); background: var(--rust-soft); padding: 10px; border-radius: 8px; font-size: 13px; margin-bottom: 15px; display: none; font-weight: 700; }
 
   /* ===== بطاقات الطلاب ===== */
   .students-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
@@ -149,11 +179,16 @@
 </div>
 
 <div class="navbar">
-  <a href="/">الرئيسية</a>
-  <a href="/login.html">دخول الطالب</a>
-  <a href="/dashboard.html">حسابي</a>
-  <a href="/admin.html">الإدارة</a>
+  <button class="nav-toggle" id="navToggle" aria-label="القائمة">☰</button>
   <span class="brand">🚗 مدرسة الوطن</span>
+  <div class="nav-links" id="navLinks">
+    <a href="/">الرئيسية</a>
+    <a href="/login.html">دخول الطالب</a>
+    <a href="/dashboard.html">حسابي</a>
+    <a href="/about.html">من نحن</a>
+    <a href="/faq.html">الأسئلة الشائعة</a>
+    <a href="/admin.html">الإدارة</a>
+  </div>
 </div>
 
 <div class="hero">
@@ -162,27 +197,37 @@
 </div>
 
 <div class="container">
-  <div class="stats">
+  <div class="stats reveal">
     <div class="stat"><div class="value" id="statStudents">0</div><div class="label">طالب مسجل</div></div>
     <div class="stat"><div class="value" id="statBookings">0</div><div class="label">حجز إجمالي</div></div>
     <div class="stat"><div class="value" id="statTeachers">0</div><div class="label">معلم</div></div>
     <div class="stat"><div class="value" id="statIncome">0 ₪</div><div class="label">الدخل الإجمالي</div></div>
   </div>
 
-  <h2>الطلاب</h2>
-  <div id="studentsTable">جاري التحميل...</div>
+  <div class="reveal">
+    <h2>الطلاب</h2>
+    <div id="studentsTable">جاري التحميل...</div>
+  </div>
 
-  <h2>الحجوزات</h2>
-  <div id="bookingsTable">جاري التحميل...</div>
+  <div class="reveal">
+    <h2>الحجوزات</h2>
+    <div id="bookingsTable">جاري التحميل...</div>
+  </div>
 
-  <h2>المعلمون</h2>
-  <div id="teachersTable">جاري التحميل...</div>
+  <div class="reveal">
+    <h2>المعلمون</h2>
+    <div id="teachersTable">جاري التحميل...</div>
+  </div>
 
-  <h2>أوقات تفرغ المعلمين</h2>
-  <div id="availabilityTable">جاري التحميل...</div>
+  <div class="reveal">
+    <h2>أوقات تفرغ المعلمين</h2>
+    <div id="availabilityTable">جاري التحميل...</div>
+  </div>
 
-  <h2>الشكاوى</h2>
-  <div id="complaintsTable">جاري التحميل...</div>
+  <div class="reveal">
+    <h2>الشكاوى</h2>
+    <div id="complaintsTable">جاري التحميل...</div>
+  </div>
 </div>
 
 <!-- نافذة منبثقة عامة تُستخدم لتسجيل الدفعات وتحديد سعر الباقة وموعد التيست -->
@@ -200,6 +245,18 @@
 const typeNames = { automatic: 'أوتوماتيك', manual: 'جير', heavy: 'شحن خفيف' };
 const subjectNames = { teacher: 'ملاحظة عن المعلم', schedule: 'مشكلة بالمواعيد', payment: 'مشكلة بالدفع', other: 'شي تاني' };
 const dayNames = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+
+document.getElementById('navToggle').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+const revealEls = document.querySelectorAll('.reveal');
+const revealIO = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) { entry.target.classList.add('in-view'); revealIO.unobserve(entry.target); }
+  });
+}, { threshold: 0.12 });
+revealEls.forEach(el => revealIO.observe(el));
 
 const ADMIN_PASSWORD = 'alwatan2026';
 let isAdmin = sessionStorage.getItem('adminAuth') === 'yes';
