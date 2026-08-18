@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>مدرسة الوطن</title>
+<title>مدرسة الوطن لتعليم السياقة</title>
 <style>
   :root {
     --ink: #1B2126;
@@ -13,6 +13,7 @@
     --route: #E9B93E;
     --olive: #4F6F52;
     --line: rgba(27,33,38,.14);
+    --wa-green: #25D366;
   }
   * { box-sizing: border-box; }
   body {
@@ -21,10 +22,29 @@
     color: var(--ink);
     margin: 0;
     padding: 0 0 40px 0;
+    overflow-x: hidden;
   }
+  img { max-width: 100%; display: block; }
+
+  /* ===== Navbar ===== */
   .navbar {
     background: var(--ink);
     padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    position: sticky;
+    top: 0;
+    z-index: 500;
+  }
+  .navbar .brand {
+    color: var(--route);
+    font-size: 16px;
+    font-weight: 800;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+  .navbar .nav-links {
     display: flex;
     gap: 18px;
     align-items: center;
@@ -37,27 +57,20 @@
     font-weight: 700;
   }
   .navbar a:hover { color: var(--route); }
-  .navbar .brand {
+  .nav-toggle {
+    display: none;
+    background: none;
+    border: none;
     color: var(--route);
-    font-size: 16px;
-    font-weight: 800;
-    margin-left: auto;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0 4px;
   }
 
-  .container { max-width: 620px; margin: 0 auto; padding: 0 18px; }
+  .container { max-width: 960px; margin: 0 auto; padding: 0 18px; }
 
-  .hero {
-    background: var(--ink);
-    color: var(--paper);
-    border-radius: 0 0 20px 20px;
-    padding: 32px 24px;
-    margin-bottom: 26px;
-    text-align: center;
-  }
-  .hero h1 { font-size: 26px; margin: 0 0 8px 0; font-weight: 800; color: var(--route); }
-  .hero p { font-size: 14px; color: #cbd5e1; margin: 0; }
-
-  h2 { font-size: 17px; margin: 28px 0 12px 0; font-weight: 800; }
+  h2 { font-size: 19px; margin: 30px 0 12px 0; font-weight: 800; }
+  h2 .sub { display:block; font-size: 12.5px; font-weight: 600; color: var(--ink-soft); margin-top: 3px; }
 
   .card {
     background: #fff;
@@ -98,146 +111,361 @@
 
   .price-box { background: var(--paper-dim); padding: 14px; border-radius: 9px; text-align: center; font-weight: 800; font-size: 17px; margin-bottom: 16px; }
 
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
-  .car-item, .theory-item { background: var(--paper-dim); padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 700; text-align: center; }
-  .video-list { display: flex; flex-direction: column; gap: 8px; font-size: 14px; font-weight: 600; color: var(--ink-soft); }
+  /* ===== Hero Slider ===== */
+  .slider {
+    position: relative;
+    width: 100%;
+    height: 46vw;
+    max-height: 420px;
+    min-height: 200px;
+    overflow: hidden;
+    background: var(--ink);
+  }
+  .slider-track {
+    display: flex;
+    height: 100%;
+    transition: transform .6s ease;
+  }
+  .slide {
+    position: relative;
+    flex: 0 0 100%;
+    height: 100%;
+  }
+  .slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .slide .slide-caption {
+    position: absolute;
+    inset: auto 0 0 0;
+    padding: 22px 24px 26px;
+    background: linear-gradient(to top, rgba(27,33,38,.92), rgba(27,33,38,0));
+    color: var(--paper);
+  }
+  .slide .slide-caption h1 {
+    color: var(--route);
+    font-size: clamp(20px, 4vw, 30px);
+    margin: 0 0 6px;
+    font-weight: 800;
+  }
+  .slide .slide-caption p {
+    margin: 0;
+    font-size: 14px;
+    color: #d8dee3;
+  }
+  .slider-dots {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 5;
+  }
+  .slider-dots button {
+    width: 9px; height: 9px; padding: 0;
+    border-radius: 50%;
+    background: rgba(246,243,236,.5);
+    border: none;
+    cursor: pointer;
+  }
+  .slider-dots button.active { background: var(--route); }
+  .slider-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(27,33,38,.55);
+    color: var(--paper);
+    border: none;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .slider-arrow.prev { right: 12px; }
+  .slider-arrow.next { left: 12px; }
+
+  /* ===== Cars Grid ===== */
+  .cars-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+  .car-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  }
+  .car-card .car-photo {
+    width: 100%;
+    height: 110px;
+    object-fit: cover;
+    background: var(--paper-dim);
+  }
+  .car-card .car-info { padding: 12px; text-align: center; }
+  .car-card .car-name { font-weight: 800; font-size: 13.5px; margin-bottom: 4px; }
+  .car-card .car-tags { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
+  .car-card .tag {
+    font-size: 11px; font-weight: 700;
+    background: var(--paper-dim); color: var(--ink-soft);
+    padding: 3px 8px; border-radius: 20px;
+  }
+  .car-card .tag.gold { background: var(--route); color: var(--ink); }
+
+  /* ===== Theory cards ===== */
+  .theory-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .theory-card {
+    background: var(--paper-dim);
+    border-radius: 12px;
+    padding: 20px 12px;
+    text-align: center;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    transition: border-color .15s ease, transform .12s ease;
+  }
+  .theory-card:hover { border-color: var(--route); transform: translateY(-2px); }
+  .theory-card .icon { font-size: 26px; margin-bottom: 8px; }
+  .theory-card .title { font-weight: 800; font-size: 14px; margin-bottom: 4px; }
+  .theory-card .desc { font-size: 11.5px; color: var(--ink-soft); font-weight: 600; }
+
+  /* ===== Videos ===== */
+  .video-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .video-card { background: #fff; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+  .video-card video, .video-card .video-fallback {
+    width: 100%; height: 130px; object-fit: cover; background: var(--ink); display: block;
+  }
+  .video-card .video-fallback {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    color: var(--route); gap: 6px; font-size: 12px; text-align: center; padding: 8px;
+  }
+  .video-card .video-fallback .play { font-size: 26px; }
+  .video-card .video-title { padding: 10px 12px; font-size: 13px; font-weight: 700; }
+
+  /* ===== Reviews ===== */
   .review-card { border-right: 4px solid var(--route); padding-right: 12px; margin-bottom: 12px; font-size: 14px; }
   .review-author { font-weight: 800; color: var(--ink); margin-top: 4px; font-size: 13px; }
+  .stars { color: var(--route); letter-spacing: 2px; }
+
+  /* ===== WhatsApp floating button ===== */
+  .wa-float {
+    position: fixed;
+    bottom: 24px;
+    left: 20px;
+    width: 58px; height: 58px;
+    background: var(--wa-green);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 20px rgba(37,211,102,.45);
+    z-index: 900;
+    text-decoration: none;
+    animation: waPulse 2.4s infinite;
+  }
+  .wa-float svg { width: 30px; height: 30px; }
+  @keyframes waPulse {
+    0% { box-shadow: 0 0 0 0 rgba(37,211,102,.55); }
+    70% { box-shadow: 0 0 0 14px rgba(37,211,102,0); }
+    100% { box-shadow: 0 0 0 0 rgba(37,211,102,0); }
+  }
 
   #toast {
     position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
     background: var(--ink); color: var(--paper); padding: 12px 24px; border-radius: 30px;
     font-size: 14px; font-weight: 700; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
     transition: transform 0.3s ease; z-index: 1000; border: 1.5px solid var(--route);
+    max-width: 90%; text-align: center;
   }
   #toast.show { transform: translateX(-50%) translateY(0); }
+
+  .grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 760px) {
+    .cars-grid { grid-template-columns: repeat(2, 1fr); }
+    .video-grid { grid-template-columns: repeat(2, 1fr); }
+    .theory-grid { grid-template-columns: 1fr; }
+    .grid-2col { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .navbar .nav-links {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0; left: 0;
+      background: var(--ink);
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 12px 20px 18px;
+      gap: 14px;
+      border-top: 1px solid rgba(246,243,236,.1);
+    }
+    .navbar .nav-links.open { display: flex; }
+    .nav-toggle { display: block; }
+    .navbar .brand { font-size: 15px; }
+    .cars-grid { grid-template-columns: repeat(2, 1fr); }
+    .video-grid { grid-template-columns: 1fr; }
+    .wa-float { width: 52px; height: 52px; left: 14px; bottom: 18px; }
+  }
 </style>
 </head>
 <body>
 
 <div id="toast">تم</div>
 
+<!-- (1) شريط التنقل -->
 <div class="navbar">
-  <a href="/">الرئيسية</a>
-  <a href="/login.html">دخول الطالب</a>
-  <a href="/dashboard.html">حسابي</a>
-  <a href="/about.html">من نحن</a>
-  <a href="/faq.html">الأسئلة الشائعة</a>
-  <a href="/admin.html">الإدارة</a>
+  <button class="nav-toggle" id="navToggle" aria-label="القائمة">☰</button>
   <span class="brand">🚗 مدرسة الوطن</span>
+  <div class="nav-links" id="navLinks">
+    <a href="/">الرئيسية</a>
+    <a href="/login.html">دخول الطالب</a>
+    <a href="/dashboard.html">حسابي</a>
+    <a href="/about.html">من نحن</a>
+    <a href="/faq.html">الأسئلة الشائعة</a>
+    <a href="/admin.html">الإدارة</a>
+  </div>
 </div>
 
-<div class="hero">
-  <h1>مدرسة الوطن لتعليم السياقة</h1>
-  <p>احجز درسك بسهولة • أوتوماتيك • جير • شحن خفيف</p>
+<!-- (2) سلايدر صور متحرك -->
+<div class="slider" id="hero-slider">
+  <div class="slider-track" id="sliderTrack"></div>
+  <button class="slider-arrow prev" onclick="changeSlide(1)">‹</button>
+  <button class="slider-arrow next" onclick="changeSlide(-1)">›</button>
+  <div class="slider-dots" id="sliderDots"></div>
 </div>
 
 <div class="container">
 
-  <!-- قسم سيارات المدرسة مع الصور -->
-  <h2>سيارات المدرسة</h2>
-  <div class="card">
-    <p style="margin-top:0; font-size:14px; font-weight:700; color:var(--ink-soft);">تتعلم على سيارات حديثة ونظيفة</p>
-    <div class="grid-2">
-      <div class="car-item">
-        <div style="background:#ddd; height:80px; border-radius:6px; margin-bottom:6px; display:flex; align-items:center; justify-content:center; font-size:12px; color:#555;">صورة نيسان كاشكاي</div>
-        نيسان كاشكاي (أوتوماتيك)
-      </div>
-      <div class="car-item">
-        <div style="background:#ddd; height:80px; border-radius:6px; margin-bottom:6px; display:flex; align-items:center; justify-content:center; font-size:12px; color:#555;">صورة سيات أرونا</div>
-        سيات أرونا (أوتوماتيك)
-      </div>
+  <!-- (3) قسم سيارات المدرسة -->
+  <h2>سيارات المدرسة<span class="sub">تتعلم على سيارات حديثة ونظيفة لكل أنواع الرخص</span></h2>
+  <div class="cars-grid" id="carsGrid"></div>
+
+  <!-- (4) قسم أسئلة التؤوريا -->
+  <h2>أسئلة التؤوريا<span class="sub">تدرّب على أسئلة الفحص النظري حسب نوع الرخصة</span></h2>
+  <div class="theory-grid">
+    <div class="theory-card" onclick="theoryClick('خصوصي')">
+      <div class="icon">🚘</div>
+      <div class="title">رخصة خصوصي</div>
+      <div class="desc">أسئلة الفحص النظري للرخصة الخصوصية</div>
+    </div>
+    <div class="theory-card" onclick="theoryClick('شحن')">
+      <div class="icon">🚚</div>
+      <div class="title">رخصة شحن</div>
+      <div class="desc">أسئلة الفحص النظري لرخصة الشحن الخفيف</div>
+    </div>
+    <div class="theory-card" onclick="theoryClick('عمومي')">
+      <div class="icon">🚌</div>
+      <div class="title">رخصة عمومي</div>
+      <div class="desc">أسئلة الفحص النظري للرخصة العمومية</div>
     </div>
   </div>
 
-  <!-- قسم أسئلة التؤوريا -->
-  <h2>أسئلة التؤوريا</h2>
-  <div class="card">
-    <p style="margin-top:0; font-size:14px; font-weight:700; color:var(--ink-soft);">تدرّب على أسئلة الفحص النظري حسب نوع الرخصة</p>
-    <div class="grid-2">
-      <div class="theory-item">أسئلة رخصة الخصوصي</div>
-      <div class="theory-item">أسئلة رخصة الشحن</div>
-      <div class="theory-item" style="grid-column: span 2;">أسئلة الرخصة العمومي</div>
-    </div>
-  </div>
-
-  <!-- قسم طلب تؤوريا و تيست الجديد -->
-  <h2>خدمات الفحوصات</h2>
+  <!-- (5) قسم طلب موعد فحص نظري -->
+  <h2>طلب موعد فحص نظري (تؤوريا)</h2>
   <div class="card">
     <label>الاسم الكامل</label>
-    <input type="text" id="reqName" placeholder="مثال: محمد أحمد">
+    <input type="text" id="theoryName" placeholder="مثال: محمد أحمد">
     <label>رقم الموبايل</label>
-    <input type="tel" id="reqPhone" placeholder="0599123456">
-    <div style="display: flex; gap: 10px;">
-      <button onclick="submitRequest('تؤوريا')">طلب تؤوريا</button>
-      <button onclick="submitRequest('تيست')">طلب تيست</button>
-    </div>
+    <input type="tel" id="theoryPhone" placeholder="0599123456">
+    <button onclick="submitRequest('theory')">طلب موعد فحص نظري</button>
   </div>
 
-  <h2>احجز درسك</h2>
+  <!-- (6) قسم طلب موعد فحص عملي (تيست) -->
+  <h2>طلب موعد فحص عملي (تيست)</h2>
   <div class="card">
-    <label>اسمك</label>
-    <input type="text" id="studentName" placeholder="مثال: محمد أحمد">
-    <label>نوع الرخصة</label>
-    <select id="lessonType" onchange="updatePrice()">
-      <option value="automatic">أوتوماتيك</option>
-      <option value="manual">جير</option>
-      <option value="heavy">شحن خفيف</option>
-    </select>
-    <label>المعلم</label>
-    <select id="teacherSelect"><option>جاري التحميل...</option></select>
-    <label>التاريخ</label>
-    <input type="date" id="lessonDate">
-    <label>الوقت</label>
-    <input type="time" id="lessonTime">
-    <div class="price-box" id="priceBox">السعر: 110 ₪</div>
-    <button onclick="submitBooking()">تأكيد الحجز</button>
+    <label>الاسم الكامل</label>
+    <input type="text" id="testName" placeholder="مثال: محمد أحمد">
+    <label>رقم الموبايل</label>
+    <input type="tel" id="testPhone" placeholder="0599123456">
+    <button onclick="submitRequest('test')">طلب موعد فحص عملي</button>
   </div>
 
-  <!-- قسم الفيديوهات التعليمية -->
-  <h2>فيديوهات تعليمية</h2>
-  <div class="card">
-    <p style="margin-top:0; font-size:14px; font-weight:700; color:var(--ink-soft);">خطوات عملية تساعدك تتعلم أسرع</p>
-    <div class="video-list">
-      <div>🎥 كيف تصِفّ سيارتك والإنعطاف يميناً بشكل صحيح</div>
-      <div>🎥 الانعطاف يساراً بشكل صحيح</div>
-      <div>🎥 الرجوع للخلف (باركنج)</div>
-    </div>
-  </div>
+  <!-- (7) قسم فيديوهات تعليمية -->
+  <h2>فيديوهات تعليمية<span class="sub">خطوات عملية تساعدك تتعلم أسرع</span></h2>
+  <div class="video-grid" id="videoGrid"></div>
 
-  <!-- قسم آراء الطلاب -->
+  <!-- (8) قسم آراء الطلاب -->
   <h2>آراء طلابنا</h2>
   <div class="card">
     <div class="review-card">
-      <div>★★★★★</div>
+      <div class="stars">★★★★★</div>
       <p style="margin:6px 0;">أفضل مدرسة تعلمت فيها، المدرب صبور كتير ونجحت من أول مرة بالفحص.</p>
       <div class="review-author">— محمد أحمد</div>
     </div>
-    <div class="review-card" style="margin-bottom:0;">
-      <div>★★★★★</div>
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
       <p style="margin:6px 0;">السيارات جديدة ونظيفة، والتعامل محترم. أنصح فيها بشدة.</p>
       <div class="review-author">— لينا سمير</div>
     </div>
+    <div class="review-card" style="margin-bottom:0;">
+      <div class="stars">★★★★☆</div>
+      <p style="margin:6px 0;">أسعار مناسبة ومواعيد مرنة، ساعدوني ألحق التيست بوقت قصير.</p>
+      <div class="review-author">— يوسف كمال</div>
+    </div>
   </div>
 
-  <h2>تسجيل طالب جديد</h2>
-  <div class="card">
-    <label>الاسم</label>
-    <input type="text" id="newStudentName" placeholder="مثال: أحمد يوسف">
-    <label>رقم الموبايل</label>
-    <input type="tel" id="newStudentPhone" placeholder="0599123456">
-    <label>نوع الرخصة</label>
-    <select id="newStudentType">
-      <option value="automatic">أوتوماتيك</option>
-      <option value="manual">جير</option>
-      <option value="heavy">شحن خفيف</option>
-    </select>
-    <button onclick="registerStudent()">تسجيل</button>
+  <!-- (10) قسم حجز الدرس وتسجيل الطالب -->
+  <h2>حجز الدرس وتسجيل الطالب</h2>
+  <div class="grid-2col">
+    <div class="card">
+      <h2 style="margin:0 0 12px; font-size:15px;">احجز درسك</h2>
+      <label>اسمك</label>
+      <input type="text" id="studentName" placeholder="مثال: محمد أحمد">
+      <label>نوع الرخصة</label>
+      <select id="lessonType" onchange="updatePrice()">
+        <option value="automatic">أوتوماتيك</option>
+        <option value="manual">جير</option>
+        <option value="heavy">شحن خفيف</option>
+      </select>
+      <label>المعلم</label>
+      <select id="teacherSelect"><option>جاري التحميل...</option></select>
+      <label>التاريخ</label>
+      <input type="date" id="lessonDate">
+      <label>الوقت</label>
+      <input type="time" id="lessonTime">
+      <div class="price-box" id="priceBox">السعر: 110 ₪</div>
+      <button onclick="submitBooking()">تأكيد الحجز</button>
+    </div>
+
+    <div class="card">
+      <h2 style="margin:0 0 12px; font-size:15px;">تسجيل طالب جديد</h2>
+      <label>الاسم</label>
+      <input type="text" id="newStudentName" placeholder="مثال: أحمد يوسف">
+      <label>رقم الموبايل</label>
+      <input type="tel" id="newStudentPhone" placeholder="0599123456">
+      <label>نوع الرخصة</label>
+      <select id="newStudentType">
+        <option value="automatic">أوتوماتيك</option>
+        <option value="manual">جير</option>
+        <option value="heavy">شحن خفيف</option>
+      </select>
+      <button onclick="registerStudent()">تسجيل</button>
+    </div>
   </div>
 </div>
 
+<!-- (9) زر واتساب عائم -->
+<a class="wa-float" id="waFloat" href="#" target="_blank" aria-label="تواصل عبر واتساب">
+  <svg viewBox="0 0 32 32" fill="#fff"><path d="M16.001 3C9.373 3 4 8.373 4 15c0 2.51.79 4.84 2.14 6.76L4.6 28.4l6.79-1.5A11.9 11.9 0 0 0 16 27c6.628 0 12-5.373 12-12S22.629 3 16.001 3zm0 21.6c-1.85 0-3.58-.5-5.07-1.37l-.36-.21-4.03.89.9-3.92-.24-.37A9.56 9.56 0 0 1 5.4 15c0-5.85 4.76-10.6 10.6-10.6S26.6 9.15 26.6 15 21.85 24.6 16 24.6zm5.83-7.94c-.32-.16-1.89-.93-2.18-1.04-.29-.11-.5-.16-.72.16-.21.32-.82 1.04-1 1.25-.19.21-.37.24-.68.08-.32-.16-1.34-.49-2.55-1.57-.94-.84-1.58-1.87-1.76-2.19-.19-.32-.02-.49.14-.65.14-.14.32-.37.48-.55.16-.19.21-.32.32-.53.11-.21.05-.4-.03-.55-.08-.16-.72-1.74-.99-2.38-.26-.62-.53-.54-.72-.55h-.61c-.21 0-.55.08-.84.4-.29.32-1.1 1.08-1.1 2.63 0 1.55 1.13 3.05 1.29 3.26.16.21 2.22 3.39 5.38 4.75.75.32 1.34.52 1.79.66.75.24 1.44.21 1.98.13.6-.09 1.89-.77 2.16-1.51.27-.75.27-1.39.19-1.52-.08-.14-.29-.21-.61-.37z"/></svg>
+</a>
+
 <script>
 document.getElementById('lessonDate').min = new Date().toISOString().split('T')[0];
+
+const WA_PHONE = "970599254574";
+document.getElementById('waFloat').href = `https://wa.me/${WA_PHONE}?text=${encodeURIComponent('مرحباً، بدي استفسر عن دروس السياقة بمدرسة الوطن')}`;
+
+document.getElementById('navToggle').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('open');
+});
 
 function showToast(text) {
   const toast = document.getElementById('toast');
@@ -246,21 +474,144 @@ function showToast(text) {
   setTimeout(() => toast.classList.remove('show'), 3000);
 }
 
+/* ===== Placeholder image (used when a real photo isn't in /public/images yet) ===== */
+function placeholderImg(label, bg1 = '1B2126', bg2 = '3A434B') {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="260">
+    <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#${bg1}"/><stop offset="100%" stop-color="#${bg2}"/>
+    </linearGradient></defs>
+    <rect width="100%" height="100%" fill="url(#g)"/>
+    <text x="50%" y="46%" font-size="46" text-anchor="middle" dominant-baseline="middle">🚗</text>
+    <text x="50%" y="72%" font-size="16" fill="#E9B93E" font-family="Tajawal,Arial,sans-serif" font-weight="700" text-anchor="middle">${label}</text>
+  </svg>`;
+  return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+}
+
+/* ===== (2) Hero slider — reads car photos from /images in the public folder ===== */
+const sliderImages = [
+  { src: '/images/hero-1.jpg', title: 'مدرسة الوطن لتعليم السياقة', text: 'احجز درسك بسهولة • أوتوماتيك • جير • شحن خفيف' },
+  { src: '/images/hero-2.jpg', title: 'مدربون محترفون وسيارات حديثة', text: 'نساعدك تنجح من أول مرة بالفحص النظري والعملي' },
+  { src: '/images/hero-3.jpg', title: 'مواعيد مرنة تناسبك', text: 'احجز فحص التؤوريا والتيست بضغطة زر' },
+];
+
+let currentSlide = 0;
+let sliderTimer;
+
+function buildSlider() {
+  const track = document.getElementById('sliderTrack');
+  const dots = document.getElementById('sliderDots');
+  track.innerHTML = sliderImages.map((s, i) => `
+    <div class="slide">
+      <img src="${s.src}" onerror="this.onerror=null; this.src=placeholderImg('${s.title}');" alt="${s.title}">
+      <div class="slide-caption">
+        <h1>${s.title}</h1>
+        <p>${s.text}</p>
+      </div>
+    </div>
+  `).join('');
+  dots.innerHTML = sliderImages.map((_, i) => `<button onclick="goToSlide(${i})" class="${i === 0 ? 'active' : ''}"></button>`).join('');
+  updateSlider();
+  sliderTimer = setInterval(() => changeSlide(-1), 5000);
+}
+
+function updateSlider() {
+  document.getElementById('sliderTrack').style.transform = `translateX(${currentSlide * 100}%)`;
+  document.querySelectorAll('.slider-dots button').forEach((d, i) => d.classList.toggle('active', i === currentSlide));
+}
+
+function changeSlide(dir) {
+  currentSlide = (currentSlide + dir + sliderImages.length) % sliderImages.length;
+  updateSlider();
+  resetSliderTimer();
+}
+
+function goToSlide(i) {
+  currentSlide = i;
+  updateSlider();
+  resetSliderTimer();
+}
+
+function resetSliderTimer() {
+  clearInterval(sliderTimer);
+  sliderTimer = setInterval(() => changeSlide(-1), 5000);
+}
+
+/* ===== (3) سيارات المدرسة ===== */
+const schoolCars = [
+  { name: 'نيسان كاشكاي', year: 2024, type: 'أوتوماتيك', img: '/images/nissan-kashqai.jpg' },
+  { name: 'سيات أرونا', year: 2022, type: 'أوتوماتيك', img: '/images/seat-arona.jpg' },
+  { name: 'سكودا أوكتافيا', year: 2019, type: 'جير', img: '/images/skoda-octavia.jpg' },
+  { name: 'مان', year: 2020, type: 'شحن خفيف', img: '/images/man-truck.jpg' },
+];
+
+function buildCars() {
+  document.getElementById('carsGrid').innerHTML = schoolCars.map(c => `
+    <div class="car-card">
+      <img class="car-photo" src="${c.img}" onerror="this.onerror=null; this.src=placeholderImg('${c.name}');" alt="${c.name}">
+      <div class="car-info">
+        <div class="car-name">${c.name}</div>
+        <div class="car-tags">
+          <span class="tag gold">${c.type}</span>
+          <span class="tag">${c.year}</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ===== (7) فيديوهات تعليمية — تقرأ المقاطع من مجلد public/videos ===== */
+const lessonVideos = [
+  { src: '/videos/parking-turn-right.mp4', title: 'كيف تصفّ سيارتك والانعطاف يميناً بشكل صحيح' },
+  { src: '/videos/turn-left.mp4', title: 'الانعطاف يساراً بشكل صحيح' },
+  { src: '/videos/reverse-parking.mp4', title: 'الرجوع للخلف (باركنج)' },
+];
+
+async function buildVideos() {
+  const grid = document.getElementById('videoGrid');
+  grid.innerHTML = lessonVideos.map(() => `
+    <div class="video-card"><div class="video-fallback"><div class="play">▶</div><div>جارِ التحميل...</div></div></div>
+  `).join('');
+
+  const cards = grid.children;
+  await Promise.all(lessonVideos.map(async (v, i) => {
+    let exists = false;
+    try {
+      const res = await fetch(v.src, { method: 'HEAD' });
+      exists = res.ok;
+    } catch (e) { exists = false; }
+
+    cards[i].innerHTML = exists
+      ? `<video controls preload="metadata"><source src="${v.src}" type="video/mp4"></video>
+         <div class="video-title">🎥 ${v.title}</div>`
+      : `<div class="video-fallback"><div class="play">▶</div><div>سيتم إضافة الفيديو قريباً</div></div>
+         <div class="video-title">🎥 ${v.title}</div>`;
+  }));
+}
+
+/* ===== أسئلة التؤوريا ===== */
+function theoryClick(category) {
+  showToast(`أسئلة رخصة ${category} — قريباً`);
+}
+
 function updatePrice() {
   const type = document.getElementById('lessonType').value;
   document.getElementById('priceBox').textContent = `السعر: ${type === 'heavy' ? 130 : 110} ₪`;
 }
 
-function submitRequest(type) {
-  const name = document.getElementById('reqName').value.trim();
-  const phone = document.getElementById('reqPhone').value.trim();
-  if(!name || !phone) {
+/* ===== طلب موعد فحص نظري / عملي ===== */
+function submitRequest(kind) {
+  const nameEl = document.getElementById(kind === 'theory' ? 'theoryName' : 'testName');
+  const phoneEl = document.getElementById(kind === 'theory' ? 'theoryPhone' : 'testPhone');
+  const name = nameEl.value.trim();
+  const phone = phoneEl.value.trim();
+  if (!name || !phone) {
     showToast('يرجى إدخال الاسم ورقم الموبايل');
     return;
   }
-  showToast(`تمت العملية بنجاح! تم إرسال طلب ${type}`);
-  document.getElementById('reqName').value = '';
-  document.getElementById('reqPhone').value = '';
+  const label = kind === 'theory' ? 'الفحص النظري (تؤوريا)' : 'الفحص العملي (تيست)';
+  showToast(`تم إرسال طلب موعد ${label} بنجاح!`);
+  nameEl.value = '';
+  phoneEl.value = '';
 }
 
 async function loadTeachers() {
@@ -294,9 +645,8 @@ async function submitBooking() {
   const result = await res.json();
   if (result.success) {
     showToast('تم الحجز بنجاح!');
-    const phoneNo = "970599254574"; 
     const text = `مرحباً، تم حجز درس: ${student_name}، التاريخ: ${date}، ${time}`;
-    window.open(`https://wa.me/${phoneNo}?text=${encodeURIComponent(text)}`, '_blank');
+    window.open(`https://wa.me/${WA_PHONE}?text=${encodeURIComponent(text)}`, '_blank');
   } else {
     showToast('حدث خطأ أثناء الحجز');
   }
@@ -325,6 +675,9 @@ async function registerStudent() {
   }
 }
 
+buildSlider();
+buildCars();
+buildVideos();
 loadTeachers();
 </script>
 </body>
