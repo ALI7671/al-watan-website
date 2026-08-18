@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>لوحة الإدارة - مدرسة الوطن</title>
+<!-- إضافة مكتبة SweetAlert2 للنافذة المنبثقة الاحترافية -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
   :root{--ink:#1B2126;--ink-soft:#3A434B;--paper:#F6F3EC;--paper-dim:#EDE8DB;--route:#E9B93E;--olive:#4F6F52;--olive-soft:#E4EAE2;--rust:#B3492B;--rust-soft:#F3E0D8;--line:rgba(27,33,38,.14);}
   *{box-sizing:border-box;}
@@ -222,13 +224,38 @@ async function setTestDate(id) {
 }
 
 async function editAvailability(teacherId, teacherName) {
-  const daysInput = prompt(`أيام دوام ${teacherName}\n(0=أحد، 1=اثنين، 2=ثلاثاء، 3=أربعاء، 4=خميس، 5=جمعة، 6=سبت)\n\nمثال: 0,1,2,3,4`);
-  if (!daysInput) return;
-  const startTime = prompt('وقت البداية:', '08:00');
-  if (!startTime) return;
-  const endTime = prompt('وقت النهاية:', '17:00');
-  if (!endTime) return;
+  const { value: formValues } = await Swal.fire({
+    title: `تعديل أيام دوام ${teacherName}`,
+    html: `
+      <div style="text-align: right; direction: rtl;">
+        <label style="display: block; margin-bottom: 5px; font-weight: bold; font-size: 13px;">الأيام (0=أحد، 1=اثنين، 2=ثلاثاء، 3=أربعاء، 4=خميس، 5=جمعة، 6=سبت):</label>
+        <input id="swal-days" class="swal2-input" placeholder="مثال: 0,1,2,3,4" style="margin: 0 0 15px 0; width: 100%;">
+        
+        <label style="display: block; margin-bottom: 5px; font-weight: bold; font-size: 13px;">وقت البداية:</label>
+        <input id="swal-start" class="swal2-input" value="08:00" style="margin: 0 0 15px 0; width: 100%;">
+        
+        <label style="display: block; margin-bottom: 5px; font-weight: bold; font-size: 13px;">وقت النهاية:</label>
+        <input id="swal-end" class="swal2-input" value="17:00" style="margin: 0 0 15px 0; width: 100%;">
+      </div>
+    `,
+    focusConfirm: false,
+    showCancelButton: true,
+    confirmButtonText: 'حفظ التعديلات',
+    cancelButtonText: 'إلغاء',
+    preConfirm: () => {
+      const daysInput = document.getElementById('swal-days').value;
+      const startTime = document.getElementById('swal-start').value;
+      const endTime = document.getElementById('swal-end').value;
+      if (!daysInput || !startTime || !endTime) {
+        Swal.showValidationMessage('الرجاء تعبئة جميع الحقول بشكل صحيح!');
+      }
+      return { daysInput, startTime, endTime };
+    }
+  });
 
+  if (!formValues) return;
+
+  const { daysInput, startTime, endTime } = formValues;
   const days = daysInput.split(',').map(d => parseInt(d.trim())).filter(d => !isNaN(d) && d >= 0 && d <= 6);
   const slots = days.map(day => ({ day_of_week: day, start_time: startTime, end_time: endTime }));
 
@@ -236,6 +263,14 @@ async function editAvailability(teacherId, teacherName) {
     method: 'PUT', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ slots })
   });
+  
+  Swal.fire({
+    icon: 'success',
+    title: 'تم التحديث بنجاح',
+    showConfirmButton: false,
+    timer: 1500
+  });
+
   loadAll();
 }
 
