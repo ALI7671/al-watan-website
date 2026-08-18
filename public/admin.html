@@ -75,6 +75,62 @@
     font-weight: 700; width: 100%; cursor: pointer; font-family: inherit;
   }
   .auth-error { color: var(--rust); background: var(--rust-soft); padding: 10px; border-radius: 8px; font-size: 13px; margin-bottom: 15px; display: none; }
+
+  /* ===== بطاقات الطلاب ===== */
+  .students-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+  .student-card { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 20px; box-shadow: 0 8px 20px rgba(27,33,38,.06); transition: box-shadow .25s ease, transform .25s ease; }
+  .student-card:hover { box-shadow: 0 16px 32px rgba(27,33,38,.12); transform: translateY(-2px); }
+  .student-card-head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+  .student-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--ink); color: var(--route); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 17px; flex-shrink: 0; }
+  .student-name { font-weight: 800; font-size: 15px; }
+  .student-meta { font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
+  .student-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .student-stat { background: var(--paper-dim); border-radius: 10px; padding: 10px 12px; }
+  .student-stat .label { display: block; font-size: 11px; color: var(--ink-soft); font-weight: 700; margin-bottom: 3px; }
+  .student-stat .value { font-size: 15px; font-weight: 800; color: var(--ink); }
+  .student-stat .value.paid { color: var(--olive); }
+  .student-stat .value.due { color: var(--rust); }
+  .student-stat .value.clear { color: var(--olive); }
+  .student-test { font-size: 12.5px; color: var(--ink-soft); margin-bottom: 14px; }
+  .student-test strong { color: var(--ink); }
+  .student-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  .mini-btn { flex: 1; min-width: 120px; background: var(--paper-dim); color: var(--ink); border: 1.5px solid var(--line); border-radius: 9px; padding: 9px 10px; font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit; transition: all .2s ease; }
+  .mini-btn:hover { border-color: var(--route); background: #fff; transform: translateY(-1px); }
+  .mini-btn.gold { background: var(--route); color: var(--ink); border-color: var(--route); }
+  .mini-btn.gold:hover { background: #f0c458; box-shadow: 0 6px 16px rgba(233,185,62,.4); }
+
+  /* ===== نافذة منبثقة عامة (Modal) ===== */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(27,33,38,.72); backdrop-filter: blur(3px);
+    display: flex; align-items: center; justify-content: center; z-index: 3000;
+    opacity: 0; pointer-events: none; transition: opacity .25s ease; padding: 20px;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: auto; }
+  .modal-box {
+    background: #fff; border-radius: 20px; width: 100%; max-width: 420px;
+    box-shadow: 0 30px 60px rgba(0,0,0,.35); border-top: 5px solid var(--route);
+    transform: translateY(20px) scale(.97); transition: transform .25s ease; overflow: hidden;
+  }
+  .modal-overlay.open .modal-box { transform: translateY(0) scale(1); }
+  .modal-header { background: var(--ink); padding: 18px 22px; display: flex; align-items: center; justify-content: space-between; }
+  .modal-header span { font-weight: 800; font-size: 16px; color: var(--route); }
+  .modal-close { background: none; border: none; color: var(--paper); font-size: 22px; cursor: pointer; line-height: 1; padding: 0; }
+  .modal-close:hover { color: var(--route); }
+  #modalBody { padding: 22px; }
+  #modalBody label { display: block; font-size: 12.5px; font-weight: 700; margin-bottom: 6px; color: var(--ink-soft); }
+  #modalBody input {
+    width: 100%; padding: 13px; border-radius: 10px; border: 1.5px solid var(--line);
+    font-family: inherit; font-size: 15px; margin-bottom: 16px; background: #faf8f5;
+  }
+  #modalBody input:focus { outline: none; border-color: var(--route); box-shadow: 0 0 0 3px rgba(233,185,62,.18); background: #fff; }
+  .modal-error { color: var(--rust); background: var(--rust-soft); padding: 10px; border-radius: 8px; font-size: 13px; margin-bottom: 14px; display: none; }
+  .modal-btn {
+    background: var(--route); color: var(--ink); border: none; border-radius: 12px;
+    padding: 14px; font-size: 15px; font-weight: 800; width: 100%; cursor: pointer;
+    font-family: inherit; transition: all .2s ease; box-shadow: 0 8px 18px rgba(233,185,62,.35);
+  }
+  .modal-btn:hover { background: #f0c458; transform: translateY(-2px); box-shadow: 0 12px 24px rgba(233,185,62,.45); }
+  .modal-btn:active { transform: scale(.97); }
 </style>
 </head>
 <body>
@@ -129,6 +185,17 @@
   <div id="complaintsTable">جاري التحميل...</div>
 </div>
 
+<!-- نافذة منبثقة عامة تُستخدم لتسجيل الدفعات وتحديد سعر الباقة وموعد التيست -->
+<div id="modalOverlay" class="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span id="modalTitle"></span>
+      <button class="modal-close" onclick="closeModal()" aria-label="إغلاق">&times;</button>
+    </div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
 <script>
 const typeNames = { automatic: 'أوتوماتيك', manual: 'جير', heavy: 'شحن خفيف' };
 const subjectNames = { teacher: 'ملاحظة عن المعلم', schedule: 'مشكلة بالمواعيد', payment: 'مشكلة بالدفع', other: 'شي تاني' };
@@ -173,8 +240,32 @@ async function loadAll() {
 
   document.getElementById('studentsTable').innerHTML = students.length === 0
     ? '<div class="empty">ما في طلاب مسجلين</div>'
-    : `<table><thead><tr><th>الاسم</th><th>الموبايل</th><th>نوع الرخصة</th><th>موعد التيست</th><th></th></tr></thead>
-       <tbody>${students.map(s => `<tr><td>${s.name}</td><td>${s.phone}</td><td>${typeNames[s.license_type]}</td><td>${s.test_date || '—'}</td><td><button class="mark-btn" onclick="setTestDate(${s.id})">تحديد موعد</button></td></tr>`).join('')}</tbody></table>`;
+    : `<div class="students-grid">${students.map(s => {
+        const hasPackage = s.total_package !== null && s.total_package !== undefined;
+        const remainingClass = !hasPackage ? '' : (s.remaining > 0 ? 'due' : 'clear');
+        return `
+        <div class="student-card">
+          <div class="student-card-head">
+            <div class="student-avatar">${escapeHtml(s.name.charAt(0))}</div>
+            <div>
+              <div class="student-name">${escapeHtml(s.name)}</div>
+              <div class="student-meta">${escapeHtml(s.phone)} • ${typeNames[s.license_type]}</div>
+            </div>
+          </div>
+          <div class="student-stats">
+            <div class="student-stat"><span class="label">عدد الدروس</span><span class="value">${s.lessons_taken}</span></div>
+            <div class="student-stat"><span class="label">سعر الباقة</span><span class="value">${hasPackage ? s.total_package + ' ₪' : '—'}</span></div>
+            <div class="student-stat"><span class="label">المدفوع</span><span class="value paid">${s.total_paid} ₪</span></div>
+            <div class="student-stat"><span class="label">الباقي</span><span class="value ${remainingClass}">${hasPackage ? s.remaining + ' ₪' : '—'}</span></div>
+          </div>
+          <div class="student-test">موعد التيست: <strong>${s.test_date || '—'}</strong></div>
+          <div class="student-actions">
+            <button class="mini-btn gold" data-action="payment" data-id="${s.id}" data-name="${escapeAttr(s.name)}">تسجيل دفعة</button>
+            <button class="mini-btn" data-action="package" data-id="${s.id}" data-name="${escapeAttr(s.name)}" data-current="${hasPackage ? s.total_package : ''}">تحديد سعر الباقة</button>
+            <button class="mini-btn" data-action="testdate" data-id="${s.id}" data-name="${escapeAttr(s.name)}" data-current="${s.test_date || ''}">تحديد موعد تيست</button>
+          </div>
+        </div>`;
+      }).join('')}</div>`;
 
   document.getElementById('bookingsTable').innerHTML = bookings.length === 0
     ? '<div class="empty">ما في حجوزات</div>'
@@ -213,15 +304,136 @@ async function markAnswered(id) {
   loadAll();
 }
 
-async function setTestDate(id) {
-  const date = prompt('أدخل موعد التيست (مثال: 2026-09-15):');
-  if (!date) return;
+/* ===== أدوات مساعدة للأمان عند إدراج نصوص المستخدم في HTML ===== */
+function escapeHtml(str) {
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+function escapeAttr(str) {
+  return escapeHtml(str).replace(/"/g, '&quot;');
+}
+
+/* ===== النافذة المنبثقة العامة ===== */
+function openModal(title, bodyHtml) {
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalBody').innerHTML = bodyHtml;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+document.getElementById('modalOverlay').addEventListener('click', (e) => {
+  if (e.target.id === 'modalOverlay') closeModal();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeModal();
+});
+
+function showModalError(text) {
+  const el = document.getElementById('modalError');
+  if (!el) return;
+  el.textContent = text;
+  el.style.display = 'block';
+}
+
+/* ===== تسجيل دفعة ===== */
+function openPaymentModal(id, name) {
+  openModal(`تسجيل دفعة — ${name}`, `
+    <label>المبلغ (₪)</label>
+    <input type="number" id="payAmount" placeholder="مثال: 200" min="1">
+    <label>التاريخ</label>
+    <input type="date" id="payDate" value="${new Date().toISOString().split('T')[0]}">
+    <label>ملاحظة (اختياري)</label>
+    <input type="text" id="payNote" placeholder="مثال: دفعة أولى">
+    <div id="modalError" class="modal-error"></div>
+    <button class="modal-btn" onclick="submitPayment(${id})">تأكيد الدفعة</button>
+  `);
+}
+
+async function submitPayment(id) {
+  const amount = parseInt(document.getElementById('payAmount').value, 10);
+  const date = document.getElementById('payDate').value;
+  const note = document.getElementById('payNote').value.trim();
+
+  if (!amount || amount <= 0 || !date) {
+    showModalError('يرجى إدخال مبلغ صحيح والتاريخ');
+    return;
+  }
+
+  const res = await fetch('/api/payments', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ student_id: id, amount, date, note })
+  });
+  const result = await res.json();
+
+  if (result.success) {
+    closeModal();
+    loadAll();
+  } else {
+    showModalError(result.message || 'صار خطأ أثناء تسجيل الدفعة');
+  }
+}
+
+/* ===== تحديد سعر الباقة ===== */
+function openPackageModal(id, name, current) {
+  openModal(`تحديد سعر الباقة — ${name}`, `
+    <label>سعر الباقة الكاملة (₪)</label>
+    <input type="number" id="packagePrice" placeholder="مثال: 1500" min="0" value="${current || ''}">
+    <div id="modalError" class="modal-error"></div>
+    <button class="modal-btn" onclick="submitPackage(${id})">حفظ السعر</button>
+  `);
+}
+
+async function submitPackage(id) {
+  const price = parseInt(document.getElementById('packagePrice').value, 10);
+
+  if (isNaN(price) || price < 0) {
+    showModalError('يرجى إدخال سعر صحيح');
+    return;
+  }
+
+  await fetch(`/api/students/${id}/package`, {
+    method: 'PUT', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ total_package: price })
+  });
+  closeModal();
+  loadAll();
+}
+
+/* ===== تحديد موعد التيست ===== */
+function openTestDateModal(id, name, current) {
+  openModal(`تحديد موعد تيست — ${name}`, `
+    <label>موعد التيست</label>
+    <input type="date" id="testDateInput" value="${current || ''}">
+    <div id="modalError" class="modal-error"></div>
+    <button class="modal-btn" onclick="submitTestDate(${id})">حفظ الموعد</button>
+  `);
+}
+
+async function submitTestDate(id) {
+  const date = document.getElementById('testDateInput').value;
+
+  if (!date) {
+    showModalError('يرجى اختيار تاريخ');
+    return;
+  }
+
   await fetch(`/api/students/${id}/test-date`, {
     method: 'PUT', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ test_date: date })
   });
+  closeModal();
   loadAll();
 }
+
+/* ===== تفويض النقر على أزرار بطاقات الطلاب ===== */
+document.getElementById('studentsTable').addEventListener('click', (e) => {
+  const btn = e.target.closest('button[data-action]');
+  if (!btn) return;
+  const { action, id, name, current } = btn.dataset;
+  if (action === 'payment') openPaymentModal(id, name);
+  else if (action === 'package') openPackageModal(id, name, current);
+  else if (action === 'testdate') openTestDateModal(id, name, current);
+});
 
 async function editAvailability(teacherId, teacherName) {
   const { value: formValues } = await Swal.fire({
