@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="تعرّف على مدرسة الوطن لتعليم السياقة في رام الله - خبرة، سيارات حديثة، مدربون محترفون وكل أنواع الرخص.">
 <title>من نحن - مدرسة الوطن لتعليم السياقة</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,10 +13,15 @@
     --ink: #1B2126;
     --ink-soft: #3A434B;
     --paper: #F6F3EC;
+    --paper-dim: #EDE8DB;
     --route: #E9B93E;
+    --olive: #4F6F52;
     --line: rgba(27,33,38,.14);
+    --line-dark: rgba(246,243,236,.16);
+    --wa-green: #25D366;
     --shadow-md: 0 12px 30px rgba(27,33,38,.10);
-    --shadow-gold: 0 0 0 2px var(--route), 0 22px 44px rgba(27,33,38,.22);
+    --shadow-lg: 0 22px 48px rgba(27,33,38,.22);
+    --shadow-gold: 0 0 0 2px var(--route), 0 26px 52px rgba(27,33,38,.28);
   }
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
@@ -24,116 +30,357 @@
     background: var(--paper);
     color: var(--ink);
     margin: 0;
-    padding: 0 0 40px 0;
+    padding: 0;
+    overflow-x: hidden;
   }
+  img { max-width: 100%; display: block; }
+
+  /* ===== Navbar ===== */
   .navbar {
     background: var(--ink);
     padding: 16px 24px;
     display: flex;
-    gap: 20px;
     align-items: center;
-    flex-wrap: wrap;
+    gap: 18px;
     position: sticky;
     top: 0;
     z-index: 500;
     box-shadow: 0 6px 20px rgba(0,0,0,.18);
+  }
+  .navbar .brand {
+    color: var(--route);
+    font-size: 17px;
+    font-weight: 900;
+    margin-left: auto;
+    white-space: nowrap;
+    letter-spacing: -.3px;
+  }
+  .navbar .nav-links {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    flex-wrap: wrap;
   }
   .navbar a {
     color: var(--paper);
     text-decoration: none;
     font-size: 14.5px;
     font-weight: 800;
+    position: relative;
+    transition: color .2s ease;
   }
   .navbar a:hover { color: var(--route); }
-  .navbar .brand {
+  .navbar a.active { color: var(--route); }
+  .nav-toggle {
+    display: none;
+    background: none;
+    border: none;
     color: var(--route);
-    font-size: 17px;
-    font-weight: 900;
-    margin-left: auto;
+    font-size: 26px;
+    cursor: pointer;
+    padding: 0 4px;
   }
 
-  .container { max-width: 720px; margin: 0 auto; padding: 40px 18px; }
+  .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
 
-  .reveal { opacity: 0; transform: translateY(36px); transition: opacity .8s cubic-bezier(.2,.8,.2,1), transform .8s cubic-bezier(.2,.8,.2,1); }
+  /* ===== Section rhythm (dark / light alternation) ===== */
+  .section { padding: 84px 0; }
+  .section-light { background: var(--paper); color: var(--ink); }
+  .section-dark { background: var(--ink); color: var(--paper); }
+
+  .reveal { opacity: 0; transform: translateY(38px); transition: opacity .8s cubic-bezier(.2,.8,.2,1), transform .8s cubic-bezier(.2,.8,.2,1); }
   .reveal.in-view { opacity: 1; transform: none; }
 
-  .hero {
-    background: var(--ink);
-    color: var(--paper);
-    border-radius: 22px;
-    padding: 56px 28px;
-    margin-bottom: 30px;
-    text-align: center;
-    box-shadow: var(--shadow-md);
+  .section-header { text-align: center; margin-bottom: 46px; }
+  .section-header::after {
+    content: '';
+    display: block;
+    width: 64px; height: 4px;
+    background: var(--route);
+    margin: 18px auto 0;
+    border-radius: 4px;
   }
-  .hero h1 { font-size: clamp(28px, 5vw, 42px); margin: 0 0 12px 0; color: var(--route); font-weight: 900; letter-spacing: -.5px; }
-  .hero p { font-size: 15.5px; color: #cbd5e1; margin: 0; line-height: 1.7; font-weight: 600; }
+
+  h2 {
+    font-size: 17px;
+    margin: 0;
+    font-weight: 900;
+    color: var(--ink);
+    letter-spacing: -.3px;
+  }
+  h2 .sub { display: block; font-size: 13px; font-weight: 700; color: var(--ink-soft); margin-top: 6px; }
+  .section-header h2 { font-size: clamp(24px, 3.6vw, 36px); }
+  .section-header h2 .sub { font-size: clamp(13.5px, 1.6vw, 16px); margin-top: 12px; }
+  .section-dark .section-header h2 { color: var(--paper); }
+  .section-dark .section-header h2 .sub { color: #B7C0C7; }
 
   .card {
     background: #fff;
+    color: var(--ink);
     border: 1px solid var(--line);
     border-radius: 18px;
-    padding: 28px;
-    margin-bottom: 18px;
+    padding: 26px;
+    margin-bottom: 12px;
     box-shadow: var(--shadow-md);
-    transition: transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s ease;
   }
-  .card:hover { transform: translateY(-6px); box-shadow: var(--shadow-gold); }
-  .card h3 { margin-top: 0; color: var(--ink); font-size: 19px; font-weight: 900; }
-  .card p, .card li { font-size: 14.5px; color: var(--ink-soft); line-height: 1.8; font-weight: 500; }
-  ul { padding-right: 20px; }
+
+  /* ===== Page hero ===== */
+  .page-hero {
+    background: var(--ink);
+    color: var(--paper);
+    text-align: center;
+    padding: 76px 20px 64px;
+    position: relative;
+    overflow: hidden;
+  }
+  .page-hero::after {
+    content: '🚗';
+    position: absolute;
+    font-size: 260px;
+    opacity: .06;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+  .page-hero h1 {
+    position: relative;
+    font-size: clamp(30px, 5.5vw, 50px);
+    margin: 0 0 14px;
+    font-weight: 900;
+    letter-spacing: -.8px;
+    color: var(--paper);
+  }
+  .page-hero h1 span { color: var(--route); }
+  .page-hero p {
+    position: relative;
+    margin: 0 auto;
+    max-width: 560px;
+    font-size: clamp(14.5px, 1.8vw, 17px);
+    font-weight: 700;
+    color: #cbd5e1;
+    line-height: 1.7;
+  }
+
+  /* ===== About page cards ===== */
+  .about-card { text-align: center; }
+  .about-card p, .about-card li { font-size: 14.5px; color: var(--ink-soft); line-height: 1.85; font-weight: 500; text-align: right; }
+  .about-card h3 { margin: 0 0 14px; font-size: 19px; font-weight: 900; color: var(--ink); }
+
+  .contact-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .contact-list li {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 14.5px; font-weight: 700; color: var(--ink-soft);
+  }
+  .contact-list .icon {
+    flex: none;
+    width: 40px; height: 40px;
+    border-radius: 11px;
+    background: var(--paper-dim);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .contact-list strong { color: var(--ink); }
+
+  /* ===== Features grid ===== */
+  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .feature-card {
+    background: #fff;
+    color: var(--ink);
+    border-radius: 18px;
+    padding: 32px 18px;
+    text-align: center;
+    border: 1.5px solid transparent;
+    box-shadow: var(--shadow-md);
+    transition: transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s ease, border-color .3s ease;
+  }
+  .feature-card:hover { border-color: var(--route); transform: translateY(-10px) scale(1.03); box-shadow: var(--shadow-gold); }
+  .feature-card .icon { font-size: 32px; margin-bottom: 12px; }
+  .feature-card .title { font-weight: 800; font-size: 15.5px; margin-bottom: 6px; }
+  .feature-card .desc { font-size: 12.5px; color: var(--ink-soft); font-weight: 600; line-height: 1.6; }
+
+  /* ===== WhatsApp floating button ===== */
+  .wa-float {
+    position: fixed;
+    bottom: 24px;
+    left: 20px;
+    width: 60px; height: 60px;
+    background: var(--wa-green);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 22px rgba(37,211,102,.5);
+    z-index: 900;
+    text-decoration: none;
+    animation: waPulse 2.2s infinite;
+    transition: transform .2s ease;
+  }
+  .wa-float:hover { transform: scale(1.08); }
+  .wa-float svg { width: 30px; height: 30px; }
+  @keyframes waPulse {
+    0% { box-shadow: 0 0 0 0 rgba(37,211,102,.6); }
+    70% { box-shadow: 0 0 0 16px rgba(37,211,102,0); }
+    100% { box-shadow: 0 0 0 0 rgba(37,211,102,0); }
+  }
+
+  footer {
+    background: var(--ink);
+    color: #9AA4AB;
+    text-align: center;
+    padding: 26px 18px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  footer span { color: var(--route); }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 760px) {
+    .section { padding: 60px 0; }
+    .features-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .navbar .nav-links {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0; left: 0;
+      background: var(--ink);
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 14px 20px 20px;
+      gap: 16px;
+      border-top: 1px solid rgba(246,243,236,.1);
+    }
+    .navbar .nav-links.open { display: flex; }
+    .nav-toggle { display: block; }
+    .navbar .brand { font-size: 15px; }
+    .wa-float { width: 54px; height: 54px; left: 14px; bottom: 18px; }
+    .page-hero { padding: 56px 18px 46px; }
+  }
 </style>
 </head>
 <body>
 
+<!-- شريط التنقل -->
 <div class="navbar">
-  <a href="/">الرئيسية</a>
-  <a href="/login.html">دخول الطالب</a>
-  <a href="/dashboard.html">حسابي</a>
-  <a href="/about.html">من نحن</a>
-  <a href="/faq.html">الأسئلة الشائعة</a>
-  <a href="/admin.html">الإدارة</a>
+  <button class="nav-toggle" id="navToggle" aria-label="القائمة">☰</button>
   <span class="brand">🚗 مدرسة الوطن</span>
-</div>
-
-<div class="container">
-  <div class="hero reveal">
-    <h1>مدرسة الوطن لتعليم السياقة</h1>
-    <p>طريقك الآمن نحو احتراف القيادة والحصول على رخصة السياقة بكل ثقة وسهولة.</p>
-  </div>
-
-  <div class="card reveal">
-    <h3>عن المدرسة</h3>
-    <p>تعتبر مدرسة الوطن إحدى رواد تعليم السياقة، حيث نتميز بوجود نخبة من أفضل المعلمين المؤهلين والمرخصين. نُقدم تدريباً نظرياً وعملياً متكاملاً على جميع أنواع الرخص (أوتوماتيك، جير عادي، وشحن خفيف) وفق أحدث الأساليب التدريبية.</p>
-  </div>
-
-  <div class="card reveal">
-    <h3>ماذا نقدم لطلابنا؟</h3>
-    <ul>
-      <li>مرونة كاملة في اختيار أوقات الدروس بما يتناسب مع جدولك.</li>
-      <li>أسطول مركبات حديث ومجهز بالكامل لأعلى معايير الأمان.</li>
-      <li>متابعة مستمرة لتقدم الطالب ومواعيد اختبارات التيست.</li>
-      <li>نظام إلكتروني متطور لحجز المواعيد ومتابعة الحساب الشخصي بسهولة.</li>
-    </ul>
-  </div>
-
-  <div class="card reveal">
-    <h3>معلومات التواصل والإدارة</h3>
-    <p>📍 <strong>العنوان:</strong> رام الله - دوار المنارة - عمارة البكري - الطابق الرابع<br>
-       👨‍💼 <strong>المدير المهني للمدرسة:</strong> عبد الحكيم غنام<br>
-       📞 <strong>رقم الهاتف:</strong> 0599254574<br>
-       ⏰ <strong>أوقات الدوام:</strong> من السبت إلى الخميس</p>
+  <div class="nav-links" id="navLinks">
+    <a href="/">الرئيسية</a>
+    <a href="/login.html">دخول الطالب</a>
+    <a href="/dashboard.html">حسابي</a>
+    <a href="/about.html" class="active">من نحن</a>
+    <a href="/faq.html">الأسئلة الشائعة</a>
+    <a href="/admin.html">الإدارة</a>
   </div>
 </div>
+
+<!-- عنوان الصفحة -->
+<div class="page-hero">
+  <h1>مدرسة الوطن <span>لتعليم السياقة</span></h1>
+  <p>طريقك الآمن نحو احتراف القيادة والحصول على رخصة السياقة بكل ثقة وسهولة، في رام الله.</p>
+</div>
+
+<!-- عن المدرسة -->
+<section class="section section-light">
+  <div class="container reveal">
+    <div class="section-header">
+      <h2>عن المدرسة<span class="sub">خبرة طويلة في تخريج سائقين ناجحين وواثقين</span></h2>
+    </div>
+    <div class="card about-card">
+      <h3>قصتنا</h3>
+      <p>تُعتبر مدرسة الوطن إحدى رواد تعليم السياقة في رام الله، حيث نتميّز بخبرة طويلة ونخبة من أفضل المعلمين المؤهلين والمرخصين. نُقدّم تدريباً نظرياً وعملياً متكاملاً على جميع أنواع الرخص — أوتوماتيك، جير عادي، وشحن خفيف — وفق أحدث الأساليب التدريبية، باستخدام سيارات حديثة ومجهزة بالكامل لأعلى معايير الأمان والراحة.</p>
+      <p style="margin-top:12px;">هدفنا أن يخرج كل طالب من عندنا سائقاً واثقاً وآمناً، وناجحاً من أول محاولة في فحصَي التؤوريا والتيست.</p>
+    </div>
+  </div>
+</section>
+
+<!-- مميزات المدرسة -->
+<section class="section section-dark">
+  <div class="container reveal">
+    <div class="section-header">
+      <h2>مميزات مدرسة الوطن<span class="sub">ليش تختار مدرسة الوطن لتعليم السياقة؟</span></h2>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="icon">🏆</div>
+        <div class="title">خبرة طويلة</div>
+        <div class="desc">سنوات من الخبرة في تدريب وتخريج مئات السائقين الناجحين</div>
+      </div>
+      <div class="feature-card">
+        <div class="icon">🚘</div>
+        <div class="title">سيارات حديثة</div>
+        <div class="desc">أسطول مركبات حديث ونظيف ومجهز بالكامل لأعلى معايير الأمان</div>
+      </div>
+      <div class="feature-card">
+        <div class="icon">👨‍🏫</div>
+        <div class="title">مدرّبون محترفون</div>
+        <div class="desc">معلمون مؤهلون ومرخصون، صبورون ويهتمون بمستوى كل طالب</div>
+      </div>
+      <div class="feature-card">
+        <div class="icon">🪪</div>
+        <div class="title">جميع أنواع الرخص</div>
+        <div class="desc">تدريب كامل لرخصة الأوتوماتيك، الجير العادي، والشحن الخفيف</div>
+      </div>
+      <div class="feature-card">
+        <div class="icon">🗓️</div>
+        <div class="title">مواعيد مرنة</div>
+        <div class="desc">اختر الوقت الذي يناسب جدولك مع نظام حجز إلكتروني سهل</div>
+      </div>
+      <div class="feature-card">
+        <div class="icon">📈</div>
+        <div class="title">متابعة مستمرة</div>
+        <div class="desc">متابعة تقدّم الطالب ودفعاته ومواعيد اختباراته أولاً بأول</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- معلومات التواصل -->
+<section class="section section-light">
+  <div class="container reveal">
+    <div class="section-header">
+      <h2>معلومات التواصل والإدارة<span class="sub">تواصل معنا أو زُرنا مباشرة</span></h2>
+    </div>
+    <div class="card">
+      <ul class="contact-list">
+        <li><span class="icon">📍</span><span><strong>العنوان:</strong> رام الله - دوار المنارة - عمارة البكري - الطابق الرابع</span></li>
+        <li><span class="icon">👨‍💼</span><span><strong>المدير المهني للمدرسة:</strong> عبد الحكيم غنام</span></li>
+        <li><span class="icon">📞</span><span><strong>رقم الهاتف:</strong> 0599254574</span></li>
+        <li><span class="icon">⏰</span><span><strong>أوقات الدوام:</strong> من السبت إلى الخميس</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>مدرسة الوطن لتعليم السياقة — رام الله <span>★</span> جميع الحقوق محفوظة</footer>
+
+<!-- زر واتساب عائم -->
+<a class="wa-float" id="waFloat" href="#" target="_blank" aria-label="تواصل عبر واتساب">
+  <svg viewBox="0 0 32 32" fill="#fff"><path d="M16.001 3C9.373 3 4 8.373 4 15c0 2.51.79 4.84 2.14 6.76L4.6 28.4l6.79-1.5A11.9 11.9 0 0 0 16 27c6.628 0 12-5.373 12-12S22.629 3 16.001 3zm0 21.6c-1.85 0-3.58-.5-5.07-1.37l-.36-.21-4.03.89.9-3.92-.24-.37A9.56 9.56 0 0 1 5.4 15c0-5.85 4.76-10.6 10.6-10.6S26.6 9.15 26.6 15 21.85 24.6 16 24.6zm5.83-7.94c-.32-.16-1.89-.93-2.18-1.04-.29-.11-.5-.16-.72.16-.21.32-.82 1.04-1 1.25-.19.21-.37.24-.68.08-.32-.16-1.34-.49-2.55-1.57-.94-.84-1.58-1.87-1.76-2.19-.19-.32-.02-.49.14-.65.14-.14.32-.37.48-.55.16-.19.21-.32.32-.53.11-.21.05-.4-.03-.55-.08-.16-.72-1.74-.99-2.38-.26-.62-.53-.54-.72-.55h-.61c-.21 0-.55.08-.84.4-.29.32-1.1 1.08-1.1 2.63 0 1.55 1.13 3.05 1.29 3.26.16.21 2.22 3.39 5.38 4.75.75.32 1.34.52 1.79.66.75.24 1.44.21 1.98.13.6-.09 1.89-.77 2.16-1.51.27-.75.27-1.39.19-1.52-.08-.14-.29-.21-.61-.37z"/></svg>
+</a>
 
 <script>
+const WA_PHONE = "972599254574";
+document.getElementById('waFloat').href = `https://wa.me/${WA_PHONE}?text=${encodeURIComponent('مرحباً، بدي استفسر عن دروس السياقة بمدرسة الوطن')}`;
+
+document.getElementById('navToggle').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+function initReveal() {
   const els = document.querySelectorAll('.reveal');
   const io = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      if (entry.isIntersecting) { entry.target.classList.add('in-view'); io.unobserve(entry.target); }
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        io.unobserve(entry.target);
+      }
     });
   }, { threshold: 0.12 });
   els.forEach(el => io.observe(el));
+}
+initReveal();
 </script>
 </body>
 </html>
