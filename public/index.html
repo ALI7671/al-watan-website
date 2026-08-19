@@ -235,6 +235,95 @@
     from { opacity: 0; transform: translateY(30px); }
     to { opacity: 1; transform: none; }
   }
+
+  /* ===== CTA slide (لوحة إعلانات تفاعلية) ===== */
+  .slide.cta-slide {
+    background: linear-gradient(135deg, #1B2126 0%, #262f36 55%, #1B2126 100%);
+  }
+  .slide.cta-slide::before { content: none; }
+  .slide.cta-slide::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 50% 32%, rgba(233,185,62,.14), transparent 60%);
+    z-index: 1;
+    pointer-events: none;
+  }
+  .cta-caption p { margin-top: 4px; }
+  .cta-buttons {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 34px;
+  }
+  .cta-btn {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: inherit;
+    font-weight: 800;
+    font-size: 15.5px;
+    padding: 17px 28px;
+    border-radius: 14px;
+    cursor: pointer;
+    border: 2px solid var(--route);
+    background: transparent;
+    color: var(--paper);
+    opacity: 0;
+    transform: translateY(18px);
+    transition: transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s ease, background .3s ease;
+  }
+  .cta-btn .cta-icon { font-size: 19px; }
+  .cta-btn::after {
+    content: '';
+    position: absolute; inset: 0 auto 0 -60%;
+    width: 50%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,.35), transparent);
+    transform: skewX(-20deg);
+    transition: left .6s ease;
+    z-index: -1;
+  }
+  .cta-btn:hover::after { left: 130%; }
+  .cta-btn:hover { transform: translateY(-4px) scale(1.045); }
+  .cta-btn.primary {
+    background: var(--route);
+    color: var(--ink);
+    box-shadow: 0 12px 30px rgba(233,185,62,.4);
+  }
+  .cta-btn.primary:hover { background: #f0c458; box-shadow: 0 16px 38px rgba(233,185,62,.55); }
+  .cta-btn.outline:hover { background: rgba(233,185,62,.14); box-shadow: 0 10px 26px rgba(233,185,62,.2); }
+
+  @keyframes ctaBtnIn {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes ctaPulse {
+    0%, 100% { box-shadow: 0 12px 30px rgba(233,185,62,.4); }
+    50% { box-shadow: 0 12px 30px rgba(233,185,62,.4), 0 0 0 9px rgba(233,185,62,.14); }
+  }
+  .slide.cta-slide.is-active .cta-btn {
+    animation-name: ctaBtnIn;
+    animation-duration: .6s;
+    animation-timing-function: cubic-bezier(.2,.8,.2,1);
+    animation-fill-mode: forwards;
+  }
+  .slide.cta-slide.is-active .cta-btn:nth-child(1) { animation-delay: .15s; }
+  .slide.cta-slide.is-active .cta-btn:nth-child(2) { animation-delay: .3s; }
+  .slide.cta-slide.is-active .cta-btn:nth-child(3) { animation-delay: .45s; }
+  .slide.cta-slide.is-active .cta-btn.primary {
+    animation-name: ctaBtnIn, ctaPulse;
+    animation-duration: .6s, 2.6s;
+    animation-timing-function: cubic-bezier(.2,.8,.2,1), ease-in-out;
+    animation-iteration-count: 1, infinite;
+    animation-fill-mode: forwards, none;
+    animation-delay: .15s, 1s;
+  }
+
   .scroll-cue {
     position: absolute;
     bottom: 26px; left: 50%;
@@ -424,6 +513,8 @@
 
   .grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 
+  #cars, #license-steps, #lesson-booking, #theory-request, #test-request { scroll-margin-top: 90px; }
+
   footer {
     background: var(--ink);
     color: #9AA4AB;
@@ -478,6 +569,8 @@
     .slider-arrow { width: 40px; height: 40px; font-size: 17px; }
     .slider-arrow.prev { right: 10px; }
     .slider-arrow.next { left: 10px; }
+    .cta-buttons { flex-direction: column; align-items: stretch; margin-top: 26px; }
+    .cta-btn { justify-content: center; padding: 15px 20px; font-size: 14.5px; }
   }
 </style>
 </head>
@@ -577,7 +670,7 @@
       <h2>احجز موعد فحصك<span class="sub">اطلب موعد الفحص النظري (تؤوريا) أو العملي (تيست)</span></h2>
     </div>
     <div class="grid-2col">
-      <div class="card">
+      <div class="card" id="theory-request">
         <h2 style="margin:0 0 14px; font-size:15px;">طلب موعد فحص نظري (تؤوريا)</h2>
         <label>الاسم الكامل</label>
         <input type="text" id="theoryName" placeholder="مثال: محمد أحمد">
@@ -586,7 +679,7 @@
         <button class="btn-gold" onclick="submitRequest('theory')">طلب موعد فحص نظري</button>
       </div>
 
-      <div class="card">
+      <div class="card" id="test-request">
         <h2 style="margin:0 0 14px; font-size:15px;">طلب موعد فحص عملي (تيست)</h2>
         <label>الاسم الكامل</label>
         <input type="text" id="testName" placeholder="مثال: محمد أحمد">
@@ -635,7 +728,7 @@
 </section>
 
 <!-- (10) قسم حجز الدرس وتسجيل الطالب -->
-<section class="section section-dark">
+<section class="section section-dark" id="lesson-booking">
   <div class="container reveal">
     <div class="section-header">
       <h2>حجز الدرس وتسجيل الطالب<span class="sub">ابدأ رحلتك مع مدرسة الوطن اليوم</span></h2>
@@ -731,7 +824,7 @@ function heroPlaceholderImg(bg1 = '1B2126', bg2 = '3A434B') {
 const sliderImages = [
   { src: '/images/hero-1.jpg', title: 'مدرسة الوطن <span>لتعليم السياقة</span>', text: 'احجز درسك بسهولة • أوتوماتيك • جير • شحن خفيف' },
   { src: '/images/hero-2.jpg', title: 'مدربون محترفون <span>وسيارات حديثة</span>', text: 'نساعدك تنجح من أول مرة بالفحص النظري والعملي' },
-  { src: '/images/hero-3.jpg', title: 'مواعيد مرنة <span>تناسبك</span>', text: 'احجز فحص التؤوريا والتيست بضغطة زر' },
+  { type: 'cta', title: 'ابدأ رحلتك <span>معنا</span>', text: 'اختر الخطوة التالية وابدأ فوراً' },
 ];
 
 let currentSlide = 0;
@@ -740,7 +833,23 @@ let sliderTimer;
 function buildSlider() {
   const track = document.getElementById('sliderTrack');
   const dots = document.getElementById('sliderDots');
-  track.innerHTML = sliderImages.map((s, i) => `
+  track.innerHTML = sliderImages.map((s) => {
+    if (s.type === 'cta') {
+      return `
+    <div class="slide cta-slide">
+      <div class="slide-caption cta-caption">
+        <h1>${s.title}</h1>
+        <p>${s.text}</p>
+        <div class="cta-buttons">
+          <button type="button" class="cta-btn primary" onclick="scrollToSection('lesson-booking')"><span class="cta-icon">🚗</span> احجز درس</button>
+          <button type="button" class="cta-btn outline" onclick="scrollToSection('theory-request')"><span class="cta-icon">📘</span> احجز موعد تؤوريا</button>
+          <button type="button" class="cta-btn outline" onclick="scrollToSection('test-request')"><span class="cta-icon">🏁</span> احجز موعد تيست</button>
+        </div>
+      </div>
+    </div>
+  `;
+    }
+    return `
     <div class="slide">
       <img src="${s.src}" onerror="this.onerror=null; this.src=heroPlaceholderImg();" alt="${s.title.replace(/<[^>]*>/g,'')}">
       <div class="slide-caption">
@@ -748,7 +857,8 @@ function buildSlider() {
         <p>${s.text}</p>
       </div>
     </div>
-  `).join('');
+  `;
+  }).join('');
   dots.innerHTML = sliderImages.map((_, i) => `<button onclick="goToSlide(${i})" class="${i === 0 ? 'active' : ''}"></button>`).join('');
   updateSlider();
   sliderTimer = setInterval(() => changeSlide(-1), 5000);
@@ -757,6 +867,12 @@ function buildSlider() {
 function updateSlider() {
   document.getElementById('sliderTrack').style.transform = `translateX(${currentSlide * 100}%)`;
   document.querySelectorAll('.slider-dots button').forEach((d, i) => d.classList.toggle('active', i === currentSlide));
+  document.querySelectorAll('.slide').forEach((s, i) => s.classList.toggle('is-active', i === currentSlide));
+}
+
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function changeSlide(dir) {
