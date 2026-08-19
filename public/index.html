@@ -236,6 +236,67 @@
     to { opacity: 1; transform: none; }
   }
 
+  /* ===== Hero slide (السلايد الأول) ===== */
+  .slide.hero-slide img {
+    animation: kenBurns 16s ease-in-out infinite alternate;
+  }
+  @keyframes kenBurns {
+    from { transform: scale(1); }
+    to { transform: scale(1.09); }
+  }
+  .slide.hero-slide::before {
+    background: linear-gradient(180deg, rgba(27,33,38,.12) 0%, rgba(27,33,38,.3) 40%, rgba(27,33,38,.95) 100%);
+  }
+  .hero-caption {
+    justify-content: flex-end;
+    padding-bottom: clamp(56px, 9vh, 110px);
+  }
+  .hero-caption p.hero-subtitle {
+    margin: 0 0 10px;
+    font-size: clamp(15px, 2vw, 19px);
+    font-weight: 700;
+    color: #E7EAED;
+    max-width: 620px;
+    text-shadow: 0 2px 14px rgba(0,0,0,.3);
+    animation: heroUp .9s cubic-bezier(.2,.8,.2,1) .16s both;
+  }
+  .hero-caption p.hero-types {
+    margin: 0 0 28px;
+    font-size: clamp(12.5px, 1.4vw, 14.5px);
+    font-weight: 800;
+    letter-spacing: .5px;
+    color: var(--route);
+    animation: heroUp .9s cubic-bezier(.2,.8,.2,1) .28s both;
+  }
+  .hero-cta {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    font-family: inherit;
+    font-weight: 800;
+    font-size: 16px;
+    padding: 18px 36px;
+    border-radius: 14px;
+    border: none;
+    cursor: pointer;
+    background: var(--route);
+    color: var(--ink);
+    box-shadow: 0 12px 30px rgba(233,185,62,.4);
+    transition: transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s ease, background .3s ease;
+    animation: heroUp .9s cubic-bezier(.2,.8,.2,1) .42s both;
+  }
+  .hero-cta::after {
+    content: '';
+    position: absolute; inset: 0 auto 0 -60%;
+    width: 50%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,.5), transparent);
+    transform: skewX(-20deg);
+    transition: left .6s ease;
+    z-index: -1;
+  }
+  .hero-cta:hover::after { left: 130%; }
+  .hero-cta:hover { transform: translateY(-4px) scale(1.045); background: #f0c458; box-shadow: 0 16px 38px rgba(233,185,62,.55); }
+
   /* ===== CTA slide (لوحة إعلانات تفاعلية) ===== */
   .slide.cta-slide {
     background: linear-gradient(135deg, #1B2126 0%, #262f36 55%, #1B2126 100%);
@@ -571,6 +632,10 @@
     .slider-arrow.next { left: 10px; }
     .cta-buttons { flex-direction: column; align-items: stretch; margin-top: 26px; }
     .cta-btn { justify-content: center; padding: 15px 20px; font-size: 14.5px; }
+    .hero-caption { padding-bottom: 42px; }
+    .hero-caption .hero-subtitle { font-size: 14px; }
+    .hero-caption .hero-types { font-size: 12px; margin-bottom: 20px; }
+    .hero-cta { padding: 15px 26px; font-size: 14.5px; width: 100%; max-width: 300px; }
   }
 </style>
 </head>
@@ -822,7 +887,7 @@ function heroPlaceholderImg(bg1 = '1B2126', bg2 = '3A434B') {
 
 /* ===== (2) Hero slider — reads car photos from /images in the public folder ===== */
 const sliderImages = [
-  { src: '/images/hero-1.jpg', title: 'مدرسة الوطن <span>لتعليم السياقة</span>', text: 'احجز درسك بسهولة • أوتوماتيك • جير • شحن خفيف' },
+  { type: 'hero', src: '/images/hero-1.jpg', title: 'مدرسة الوطن <span>لتعليم السياقة</span>', subtitle: 'تعلّم القيادة باحتراف مع مدربين خبرة وسيارات حديثة', types: 'أوتوماتيك • جير • شحن خفيف' },
   { src: '/banner2.png', title: 'مدربون محترفون <span>وسيارات حديثة</span>', text: 'نساعدك تنجح من أول مرة بالفحص النظري والعملي' },
   { type: 'cta', title: 'ابدأ رحلتك <span>معنا</span>', text: 'اختر الخطوة التالية وابدأ فوراً' },
 ];
@@ -845,6 +910,19 @@ function buildSlider() {
           <button type="button" class="cta-btn outline" onclick="scrollToSection('theory-request')"><span class="cta-icon">📘</span> احجز موعد تؤوريا</button>
           <button type="button" class="cta-btn outline" onclick="scrollToSection('test-request')"><span class="cta-icon">🏁</span> احجز موعد تيست</button>
         </div>
+      </div>
+    </div>
+  `;
+    }
+    if (s.type === 'hero') {
+      return `
+    <div class="slide hero-slide">
+      <img src="${s.src}" onerror="this.onerror=null; this.src=heroPlaceholderImg();" alt="${s.title.replace(/<[^>]*>/g,'')}">
+      <div class="slide-caption hero-caption">
+        <h1>${s.title}</h1>
+        <p class="hero-subtitle">${s.subtitle}</p>
+        <p class="hero-types">${s.types}</p>
+        <button type="button" class="hero-cta" onclick="scrollToSection('lesson-booking')">احجز درسك الآن</button>
       </div>
     </div>
   `;
