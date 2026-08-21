@@ -330,6 +330,35 @@
   .finance-item .value.paid { color: var(--olive); }
   .finance-item .value.due { color: var(--rust); }
   .finance-item .value.clear { color: var(--olive); }
+
+  /* ===== نافذة تأكيد أنيقة (Modal) ===== */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(27,33,38,.72); backdrop-filter: blur(3px);
+    display: flex; align-items: center; justify-content: center; z-index: 3000;
+    opacity: 0; pointer-events: none; transition: opacity .25s ease; padding: 20px;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: auto; }
+  .modal-box {
+    background: #fff; border-radius: 20px; width: 100%; max-width: 400px;
+    box-shadow: 0 30px 60px rgba(0,0,0,.35); border-top: 5px solid var(--route);
+    transform: translateY(20px) scale(.97); transition: transform .25s ease; overflow: hidden;
+  }
+  .modal-overlay.open .modal-box { transform: translateY(0) scale(1); }
+  .modal-header { background: var(--ink); padding: 18px 22px; display: flex; align-items: center; justify-content: space-between; }
+  .modal-header span { font-weight: 800; font-size: 16px; color: var(--route); }
+  .modal-close { background: none; border: none; color: var(--paper); font-size: 22px; cursor: pointer; line-height: 1; padding: 0; }
+  .modal-close:hover { color: var(--route); }
+  .modal-body { padding: 22px; }
+  .modal-body p { margin: 0 0 22px; font-size: 14.5px; color: var(--ink-soft); line-height: 1.7; }
+  .modal-btn-row { display: flex; gap: 10px; }
+  .modal-btn {
+    flex: 1; border: none; border-radius: 12px; padding: 14px; font-size: 15px;
+    font-weight: 800; cursor: pointer; font-family: inherit; transition: all .2s ease;
+  }
+  .modal-btn.danger { background: var(--rust); color: #fff; box-shadow: 0 8px 18px rgba(179,73,43,.35); }
+  .modal-btn.danger:hover { background: #9c3f23; transform: translateY(-2px); box-shadow: 0 12px 24px rgba(179,73,43,.45); }
+  .modal-btn.secondary { background: var(--paper-dim); color: var(--ink); }
+  .modal-btn.secondary:hover { background: #e5e0d2; transform: translateY(-2px); }
 </style>
 </head>
 <body>
@@ -470,6 +499,23 @@
   </div>
 </div>
 
+<!-- نافذة تأكيد إلغاء الحجز -->
+<div id="modalOverlay" class="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span>تأكيد الإلغاء</span>
+      <button class="modal-close" onclick="closeModal()" aria-label="إغلاق">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p>متأكد بدك تلغي هالحجز؟</p>
+      <div class="modal-btn-row">
+        <button class="modal-btn secondary" onclick="closeModal()">تراجع</button>
+        <button class="modal-btn danger" onclick="confirmCancelBooking()">نعم، ألغِ الحجز</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 const typeNames = { automatic: 'أوتوماتيك', manual: 'جير', heavy: 'شحن خفيف' };
 const subjectNames = {
@@ -517,9 +563,29 @@ async function loadMyBookings() {
     `).join('');
 }
 
-async function cancelBooking(id) {
-  if (!confirm('متأكد بدك تلغي هالحجز؟')) return;
-  await fetch(`/api/bookings/${id}`, { method: 'DELETE' });
+let bookingIdToCancel = null;
+
+function cancelBooking(id) {
+  bookingIdToCancel = id;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  bookingIdToCancel = null;
+}
+
+document.getElementById('modalOverlay').addEventListener('click', (e) => {
+  if (e.target.id === 'modalOverlay') closeModal();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeModal();
+});
+
+async function confirmCancelBooking() {
+  if (bookingIdToCancel === null) return;
+  await fetch(`/api/bookings/${bookingIdToCancel}`, { method: 'DELETE' });
+  closeModal();
   loadMyBookings();
 }
 
