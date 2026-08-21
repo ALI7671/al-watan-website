@@ -741,6 +741,8 @@
         <input type="text" id="theoryName" placeholder="مثال: محمد أحمد">
         <label>رقم الموبايل</label>
         <input type="tel" id="theoryPhone" placeholder="0599123456">
+        <label>التاريخ المفضّل</label>
+        <input type="date" id="theoryDate">
         <button class="btn-gold" onclick="submitRequest('theory')">طلب موعد فحص نظري</button>
       </div>
 
@@ -750,6 +752,8 @@
         <input type="text" id="testName" placeholder="مثال: محمد أحمد">
         <label>رقم الموبايل</label>
         <input type="tel" id="testPhone" placeholder="0599123456">
+        <label>التاريخ المفضّل</label>
+        <input type="date" id="testDate">
         <button class="btn-gold" onclick="submitRequest('test')">طلب موعد فحص عملي</button>
       </div>
     </div>
@@ -1028,19 +1032,37 @@ function updatePrice() {
 }
 
 /* ===== طلب موعد فحص نظري / عملي ===== */
-function submitRequest(kind) {
+async function submitRequest(kind) {
   const nameEl = document.getElementById(kind === 'theory' ? 'theoryName' : 'testName');
   const phoneEl = document.getElementById(kind === 'theory' ? 'theoryPhone' : 'testPhone');
+  const dateEl = document.getElementById(kind === 'theory' ? 'theoryDate' : 'testDate');
   const name = nameEl.value.trim();
   const phone = phoneEl.value.trim();
+  const preferred_date = dateEl.value;
   if (!name || !phone) {
     showToast('يرجى إدخال الاسم ورقم الموبايل');
     return;
   }
   const label = kind === 'theory' ? 'الفحص النظري (تؤوريا)' : 'الفحص العملي (تيست)';
-  showToast(`تم إرسال طلب موعد ${label} بنجاح!`);
-  nameEl.value = '';
-  phoneEl.value = '';
+
+  try {
+    const res = await fetch('/api/test-requests', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, phone, kind, preferred_date })
+    });
+    const result = await res.json();
+    if (!result.success) {
+      showToast(result.message || 'صار خطأ أثناء إرسال الطلب');
+      return;
+    }
+    showToast(`تم إرسال طلب موعد ${label} بنجاح!`);
+    nameEl.value = '';
+    phoneEl.value = '';
+    dateEl.value = '';
+  } catch (e) {
+    showToast('تعذّر إرسال الطلب، تحقق من الاتصال');
+  }
 }
 
 async function loadTeachers() {

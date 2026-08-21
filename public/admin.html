@@ -38,6 +38,24 @@
   .stat:hover{transform:translateY(-5px);box-shadow:var(--shadow-gold);}
   .stat .value{font-size:27px;font-weight:900;}
   .stat .label{font-size:12px;color:var(--ink-soft);margin-top:4px;font-weight:700;}
+
+  /* ===== الملخص المالي ===== */
+  .fin-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px;}
+  @media(max-width:700px){.fin-stats{grid-template-columns:1fr;}}
+  .fin-card{border-radius:18px;padding:24px 18px;text-align:center;box-shadow:var(--shadow-md);color:#fff;transition:transform .25s ease,box-shadow .25s ease;}
+  .fin-card:hover{transform:translateY(-5px);}
+  .fin-card .value{font-size:26px;font-weight:900;}
+  .fin-card .label{font-size:12.5px;margin-top:6px;font-weight:700;opacity:.92;}
+  .fin-card.income{background:linear-gradient(135deg,var(--olive),#3d5a40);}
+  .fin-card.salary{background:linear-gradient(135deg,var(--rust),#8f3a21);}
+  .fin-card.profit{background:linear-gradient(135deg,var(--ink),#2A333B);border:2px solid var(--route);}
+  .fin-card.profit .value{color:var(--route);}
+
+  /* ===== أزرار إضافية ===== */
+  .add-btn{background:var(--route);color:var(--ink);border:none;border-radius:9px;padding:9px 18px;font-size:12.5px;font-weight:800;cursor:pointer;font-family:inherit;transition:all .2s ease;}
+  .add-btn:hover{background:#f0c458;transform:translateY(-2px);box-shadow:0 8px 18px rgba(233,185,62,.4);}
+  .del-btn{background:var(--rust);color:#fff;border:none;border-radius:9px;padding:9px 16px;font-size:12.5px;font-weight:800;cursor:pointer;font-family:inherit;margin-right:6px;transition:all .2s ease;}
+  .del-btn:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(179,73,43,.35);}
   h2{font-size:18px;margin:32px 0 14px 0;font-weight:900;}
   table{width:100%;border-collapse:collapse;background:#fff;border-radius:16px;overflow:hidden;font-size:13.5px;border:1px solid var(--line);box-shadow:var(--shadow-md);}
   th,td{padding:14px 16px;text-align:right;border-bottom:1px solid var(--line);}
@@ -197,11 +215,17 @@
 </div>
 
 <div class="container">
+  <div class="fin-stats reveal">
+    <div class="fin-card income"><div class="value" id="finIncome">0 ₪</div><div class="label">الدخل الإجمالي (الدفعات المحصّلة)</div></div>
+    <div class="fin-card salary"><div class="value" id="finSalaries">0 ₪</div><div class="label">إجمالي الرواتب الشهرية</div></div>
+    <div class="fin-card profit"><div class="value" id="finProfit">0 ₪</div><div class="label">صافي الربح</div></div>
+  </div>
+
   <div class="stats reveal">
     <div class="stat"><div class="value" id="statStudents">0</div><div class="label">طالب مسجل</div></div>
     <div class="stat"><div class="value" id="statBookings">0</div><div class="label">حجز إجمالي</div></div>
     <div class="stat"><div class="value" id="statTeachers">0</div><div class="label">معلم</div></div>
-    <div class="stat"><div class="value" id="statIncome">0 ₪</div><div class="label">الدخل الإجمالي</div></div>
+    <div class="stat"><div class="value" id="statEmployees">0</div><div class="label">موظف على الراتب</div></div>
   </div>
 
   <div class="reveal">
@@ -220,6 +244,11 @@
   </div>
 
   <div class="reveal">
+    <h2>رواتب الموظفين والمعلمين <button class="add-btn" style="margin-right:10px;" onclick="openSalaryModal()">+ إضافة راتب</button></h2>
+    <div id="salariesTable">جاري التحميل...</div>
+  </div>
+
+  <div class="reveal">
     <h2>أوقات تفرغ المعلمين</h2>
     <div id="availabilityTable">جاري التحميل...</div>
   </div>
@@ -227,6 +256,11 @@
   <div class="reveal">
     <h2>الشكاوى</h2>
     <div id="complaintsTable">جاري التحميل...</div>
+  </div>
+
+  <div class="reveal">
+    <h2>طلبات الفحص (تؤوريا / تيست) <button class="mark-btn" style="margin-right:10px;" onclick="loadTestRequests()">تحديث</button></h2>
+    <div id="testRequestsTable">جاري التحميل...</div>
   </div>
 </div>
 
@@ -244,6 +278,7 @@
 <script>
 const typeNames = { automatic: 'أوتوماتيك', manual: 'جير', heavy: 'شحن خفيف' };
 const subjectNames = { teacher: 'ملاحظة عن المعلم', schedule: 'مشكلة بالمواعيد', payment: 'مشكلة بالدفع', other: 'شي تاني' };
+const requestKindNames = { theory: 'تؤوريا (نظري)', test: 'تيست (عملي)' };
 const dayNames = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
 
 document.getElementById('navToggle').addEventListener('click', () => {
@@ -279,9 +314,9 @@ function handleAdminAuth(e) {
 }
 
 async function loadAll() {
-  const [studentsRes, bookingsRes, teachersRes, complaintsRes, availRes] = await Promise.all([
+  const [studentsRes, bookingsRes, teachersRes, complaintsRes, availRes, salariesRes] = await Promise.all([
     fetch('/api/students'), fetch('/api/bookings'), fetch('/api/teachers'),
-    fetch('/api/complaints'), fetch('/api/availability')
+    fetch('/api/complaints'), fetch('/api/availability'), fetch('/api/salaries')
   ]);
 
   const students = await studentsRes.json();
@@ -289,11 +324,21 @@ async function loadAll() {
   const teachers = await teachersRes.json();
   const complaints = await complaintsRes.json();
   const avail = await availRes.json();
+  const salaries = await salariesRes.json();
 
   document.getElementById('statStudents').textContent = students.length;
   document.getElementById('statBookings').textContent = bookings.length;
   document.getElementById('statTeachers').textContent = teachers.length;
-  document.getElementById('statIncome').textContent = bookings.reduce((s,b) => s+b.price, 0) + ' ₪';
+  document.getElementById('statEmployees').textContent = salaries.length;
+
+  const totalIncome = students.reduce((sum, s) => sum + (s.total_paid || 0), 0);
+  const totalSalaries = salaries.reduce((sum, s) => sum + s.amount, 0);
+  const netProfit = totalIncome - totalSalaries;
+  document.getElementById('finIncome').textContent = totalIncome + ' ₪';
+  document.getElementById('finSalaries').textContent = totalSalaries + ' ₪';
+  document.getElementById('finProfit').textContent = netProfit + ' ₪';
+
+  renderSalaries(salaries);
 
   document.getElementById('studentsTable').innerHTML = students.length === 0
     ? '<div class="empty">ما في طلاب مسجلين</div>'
@@ -311,14 +356,14 @@ async function loadAll() {
           </div>
           <div class="student-stats">
             <div class="student-stat"><span class="label">عدد الدروس</span><span class="value">${s.lessons_taken}</span></div>
-            <div class="student-stat"><span class="label">سعر الباقة</span><span class="value">${hasPackage ? s.total_package + ' ₪' : '—'}</span></div>
+            <div class="student-stat"><span class="label">سعر المقاولة</span><span class="value">${hasPackage ? s.total_package + ' ₪' : '—'}</span></div>
             <div class="student-stat"><span class="label">المدفوع</span><span class="value paid">${s.total_paid} ₪</span></div>
             <div class="student-stat"><span class="label">الباقي</span><span class="value ${remainingClass}">${hasPackage ? s.remaining + ' ₪' : '—'}</span></div>
           </div>
           <div class="student-test">موعد التيست: <strong>${s.test_date || '—'}</strong></div>
           <div class="student-actions">
             <button class="mini-btn gold" data-action="payment" data-id="${s.id}" data-name="${escapeAttr(s.name)}">تسجيل دفعة</button>
-            <button class="mini-btn" data-action="package" data-id="${s.id}" data-name="${escapeAttr(s.name)}" data-current="${hasPackage ? s.total_package : ''}">تحديد سعر الباقة</button>
+            <button class="mini-btn" data-action="package" data-id="${s.id}" data-name="${escapeAttr(s.name)}" data-current="${hasPackage ? s.total_package : ''}">تحديد مقاولة</button>
             <button class="mini-btn" data-action="testdate" data-id="${s.id}" data-name="${escapeAttr(s.name)}" data-current="${s.test_date || ''}">تحديد موعد تيست</button>
           </div>
         </div>`;
@@ -331,6 +376,20 @@ async function loadAll() {
 
   document.getElementById('teachersTable').innerHTML = `<table><thead><tr><th>الاسم</th><th>الأنواع اللي بعلمها</th></tr></thead>
     <tbody>${teachers.map(t => `<tr><td>${t.name}</td><td>${t.types.split(',').map(x => typeNames[x]).join(' • ')}</td></tr>`).join('')}</tbody></table>`;
+
+  function renderSalaries(list) {
+    document.getElementById('salariesTable').innerHTML = list.length === 0
+      ? '<div class="empty">ما في رواتب مسجلة</div>'
+      : `<table><thead><tr><th>الاسم</th><th>الراتب الشهري</th><th></th></tr></thead>
+         <tbody>${list.map(s => `<tr>
+           <td>${escapeHtml(s.name)}</td>
+           <td>${s.amount} ₪</td>
+           <td>
+             <button class="mark-btn" data-action="edit-salary" data-id="${s.id}" data-name="${escapeAttr(s.name)}" data-amount="${s.amount}">تعديل</button>
+             <button class="del-btn" data-action="delete-salary" data-id="${s.id}" data-name="${escapeAttr(s.name)}">حذف</button>
+           </td>
+         </tr>`).join('')}</tbody></table>`;
+  }
 
   const byTeacher = {};
   avail.forEach(a => {
@@ -354,6 +413,30 @@ async function loadAll() {
     ? '<div class="empty">ما في شكاوى</div>'
     : `<table><thead><tr><th>الطالب</th><th>الموضوع</th><th>التفاصيل</th><th>الحالة</th><th></th></tr></thead>
        <tbody>${complaints.map(c => `<tr><td>${c.student_name}</td><td>${subjectNames[c.subject]}</td><td>${c.body}</td><td><span class="pill pill-${c.status}">${c.status === 'answered' ? 'تم الرد' : 'قيد المراجعة'}</span></td><td>${c.status === 'review' ? `<button class="mark-btn" onclick="markAnswered(${c.id})">تم الرد</button>` : ''}</td></tr>`).join('')}</tbody></table>`;
+
+  await loadTestRequests();
+}
+
+async function loadTestRequests() {
+  const res = await fetch('/api/test-requests');
+  const requests = await res.json();
+
+  document.getElementById('testRequestsTable').innerHTML = requests.length === 0
+    ? '<div class="empty">ما في طلبات مواعيد فحص</div>'
+    : `<table><thead><tr><th>الاسم</th><th>الموبايل</th><th>نوع الفحص</th><th>التاريخ المفضّل</th><th>الحالة</th><th></th></tr></thead>
+       <tbody>${requests.map(r => `<tr>
+         <td>${escapeHtml(r.name)}</td>
+         <td>${escapeHtml(r.phone)}</td>
+         <td>${requestKindNames[r.kind] || r.kind}</td>
+         <td>${r.preferred_date || '—'}</td>
+         <td><span class="pill pill-${r.status === 'done' ? 'answered' : 'review'}">${r.status === 'done' ? 'تم التواصل' : 'قيد المراجعة'}</span></td>
+         <td>${r.status === 'pending' ? `<button class="mark-btn" onclick="markTestRequestDone(${r.id})">تم التواصل</button>` : ''}</td>
+       </tr>`).join('')}</tbody></table>`;
+}
+
+async function markTestRequestDone(id) {
+  await fetch(`/api/test-requests/${id}`, { method: 'PUT' });
+  loadTestRequests();
 }
 
 async function markAnswered(id) {
@@ -432,11 +515,11 @@ async function submitPayment(id) {
 
 /* ===== تحديد سعر الباقة ===== */
 function openPackageModal(id, name, current) {
-  openModal(`تحديد سعر الباقة — ${name}`, `
-    <label>سعر الباقة الكاملة (₪)</label>
-    <input type="number" id="packagePrice" placeholder="مثال: 1500" min="0" value="${current || ''}">
+  openModal(`تحديد مقاولة — ${name}`, `
+    <label>سعر المقاولة الشامل (₪)</label>
+    <input type="number" id="packagePrice" placeholder="مثال: 2000" min="0" value="${current || ''}">
     <div id="modalError" class="modal-error"></div>
-    <button class="modal-btn" onclick="submitPackage(${id})">حفظ السعر</button>
+    <button class="modal-btn" onclick="submitPackage(${id})">حفظ المقاولة</button>
   `);
 }
 
@@ -490,6 +573,68 @@ document.getElementById('studentsTable').addEventListener('click', (e) => {
   if (action === 'payment') openPaymentModal(id, name);
   else if (action === 'package') openPackageModal(id, name, current);
   else if (action === 'testdate') openTestDateModal(id, name, current);
+});
+
+/* ===== رواتب الموظفين والمعلمين ===== */
+function openSalaryModal(id, name, amount) {
+  const isEdit = !!id;
+  openModal(isEdit ? `تعديل راتب — ${name}` : 'إضافة راتب جديد', `
+    <label>اسم الموظف/المعلم</label>
+    <input type="text" id="salaryName" placeholder="مثال: أبو سامح" value="${isEdit ? escapeAttr(name) : ''}">
+    <label>الراتب الشهري (₪)</label>
+    <input type="number" id="salaryAmount" placeholder="مثال: 3000" min="1" value="${isEdit ? amount : ''}">
+    <div id="modalError" class="modal-error"></div>
+    <button class="modal-btn" onclick="submitSalary(${isEdit ? id : 'null'})">${isEdit ? 'حفظ التعديلات' : 'إضافة الراتب'}</button>
+  `);
+}
+
+async function submitSalary(id) {
+  const name = document.getElementById('salaryName').value.trim();
+  const amount = parseInt(document.getElementById('salaryAmount').value, 10);
+
+  if (!name || !amount || amount <= 0) {
+    showModalError('يرجى تعبئة الاسم والمبلغ بشكل صحيح');
+    return;
+  }
+
+  const url = id ? `/api/salaries/${id}` : '/api/salaries';
+  const method = id ? 'PUT' : 'POST';
+  const res = await fetch(url, {
+    method, headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, amount })
+  });
+  const result = await res.json();
+
+  if (result.success) {
+    closeModal();
+    loadAll();
+  } else {
+    showModalError(result.message || 'صار خطأ أثناء الحفظ');
+  }
+}
+
+async function deleteSalary(id, name) {
+  const result = await Swal.fire({
+    title: `حذف راتب ${name}؟`,
+    text: 'ما بقدر نتراجع عن هالعملية',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'نعم، احذف',
+    cancelButtonText: 'إلغاء',
+    confirmButtonColor: '#B3492B'
+  });
+  if (!result.isConfirmed) return;
+
+  await fetch(`/api/salaries/${id}`, { method: 'DELETE' });
+  loadAll();
+}
+
+document.getElementById('salariesTable').addEventListener('click', (e) => {
+  const btn = e.target.closest('button[data-action]');
+  if (!btn) return;
+  const { action, id, name, amount } = btn.dataset;
+  if (action === 'edit-salary') openSalaryModal(id, name, parseInt(amount, 10));
+  else if (action === 'delete-salary') deleteSalary(id, name);
 });
 
 async function editAvailability(teacherId, teacherName) {

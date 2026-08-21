@@ -91,6 +91,29 @@ db.exec(`
   )
 `);
 
+// جدول رواتب الموظفين/المعلمين
+db.exec(`
+  CREATE TABLE IF NOT EXISTS salaries (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    amount INTEGER NOT NULL,
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP
+  )
+`);
+
+// جدول طلبات مواعيد الفحص (تؤوريا / تيست) القادمة من الصفحة الرئيسية
+db.exec(`
+  CREATE TABLE IF NOT EXISTS test_requests (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    phone TEXT NOT NULL,
+    kind TEXT NOT NULL,
+    preferred_date TEXT,
+    status TEXT DEFAULT 'pending',
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP
+  )
+`);
+
 const teacherCount = db.prepare('SELECT COUNT(*) as count FROM teachers').get();
 if (teacherCount.count === 0) {
   const insertTeacher = db.prepare('INSERT INTO teachers (name, types) VALUES (?, ?)');

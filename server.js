@@ -86,6 +86,24 @@ app.get('/api/students', (req, res) => {
   `).all();
   res.json(students);
 });
+// بيانات طالب واحد (مع سعر المقاولة والمدفوع والباقي) - تستخدم بحساب الطالب
+app.get('/api/students/:id', (req, res) => {
+  const { id } = req.params;
+  const student = db.prepare(`
+    SELECT s.*,
+      (SELECT COUNT(*) FROM bookings b WHERE b.student_name = s.name) AS lessons_taken,
+      COALESCE((SELECT SUM(p.amount) FROM payments p WHERE p.student_id = s.id), 0) AS total_paid,
+      (COALESCE(s.total_package, 0) - COALESCE((SELECT SUM(p.amount) FROM payments p WHERE p.student_id = s.id), 0)) AS remaining
+    FROM students s WHERE s.id = ?
+  `).get(id);
+
+  if (!student) {
+    return res.json({ success: false, message: 'هذا الطالب غير موجود' });
+  }
+
+  res.json({ success: true, student });
+});
+
 // تسجيل دخول برقم الموبايل
 app.post('/api/login', (req, res) => {
   const { phone } = req.body;
@@ -222,6 +240,72 @@ app.put('/api/students/:id/package', (req, res) => {
   const { id } = req.params;
   const { total_package } = req.body;
   db.prepare('UPDATE students SET total_package = ? WHERE id = ?').run(total_package, id);
+  res.json({ success: true });
+});
+
+// ===== رواتب الموظفين/المعلمين =====
+
+// عرض كل الرواتب
+app.get('/api/salaries', (req, res) => {
+  const salaries = db.prepare('SELECT * FROM salaries ORDER BY id DESC').all();
+  res.json(salaries);
+});
+
+// إضافة راتب جديد
+app.post('/api/salaries', (req, res) => {
+  const { name, amount } = req.body;
+  if (!name || !amount || amount <= 0) {
+    return res.json({ success: false, message: 'يرجى تعبئة الاسم والمبلغ بشكل صحيح' });
+  }
+  const insert = db.prepare('INSERT INTO salaries (name, amount) VALUES (?, ?)');
+  const result = insert.run(name, amount);
+  res.json({ success: true, salaryId: result.lastInsertRowid });
+});
+
+// تعديل راتب
+app.put('/api/salaries/:id', (req, res) => {
+  const { id } = req.params;
+  const { name, amount } = req.body;
+  if (!name || !amount || amount <= 0) {
+    return res.json({ success: false, message: 'يرجى تعبئة الاسم والمبلغ بشكل صحيح' });
+  }
+  db.prepare('UPDATE salaries SET name = ?, amount = ? WHERE id = ?').run(name, amount, id);
+  res.json({ success: true });
+});
+
+// حذف راتب
+app.delete('/api/salaries/:id', (req, res) => {
+  const { id } = req.params;
+  db.prepare('DELETE FROM salaries WHERE id = ?').run(id);
+  res.json({ success: true });
+});
+
+// إنشاء طلب موعد فحص (تؤوريا أو تيست) من الصفحة الرئيسية
+app.post('/api/test-requests', (req, res) => {
+  const { name, phone, kind, preferred_date } = req.body;
+
+  if (!name || !phone || !kind) {
+    return res.json({ success: false, message: 'يرجى تعبئة الاسم ورقم الموبايل' });
+  }
+
+  const insert = db.prepare(
+    'INSERT INTO test_requests (name, phone, kind, preferred_date) VALUES (?, ?, ?, ?)'
+  );
+  const result = insert.run(name, phone, kind, preferred_date || null);
+
+  res.json({ success: true, requestId: result.lastInsertRowid });
+});
+
+// عرض كل طلبات مواعيد الفحص (للإدارة)
+app.get('/api/test-requests', (req, res) => {
+  const requests = db.prepare('SELECT * FROM test_requests ORDER BY id DESC').all();
+  res.json(requests);
+});
+
+// تحديث حالة طلب موعد فحص (تم التواصل)
+app.put('/api/test-requests/:id', (req, res) => {
+  const { id } = req.params;
+  db.prepare("UPDATE test_requests SET status = 'done' WHERE id = ?").run(id);
   res.json({ success: true });
 });
 
