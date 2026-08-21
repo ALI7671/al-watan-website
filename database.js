@@ -23,6 +23,14 @@ db.exec(`
   )
 `);
 
+// نضيف عمود حالة الحجز لو مش موجود (نشط / تم / ملغي)
+try {
+  db.exec("ALTER TABLE bookings ADD COLUMN status TEXT DEFAULT 'active'");
+  console.log('تمت إضافة عمود حالة الحجز ✅');
+} catch (e) {
+  // العمود موجود أصلاً، عادي
+}
+
 // جدول الطلاب
 db.exec(`
   CREATE TABLE IF NOT EXISTS students (

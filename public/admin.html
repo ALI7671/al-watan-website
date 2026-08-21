@@ -146,6 +146,31 @@
   .mini-btn:hover { border-color: var(--route); background: #fff; transform: translateY(-1px); }
   .mini-btn.gold { background: var(--route); color: var(--ink); border-color: var(--route); }
   .mini-btn.gold:hover { background: #f0c458; box-shadow: 0 6px 16px rgba(233,185,62,.4); }
+  .mini-btn.olive { background: var(--olive); color: #fff; border-color: var(--olive); }
+  .mini-btn.olive:hover { background: #3d5a40; box-shadow: 0 6px 16px rgba(79,111,82,.4); }
+  .mini-btn.rust { background: var(--rust); color: #fff; border-color: var(--rust); }
+  .mini-btn.rust:hover { background: #9c3f23; box-shadow: 0 6px 16px rgba(179,73,43,.4); }
+
+  /* ===== بطاقات الحجوزات ===== */
+  .bookings-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+  .booking-card { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 18px; box-shadow: 0 8px 20px rgba(27,33,38,.06); transition: box-shadow .25s ease, transform .25s ease; }
+  .booking-card:hover { box-shadow: 0 16px 32px rgba(27,33,38,.12); transform: translateY(-2px); }
+  .booking-card.is-done { opacity: .85; }
+  .booking-card.is-cancelled { opacity: .62; }
+  .booking-card-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+  .booking-student { font-weight: 800; font-size: 14.5px; }
+  .booking-detail { display: flex; justify-content: space-between; font-size: 12.5px; color: var(--ink-soft); margin-bottom: 7px; }
+  .booking-detail strong { color: var(--ink); font-weight: 700; }
+  .booking-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .pill-active { background: rgba(233,185,62,.18); color: #8a6612; }
+  .pill-done { background: var(--olive-soft); color: var(--olive); }
+  .pill-cancelled { background: var(--rust-soft); color: var(--rust); }
+
+  /* ===== قسم الحجوزات الملغاة القابل للطي ===== */
+  .cancelled-details summary { cursor: pointer; font-weight: 800; font-size: 14px; color: var(--ink-soft); padding: 12px 4px; list-style: none; }
+  .cancelled-details summary::-webkit-details-marker { display: none; }
+  .cancelled-details summary::before { content: '▸ '; color: var(--route); }
+  .cancelled-details[open] summary::before { content: '▾ '; }
 
   /* ===== نافذة منبثقة عامة (Modal) ===== */
   .modal-overlay {
@@ -171,6 +196,12 @@
     font-family: inherit; font-size: 15px; margin-bottom: 16px; background: #faf8f5;
   }
   #modalBody input:focus { outline: none; border-color: var(--route); box-shadow: 0 0 0 3px rgba(233,185,62,.18); background: #fff; }
+  #modalBody select {
+    width: 100%; padding: 13px; border-radius: 10px; border: 1.5px solid var(--line);
+    font-family: inherit; font-size: 15px; margin-bottom: 16px; background: #faf8f5;
+  }
+  #modalBody select:focus { outline: none; border-color: var(--route); box-shadow: 0 0 0 3px rgba(233,185,62,.18); background: #fff; }
+  #modalBody p { margin: 0; }
   .modal-error { color: var(--rust); background: var(--rust-soft); padding: 10px; border-radius: 8px; font-size: 13px; margin-bottom: 14px; display: none; }
   .modal-btn {
     background: var(--route); color: var(--ink); border: none; border-radius: 12px;
@@ -179,6 +210,12 @@
   }
   .modal-btn:hover { background: #f0c458; transform: translateY(-2px); box-shadow: 0 12px 24px rgba(233,185,62,.45); }
   .modal-btn:active { transform: scale(.97); }
+  .modal-btn.secondary { background: var(--paper-dim); color: var(--ink); box-shadow: none; }
+  .modal-btn.secondary:hover { background: #e5e0d2; box-shadow: none; }
+  .modal-btn.danger { background: var(--rust); color: #fff; box-shadow: 0 8px 18px rgba(179,73,43,.35); }
+  .modal-btn.danger:hover { background: #9c3f23; box-shadow: 0 12px 24px rgba(179,73,43,.45); }
+  .modal-btn-row { display: flex; gap: 10px; }
+  .modal-btn-row .modal-btn { flex: 1; }
 </style>
 </head>
 <body>
@@ -234,8 +271,20 @@
   </div>
 
   <div class="reveal">
-    <h2>الحجوزات</h2>
-    <div id="bookingsTable">جاري التحميل...</div>
+    <h2>الحجوزات النشطة</h2>
+    <div id="activeBookings">جاري التحميل...</div>
+  </div>
+
+  <div class="reveal">
+    <h2>الدروس المكتملة</h2>
+    <div id="doneBookings">جاري التحميل...</div>
+  </div>
+
+  <div class="reveal">
+    <details class="cancelled-details">
+      <summary>الحجوزات الملغاة (<span id="cancelledCount">0</span>)</summary>
+      <div id="cancelledBookings">جاري التحميل...</div>
+    </details>
   </div>
 
   <div class="reveal">
@@ -277,6 +326,7 @@
 
 <script>
 const typeNames = { automatic: 'أوتوماتيك', manual: 'جير', heavy: 'شحن خفيف' };
+let teachersCache = [];
 const subjectNames = { teacher: 'ملاحظة عن المعلم', schedule: 'مشكلة بالمواعيد', payment: 'مشكلة بالدفع', other: 'شي تاني' };
 const requestKindNames = { theory: 'تؤوريا (نظري)', test: 'تيست (عملي)' };
 const dayNames = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
@@ -369,10 +419,46 @@ async function loadAll() {
         </div>`;
       }).join('')}</div>`;
 
-  document.getElementById('bookingsTable').innerHTML = bookings.length === 0
-    ? '<div class="empty">ما في حجوزات</div>'
-    : `<table><thead><tr><th>الطالب</th><th>النوع</th><th>التاريخ</th><th>الوقت</th><th>السعر</th></tr></thead>
-       <tbody>${bookings.map(b => `<tr><td>${b.student_name}</td><td>${typeNames[b.lesson_type]}</td><td>${b.date}</td><td>${b.time}</td><td>${b.price} ₪</td></tr>`).join('')}</tbody></table>`;
+  teachersCache = teachers;
+
+  const activeList = bookings.filter(b => (b.status || 'active') === 'active');
+  const doneList = bookings.filter(b => b.status === 'done');
+  const cancelledList = bookings.filter(b => b.status === 'cancelled');
+
+  document.getElementById('activeBookings').innerHTML = renderBookingGroup(activeList, 'ما في حجوزات نشطة حالياً');
+  document.getElementById('doneBookings').innerHTML = renderBookingGroup(doneList, 'ما في دروس مكتملة بعد');
+  document.getElementById('cancelledBookings').innerHTML = renderBookingGroup(cancelledList, 'ما في حجوزات ملغاة');
+  document.getElementById('cancelledCount').textContent = cancelledList.length;
+
+  function renderBookingGroup(list, emptyText) {
+    if (list.length === 0) return `<div class="empty">${emptyText}</div>`;
+    return `<div class="bookings-grid">${list.map(bookingCardHtml).join('')}</div>`;
+  }
+
+  function bookingCardHtml(b) {
+    const status = b.status || 'active';
+    const statusInfo = { active: ['pill-active', 'نشط'], done: ['pill-done', 'تم'], cancelled: ['pill-cancelled', 'ملغي'] }[status];
+    const cardClass = status === 'done' ? ' is-done' : (status === 'cancelled' ? ' is-cancelled' : '');
+    const actions = status === 'active' ? `
+      <div class="booking-actions">
+        <button class="mini-btn olive" data-action="complete-booking" data-id="${b.id}">تم</button>
+        <button class="mini-btn" data-action="edit-booking" data-id="${b.id}" data-teacher="${b.teacher_id}" data-date="${b.date}" data-time="${b.time}" data-student="${escapeAttr(b.student_name)}">تعديل</button>
+        <button class="mini-btn rust" data-action="cancel-booking" data-id="${b.id}" data-student="${escapeAttr(b.student_name)}" data-date="${b.date}">إلغاء</button>
+      </div>` : '';
+    return `
+      <div class="booking-card${cardClass}">
+        <div class="booking-card-head">
+          <span class="booking-student">${escapeHtml(b.student_name)}</span>
+          <span class="pill ${statusInfo[0]}">${statusInfo[1]}</span>
+        </div>
+        <div class="booking-detail"><span>نوع الدرس</span><strong>${typeNames[b.lesson_type]}</strong></div>
+        <div class="booking-detail"><span>المعلم</span><strong>${escapeHtml(b.teacher_name || '—')}</strong></div>
+        <div class="booking-detail"><span>التاريخ</span><strong>${b.date}</strong></div>
+        <div class="booking-detail"><span>الوقت</span><strong>${b.time}</strong></div>
+        <div class="booking-detail"><span>السعر</span><strong>${b.price} ₪</strong></div>
+        ${actions}
+      </div>`;
+  }
 
   document.getElementById('teachersTable').innerHTML = `<table><thead><tr><th>الاسم</th><th>الأنواع اللي بعلمها</th></tr></thead>
     <tbody>${teachers.map(t => `<tr><td>${t.name}</td><td>${t.types.split(',').map(x => typeNames[x]).join(' • ')}</td></tr>`).join('')}</tbody></table>`;
@@ -635,6 +721,90 @@ document.getElementById('salariesTable').addEventListener('click', (e) => {
   const { action, id, name, amount } = btn.dataset;
   if (action === 'edit-salary') openSalaryModal(id, name, parseInt(amount, 10));
   else if (action === 'delete-salary') deleteSalary(id, name);
+});
+
+/* ===== إدارة الحجوزات: تعديل / تم / إلغاء ===== */
+async function completeBooking(id) {
+  await fetch(`/api/bookings/${id}/status`, {
+    method: 'PUT', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ status: 'done' })
+  });
+  loadAll();
+}
+
+function openEditBookingModal(id, teacherId, date, time, studentName) {
+  const teacherOptions = teachersCache.map(t =>
+    `<option value="${t.id}" ${String(t.id) === String(teacherId) ? 'selected' : ''}>${escapeHtml(t.name)}</option>`
+  ).join('');
+
+  openModal(`تعديل حجز — ${studentName}`, `
+    <label>المعلم</label>
+    <select id="editBookingTeacher">${teacherOptions}</select>
+    <label>التاريخ</label>
+    <input type="date" id="editBookingDate" value="${date}">
+    <label>الوقت</label>
+    <input type="time" id="editBookingTime" value="${time}">
+    <div id="modalError" class="modal-error"></div>
+    <button class="modal-btn" onclick="submitEditBooking(${id})">حفظ التعديلات</button>
+  `);
+}
+
+async function submitEditBooking(id) {
+  const teacher_id = document.getElementById('editBookingTeacher').value;
+  const date = document.getElementById('editBookingDate').value;
+  const time = document.getElementById('editBookingTime').value;
+
+  if (!date || !time) {
+    showModalError('يرجى تعبئة التاريخ والوقت');
+    return;
+  }
+
+  const res = await fetch(`/api/bookings/${id}`, {
+    method: 'PUT', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ teacher_id, date, time })
+  });
+  const result = await res.json();
+
+  if (result.success) {
+    closeModal();
+    loadAll();
+  } else {
+    showModalError(result.message || 'صار خطأ أثناء التعديل');
+  }
+}
+
+function openCancelBookingModal(id, studentName, date) {
+  openModal('تأكيد الإلغاء', `
+    <p style="font-size:14.5px;color:var(--ink-soft);margin-bottom:22px;line-height:1.7;">
+      متأكد إنك بدك تلغي حجز <strong style="color:var(--ink);">${escapeHtml(studentName)}</strong>
+      بتاريخ <strong style="color:var(--ink);">${date}</strong>؟
+    </p>
+    <div class="modal-btn-row">
+      <button class="modal-btn secondary" onclick="closeModal()">تراجع</button>
+      <button class="modal-btn danger" onclick="submitCancelBooking(${id})">نعم، ألغِ الحجز</button>
+    </div>
+  `);
+}
+
+async function submitCancelBooking(id) {
+  await fetch(`/api/bookings/${id}/status`, {
+    method: 'PUT', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ status: 'cancelled' })
+  });
+  closeModal();
+  loadAll();
+}
+
+function handleBookingAction(e) {
+  const btn = e.target.closest('button[data-action]');
+  if (!btn) return;
+  const { action, id, teacher, date, time, student } = btn.dataset;
+  if (action === 'complete-booking') completeBooking(id);
+  else if (action === 'edit-booking') openEditBookingModal(id, teacher, date, time, student);
+  else if (action === 'cancel-booking') openCancelBookingModal(id, student, date);
+}
+['activeBookings', 'doneBookings', 'cancelledBookings'].forEach(id => {
+  document.getElementById(id).addEventListener('click', handleBookingAction);
 });
 
 async function editAvailability(teacherId, teacherName) {

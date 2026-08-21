@@ -18,9 +18,9 @@ app.get('/api/teachers', (req, res) => {
 // إنشاء حجز جديد
 app.post('/api/bookings', (req, res) => {
   const { teacher_id, student_name, lesson_type, date, time } = req.body;
-  // نتأكد إذا المعلم محجوز بنفس الوقت
+  // نتأكد إذا المعلم محجوز بنفس الوقت (نتجاهل الحجوزات الملغاة)
   const conflict = db.prepare(
-    'SELECT * FROM bookings WHERE teacher_id = ? AND date = ? AND time = ?'
+    "SELECT * FROM bookings WHERE teacher_id = ? AND date = ? AND time = ? AND status != 'cancelled'"
   ).get(teacher_id, date, time);
 
   if (conflict) {
@@ -38,13 +38,53 @@ app.post('/api/bookings', (req, res) => {
 
   res.json({ success: true, bookingId: result.lastInsertRowid, price });
 });
-  // ترجع كل الحجوزات
+  // ترجع كل الحجوزات (مع اسم المعلم)
 app.get('/api/bookings', (req, res) => {
-  const bookings = db.prepare('SELECT * FROM bookings').all();
+  const bookings = db.prepare(`
+    SELECT b.*, t.name AS teacher_name
+    FROM bookings b
+    LEFT JOIN teachers t ON b.teacher_id = t.id
+    ORDER BY b.date DESC, b.time DESC
+  `).all();
   res.json(bookings);
 });
 
-// إلغاء حجز
+// تعديل حجز (المعلم، التاريخ، الوقت) - للإدارة
+app.put('/api/bookings/:id', (req, res) => {
+  const { id } = req.params;
+  const { teacher_id, date, time } = req.body;
+
+  const existing = db.prepare('SELECT * FROM bookings WHERE id = ?').get(id);
+  if (!existing) {
+    return res.json({ success: false, message: 'هذا الحجز غير موجود' });
+  }
+
+  const conflict = db.prepare(
+    "SELECT * FROM bookings WHERE teacher_id = ? AND date = ? AND time = ? AND status != 'cancelled' AND id != ?"
+  ).get(teacher_id, date, time, id);
+
+  if (conflict) {
+    return res.json({ success: false, message: 'هذا المعلم محجوز بهذا الموعد، اختر وقت ثاني' });
+  }
+
+  db.prepare('UPDATE bookings SET teacher_id = ?, date = ?, time = ? WHERE id = ?').run(teacher_id, date, time, id);
+  res.json({ success: true });
+});
+
+// تحديث حالة الحجز (نشط / تم / ملغي) - للإدارة
+app.put('/api/bookings/:id/status', (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  if (!['active', 'done', 'cancelled'].includes(status)) {
+    return res.json({ success: false, message: 'حالة غير صالحة' });
+  }
+
+  db.prepare('UPDATE bookings SET status = ? WHERE id = ?').run(status, id);
+  res.json({ success: true });
+});
+
+// إلغاء حجز (حذف نهائي - يستخدمه الطالب من حسابه)
 app.delete('/api/bookings/:id', (req, res) => {
   const { id } = req.params;
   db.prepare('DELETE FROM bookings WHERE id = ?').run(id);
@@ -79,7 +119,7 @@ app.post('/api/students', (req, res) => {
 app.get('/api/students', (req, res) => {
   const students = db.prepare(`
     SELECT s.*,
-      (SELECT COUNT(*) FROM bookings b WHERE b.student_name = s.name) AS lessons_taken,
+      (SELECT COUNT(*) FROM bookings b WHERE b.student_name = s.name AND b.status = 'done') AS lessons_taken,
       COALESCE((SELECT SUM(p.amount) FROM payments p WHERE p.student_id = s.id), 0) AS total_paid,
       (COALESCE(s.total_package, 0) - COALESCE((SELECT SUM(p.amount) FROM payments p WHERE p.student_id = s.id), 0)) AS remaining
     FROM students s
@@ -91,7 +131,7 @@ app.get('/api/students/:id', (req, res) => {
   const { id } = req.params;
   const student = db.prepare(`
     SELECT s.*,
-      (SELECT COUNT(*) FROM bookings b WHERE b.student_name = s.name) AS lessons_taken,
+      (SELECT COUNT(*) FROM bookings b WHERE b.student_name = s.name AND b.status = 'done') AS lessons_taken,
       COALESCE((SELECT SUM(p.amount) FROM payments p WHERE p.student_id = s.id), 0) AS total_paid,
       (COALESCE(s.total_package, 0) - COALESCE((SELECT SUM(p.amount) FROM payments p WHERE p.student_id = s.id), 0)) AS remaining
     FROM students s WHERE s.id = ?
