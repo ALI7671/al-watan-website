@@ -88,6 +88,14 @@ try {
   // العمود موجود أصلاً، عادي
 }
 
+// نضيف عمود كلمة المرور (مشفّرة بـ bcrypt) لو مش موجود
+try {
+  db.exec('ALTER TABLE students ADD COLUMN password TEXT');
+  console.log('تمت إضافة عمود كلمة المرور ✅');
+} catch (e) {
+  // العمود موجود أصلاً، عادي
+}
+
 // جدول الدفعات
 db.exec(`
   CREATE TABLE IF NOT EXISTS payments (

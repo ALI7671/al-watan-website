@@ -1,8 +1,11 @@
 //redeploy trigger
 const express = require('express');
+const bcrypt = require('bcrypt');
 const db = require('./database');
 const app = express();
 const PORT = 3000;
+const BCRYPT_ROUNDS = 10;
+const MIN_PASSWORD_LENGTH = 6;
 
 // هاد السطر يخلي السيرفر يفهم بيانات JSON يلي بتوصله
 app.use(express.json());
@@ -100,20 +103,31 @@ app.get('/api/bookings/student/:name', (req, res) => {
 });
 
 
-// تسجيل طالب جديد
-app.post('/api/students', (req, res) => {
-  const { name, phone, license_type } = req.body;
+// تسجيل طالب جديد (مع كلمة مرور مشفّرة)
+app.post('/api/students', async (req, res) => {
+  const { name, phone, license_type, password } = req.body;
+
+  if (!name || !phone || !license_type || !password) {
+    return res.json({ success: false, message: 'يرجى تعبئة جميع الحقول' });
+  }
+  if (password.length < MIN_PASSWORD_LENGTH) {
+    return res.json({ success: false, message: `كلمة المرور يجب أن تكون ${MIN_PASSWORD_LENGTH} أحرف على الأقل` });
+  }
 
   // نتأكد إذا الطالب مسجل من قبل
   const existing = db.prepare('SELECT * FROM students WHERE phone = ?').get(phone);
   if (existing) {
-    return res.json({ success: false, message: 'هذا الرقم مسجل مسبقاً' });
+    return res.json({ success: false, message: 'هذا الرقم مسجل مسبقاً. إذا كان حسابك قديم وما عندك كلمة مرور، سجّل الدخول وبينطلب منك تنشئ وحدة' });
   }
 
-  const insertStudent = db.prepare('INSERT INTO students (name, phone, license_type) VALUES (?, ?, ?)');
-  const result = insertStudent.run(name, phone, license_type);
+  const passwordHash = await bcrypt.hash(password, BCRYPT_ROUNDS);
+  const insertStudent = db.prepare('INSERT INTO students (name, phone, license_type, password) VALUES (?, ?, ?, ?)');
+  const result = insertStudent.run(name, phone, license_type, passwordHash);
 
-  res.json({ success: true, studentId: result.lastInsertRowid });
+  const student = db.prepare('SELECT * FROM students WHERE id = ?').get(result.lastInsertRowid);
+  delete student.password;
+
+  res.json({ success: true, student });
 });
 
 // عرض كل الطلاب (مع عدد الدروس والمدفوعات والباقي على كل طالب)
@@ -125,6 +139,7 @@ app.get('/api/students', (req, res) => {
       (COALESCE(s.total_package, 0) - COALESCE((SELECT SUM(p.amount) FROM payments p WHERE p.student_id = s.id), 0)) AS remaining
     FROM students s
   `).all();
+  students.forEach(s => delete s.password);
   res.json(students);
 });
 // بيانات طالب واحد (مع سعر المقاولة والمدفوع والباقي) - تستخدم بحساب الطالب
@@ -141,13 +156,14 @@ app.get('/api/students/:id', (req, res) => {
   if (!student) {
     return res.json({ success: false, message: 'هذا الطالب غير موجود' });
   }
+  delete student.password;
 
   res.json({ success: true, student });
 });
 
-// تسجيل دخول برقم الموبايل
-app.post('/api/login', (req, res) => {
-  const { phone } = req.body;
+// تسجيل دخول برقم الموبايل وكلمة المرور
+app.post('/api/login', async (req, res) => {
+  const { phone, password } = req.body;
 
   const student = db.prepare('SELECT * FROM students WHERE phone = ?').get(phone);
 
@@ -155,6 +171,46 @@ app.post('/api/login', (req, res) => {
     return res.json({ success: false, message: 'هذا الرقم غير مسجل' });
   }
 
+  // طالب قديم ما إله كلمة مرور بعد - لازم ينشئ وحدة قبل ما يكمل
+  if (!student.password) {
+    return res.json({ success: false, needsPasswordSetup: true, message: 'هذا أول تسجيل دخول لك، يرجى إنشاء كلمة مرور' });
+  }
+
+  if (!password) {
+    return res.json({ success: false, message: 'يرجى إدخال كلمة المرور' });
+  }
+
+  const match = await bcrypt.compare(password, student.password);
+  if (!match) {
+    return res.json({ success: false, message: 'رقم الموبايل أو كلمة المرور غير صحيحة' });
+  }
+
+  delete student.password;
+  res.json({ success: true, student });
+});
+
+// إنشاء كلمة مرور لطالب قديم بيسجل دخول لأول مرة بدون كلمة مرور
+app.post('/api/set-password', async (req, res) => {
+  const { phone, password, confirmPassword } = req.body;
+
+  const student = db.prepare('SELECT * FROM students WHERE phone = ?').get(phone);
+  if (!student) {
+    return res.json({ success: false, message: 'هذا الرقم غير مسجل' });
+  }
+  if (student.password) {
+    return res.json({ success: false, message: 'هذا الحساب إله كلمة مرور مسبقاً' });
+  }
+  if (!password || password.length < MIN_PASSWORD_LENGTH) {
+    return res.json({ success: false, message: `كلمة المرور يجب أن تكون ${MIN_PASSWORD_LENGTH} أحرف على الأقل` });
+  }
+  if (password !== confirmPassword) {
+    return res.json({ success: false, message: 'كلمتا المرور غير متطابقتين' });
+  }
+
+  const passwordHash = await bcrypt.hash(password, BCRYPT_ROUNDS);
+  db.prepare('UPDATE students SET password = ? WHERE id = ?').run(passwordHash, student.id);
+
+  delete student.password;
   res.json({ success: true, student });
 });
 // إرسال شكوى

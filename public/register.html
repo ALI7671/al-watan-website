@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <link rel="icon" type="image/png" href="/favicon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>تسجيل الدخول - مدرسة الوطن</title>
+<title>إنشاء حساب - مدرسة الوطن</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -51,7 +51,7 @@
   .reveal { opacity: 0; transform: translateY(30px); transition: opacity .7s cubic-bezier(.2,.8,.2,1), transform .7s cubic-bezier(.2,.8,.2,1); }
   .reveal.in-view { opacity: 1; transform: none; }
 
-  /* ===== بوابة دخول: خلفية داكنة كاملة الشاشة مع سيارة خافتة ===== */
+  /* ===== بوابة تسجيل: خلفية داكنة كاملة الشاشة مع سيارة خافتة ===== */
   .login-wrap {
     display: flex;
     align-items: center;
@@ -79,13 +79,13 @@
     user-select: none;
   }
 
-  /* ===== بطاقة تسجيل الدخول - وحيدة ومركزية ===== */
+  /* ===== بطاقة إنشاء الحساب - وحيدة ومركزية ===== */
   .login-box {
     background: var(--paper-card);
     border: 2.5px solid var(--route);
     border-radius: 26px;
     padding: 44px 34px;
-    max-width: 400px;
+    max-width: 420px;
     width: 100%;
     text-align: center;
     box-shadow: var(--shadow);
@@ -107,7 +107,7 @@
   }
   .login-box h1 {
     color: var(--ink);
-    font-size: clamp(26px, 6vw, 32px);
+    font-size: clamp(24px, 6vw, 30px);
     font-weight: 900;
     margin: 0 0 10px;
     letter-spacing: -.5px;
@@ -118,7 +118,7 @@
     color: var(--ink-soft);
     font-size: 14px;
     font-weight: 600;
-    margin: 0 0 30px;
+    margin: 0 0 28px;
   }
 
   label {
@@ -129,18 +129,20 @@
     margin-bottom: 8px;
     color: var(--ink-soft);
   }
-  input {
+  input, select {
     width: 100%;
     padding: 14px 16px;
     border-radius: 12px;
     border: 1.5px solid var(--line);
     font-size: 15px;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
     font-family: inherit;
     background: #faf8f5;
     transition: all 0.2s ease;
   }
-  input:focus { outline: none; background: #fff; border-color: var(--route); box-shadow: 0 0 0 3px rgba(233, 185, 62, 0.15); }
+  input:focus, select:focus { outline: none; background: #fff; border-color: var(--route); box-shadow: 0 0 0 3px rgba(233, 185, 62, 0.15); }
+  select { cursor: pointer; }
+  .hint { text-align: right; font-size: 12px; color: var(--ink-soft); opacity: .8; margin: -12px 0 18px; }
 
   button {
     background: var(--route);
@@ -174,19 +176,6 @@
   .msg { padding: 13px; border-radius: 10px; margin-bottom: 20px; display: none; font-size: 14px; font-weight: 700; }
   .msg.error { background: var(--rust-soft); color: var(--rust); display: block; border: 1px solid rgba(179,73,43,0.15); }
 
-  .setup-note {
-    background: rgba(233,185,62,.14);
-    color: var(--ink-soft);
-    border: 1px solid rgba(233,185,62,.3);
-    border-radius: 10px;
-    padding: 13px;
-    margin: 0 0 20px;
-    font-size: 13.5px;
-    font-weight: 700;
-    line-height: 1.6;
-    text-align: center;
-  }
-
   .switch-link { font-size: 13.5px; color: var(--ink-soft); font-weight: 600; margin: 18px 0 0; }
   .switch-link a { color: var(--route); font-weight: 800; text-decoration: none; }
   .switch-link a:hover { text-decoration: underline; }
@@ -199,34 +188,34 @@
 <div class="login-wrap">
   <div class="login-box reveal">
     <div class="brand-badge">🚗</div>
-    <h1>مدرسة <span>الوطن</span></h1>
-    <p class="tagline">خطوتك الأولى نحو رخصة القيادة تبدأ من هون</p>
+    <h1>إنشاء حساب <span>طالب</span></h1>
+    <p class="tagline">سجّل بياناتك لتبدأ رحلتك مع مدرسة الوطن</p>
 
-    <div id="loginMessage" class="msg"></div>
+    <div id="regMessage" class="msg"></div>
 
-    <div id="loginForm">
-      <label>رقم الموبايل</label>
-      <input type="tel" id="loginPhone" placeholder="0599123456">
+    <label>الاسم الكامل</label>
+    <input type="text" id="regName" placeholder="مثال: أحمد محمد">
 
-      <label>كلمة المرور</label>
-      <input type="password" id="loginPassword" placeholder="••••••••">
+    <label>رقم الموبايل</label>
+    <input type="tel" id="regPhone" placeholder="0599123456">
 
-      <button onclick="login()">دخول</button>
+    <label>نوع الرخصة</label>
+    <select id="regLicenseType">
+      <option value="automatic">أوتوماتيك</option>
+      <option value="manual">جير</option>
+      <option value="heavy">شحن خفيف</option>
+    </select>
 
-      <p class="switch-link">ليس لديك حساب؟ <a href="/register.html">سجّل الآن</a></p>
-    </div>
+    <label>كلمة المرور</label>
+    <input type="password" id="regPassword" placeholder="6 أحرف على الأقل">
+    <div class="hint">لازم تكون 6 أحرف على الأقل</div>
 
-    <div id="setupForm" style="display:none;">
-      <p class="setup-note">👋 هاي أول مرة بتسجل فيها دخول، لازم تنشئ كلمة مرور لحسابك.</p>
+    <label>تأكيد كلمة المرور</label>
+    <input type="password" id="regPasswordConfirm" placeholder="أعد كتابة كلمة المرور">
 
-      <label>كلمة المرور الجديدة</label>
-      <input type="password" id="setupPassword" placeholder="6 أحرف على الأقل">
+    <button onclick="register()">إنشاء الحساب</button>
 
-      <label>تأكيد كلمة المرور</label>
-      <input type="password" id="setupPasswordConfirm" placeholder="أعد كتابة كلمة المرور">
-
-      <button onclick="setupPassword()">حفظ ومتابعة</button>
-    </div>
+    <p class="switch-link">عندك حساب أصلاً؟ <a href="/login.html">سجّل دخولك</a></p>
   </div>
 </div>
 
@@ -239,56 +228,19 @@ const revealIO = new IntersectionObserver((entries) => {
 }, { threshold: 0.12 });
 revealEls.forEach(el => revealIO.observe(el));
 
-let pendingPhone = '';
+async function register() {
+  const name = document.getElementById('regName').value.trim();
+  const phone = document.getElementById('regPhone').value.trim();
+  const license_type = document.getElementById('regLicenseType').value;
+  const password = document.getElementById('regPassword').value;
+  const confirmPassword = document.getElementById('regPasswordConfirm').value;
+  const msgEl = document.getElementById('regMessage');
 
-async function login() {
-  const phone = document.getElementById('loginPhone').value.trim();
-  const password = document.getElementById('loginPassword').value;
-  const msgEl = document.getElementById('loginMessage');
-
-  if (!phone) {
+  if (!name || !phone) {
     msgEl.className = 'msg error';
-    msgEl.textContent = 'يرجى إدخال رقم الموبايل';
+    msgEl.textContent = 'يرجى تعبئة الاسم ورقم الموبايل';
     return;
   }
-  if (!password) {
-    msgEl.className = 'msg error';
-    msgEl.textContent = 'يرجى إدخال كلمة المرور';
-    return;
-  }
-
-  const res = await fetch('/api/login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ phone, password })
-  });
-
-  const result = await res.json();
-
-  if (result.success) {
-    sessionStorage.setItem('student', JSON.stringify(result.student));
-    window.location.href = '/dashboard.html';
-    return;
-  }
-
-  if (result.needsPasswordSetup) {
-    pendingPhone = phone;
-    msgEl.className = 'msg';
-    msgEl.style.display = 'none';
-    document.getElementById('loginForm').style.display = 'none';
-    document.getElementById('setupForm').style.display = 'block';
-    return;
-  }
-
-  msgEl.className = 'msg error';
-  msgEl.textContent = result.message;
-}
-
-async function setupPassword() {
-  const password = document.getElementById('setupPassword').value;
-  const confirmPassword = document.getElementById('setupPasswordConfirm').value;
-  const msgEl = document.getElementById('loginMessage');
-
   if (password.length < 6) {
     msgEl.className = 'msg error';
     msgEl.textContent = 'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
@@ -300,10 +252,10 @@ async function setupPassword() {
     return;
   }
 
-  const res = await fetch('/api/set-password', {
+  const res = await fetch('/api/students', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ phone: pendingPhone, password, confirmPassword })
+    body: JSON.stringify({ name, phone, license_type, password })
   });
 
   const result = await res.json();
