@@ -406,6 +406,52 @@ app.put('/api/test-requests/:id', (req, res) => {
   res.json({ success: true });
 });
 
+// ===== آراء الطلاب (Reviews) =====
+
+// إرسال رأي جديد من طالب (يبقى قيد المراجعة لحد ما الإدارة توافق عليه)
+app.post('/api/reviews', (req, res) => {
+  const { student_name, rating, text } = req.body;
+  const ratingNum = parseInt(rating, 10);
+
+  if (!student_name || !text || !text.trim()) {
+    return res.json({ success: false, message: 'يرجى كتابة رأيك قبل الإرسال' });
+  }
+  if (!Number.isInteger(ratingNum) || ratingNum < 1 || ratingNum > 5) {
+    return res.json({ success: false, message: 'يرجى اختيار تقييم من 1 إلى 5 نجوم' });
+  }
+
+  const insert = db.prepare('INSERT INTO reviews (student_name, rating, text) VALUES (?, ?, ?)');
+  const result = insert.run(student_name, ratingNum, text.trim());
+
+  res.json({ success: true, reviewId: result.lastInsertRowid });
+});
+
+// عرض كل الآراء (للإدارة)
+app.get('/api/reviews', (req, res) => {
+  const reviews = db.prepare('SELECT * FROM reviews ORDER BY id DESC').all();
+  res.json(reviews);
+});
+
+// عرض الآراء الموافق عليها فقط (للصفحة الرئيسية)
+app.get('/api/reviews/approved', (req, res) => {
+  const reviews = db.prepare("SELECT * FROM reviews WHERE status = 'approved' ORDER BY id DESC").all();
+  res.json(reviews);
+});
+
+// نشر (الموافقة على) رأي طالب
+app.put('/api/reviews/:id/approve', (req, res) => {
+  const { id } = req.params;
+  db.prepare("UPDATE reviews SET status = 'approved' WHERE id = ?").run(id);
+  res.json({ success: true });
+});
+
+// حذف رأي
+app.delete('/api/reviews/:id', (req, res) => {
+  const { id } = req.params;
+  db.prepare('DELETE FROM reviews WHERE id = ?').run(id);
+  res.json({ success: true });
+});
+
 app.listen(PORT, () => {
   console.log(`السيرفر شغال على http://localhost:${PORT}`);
 }); 

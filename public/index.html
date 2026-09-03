@@ -543,8 +543,11 @@
 
   /* ===== Reviews ===== */
   .review-card { border-right: 4px solid var(--route); padding-right: 14px; margin-bottom: 14px; font-size: 14px; }
+  .review-card:last-child { margin-bottom: 0; }
   .review-author { font-weight: 800; color: var(--ink); margin-top: 4px; font-size: 13px; }
   .stars { color: var(--route); letter-spacing: 3px; font-size: 15px; }
+  .reviews-cta { text-align: center; margin-top: 22px; }
+  .reviews-cta .btn-gold { display: inline-block; width: auto; padding: 15px 34px; text-decoration: none; }
 
   /* ===== WhatsApp floating button ===== */
   .wa-float {
@@ -813,11 +816,15 @@
         <p style="margin:6px 0;">السيارات جديدة ونظيفة، والتعامل محترم. أنصح فيها بشدة.</p>
         <div class="review-author">— لينا سمير</div>
       </div>
-      <div class="review-card" style="margin-bottom:0;">
+      <div class="review-card">
         <div class="stars">★★★★☆</div>
         <p style="margin:6px 0;">أسعار مناسبة ومواعيد مرنة، ساعدوني ألحق التيست بوقت قصير.</p>
         <div class="review-author">— يوسف كمال</div>
       </div>
+      <div id="dynamicReviews"></div>
+    </div>
+    <div class="reviews-cta">
+      <a href="/login.html" id="reviewCtaBtn" class="btn-gold">شاركنا رأيك</a>
     </div>
   </div>
 </section>
@@ -1050,6 +1057,38 @@ function buildCars() {
   `).join('');
 }
 
+/* ===== (8) آراء الطلاب — تقرأ الآراء الموافق عليها من الإدارة ===== */
+function escapeHtml(str) {
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function starsHtml(rating) {
+  return '★'.repeat(rating) + '☆'.repeat(5 - rating);
+}
+
+async function buildReviews() {
+  try {
+    const res = await fetch('/api/reviews/approved');
+    const reviews = await res.json();
+
+    document.getElementById('dynamicReviews').innerHTML = reviews.map(r => `
+      <div class="review-card">
+        <div class="stars">${starsHtml(r.rating)}</div>
+        <p style="margin:6px 0;">${escapeHtml(r.text)}</p>
+        <div class="review-author">— ${escapeHtml(r.student_name)}</div>
+      </div>
+    `).join('');
+  } catch (e) {
+    // ما قدرنا نجيب آراء إضافية، بيضلوا الآراء الثابتة ظاهرة
+  }
+}
+
+(function setReviewCtaLink() {
+  const isLoggedIn = !!sessionStorage.getItem('student');
+  const btn = document.getElementById('reviewCtaBtn');
+  if (btn) btn.href = isLoggedIn ? '/dashboard.html#student-review' : '/login.html';
+})();
+
 /* ===== (7) فيديوهات تعليمية — تقرأ المقاطع من مجلد public/videos ===== */
 const lessonVideos = [
   { src: '/turn-right.mp4', title: 'كيف تصفّ سيارتك والانعطاف يميناً بشكل صحيح' },
@@ -1207,6 +1246,7 @@ function initReveal() {
 buildSlider();
 buildCars();
 buildVideos();
+buildReviews();
 loadTeachers();
 initReveal();
 </script>

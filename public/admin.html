@@ -66,6 +66,9 @@
   .pill{font-size:11px;font-weight:800;padding:5px 11px;border-radius:20px;display:inline-block;}
   .pill-review{background:var(--rust-soft);color:var(--rust);}
   .pill-answered{background:var(--olive-soft);color:var(--olive);}
+  .pill-pending{background:var(--rust-soft);color:var(--rust);}
+  .pill-approved{background:var(--olive-soft);color:var(--olive);}
+  .review-stars{color:var(--route);letter-spacing:2px;white-space:nowrap;}
   .mark-btn{background:var(--olive);color:#fff;border:none;border-radius:9px;padding:9px 16px;font-size:12.5px;font-weight:800;cursor:pointer;font-family:inherit;transition:transform .2s ease,box-shadow .2s ease;}
   .mark-btn:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(79,111,82,.35);}
   .empty{color:var(--ink-soft);font-size:14px;padding:22px;text-align:center;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow-md);}
@@ -322,6 +325,11 @@
   </div>
 
   <div class="reveal">
+    <h2>آراء الطلاب</h2>
+    <div id="reviewsTable">جاري التحميل...</div>
+  </div>
+
+  <div class="reveal">
     <h2>طلبات الفحص (تؤوريا / تيست) <button class="mark-btn" style="margin-right:10px;" onclick="loadTestRequests()">تحديث</button></h2>
     <div id="testRequestsTable">جاري التحميل...</div>
   </div>
@@ -392,9 +400,9 @@ function handleAdminAuth(e) {
 }
 
 async function loadAll() {
-  const [studentsRes, bookingsRes, teachersRes, complaintsRes, availRes, salariesRes] = await Promise.all([
+  const [studentsRes, bookingsRes, teachersRes, complaintsRes, availRes, salariesRes, reviewsRes] = await Promise.all([
     fetch('/api/students'), fetch('/api/bookings'), fetch('/api/teachers'),
-    fetch('/api/complaints'), fetch('/api/availability'), fetch('/api/salaries')
+    fetch('/api/complaints'), fetch('/api/availability'), fetch('/api/salaries'), fetch('/api/reviews')
   ]);
 
   const students = await studentsRes.json();
@@ -404,6 +412,7 @@ async function loadAll() {
   const avail = await availRes.json();
   availCache = avail;
   const salaries = await salariesRes.json();
+  const reviews = await reviewsRes.json();
 
   document.getElementById('statStudents').textContent = students.length;
   document.getElementById('statBookings').textContent = bookings.length;
@@ -529,7 +538,46 @@ async function loadAll() {
     : `<table><thead><tr><th>الطالب</th><th>الموضوع</th><th>التفاصيل</th><th>الحالة</th><th></th></tr></thead>
        <tbody>${complaints.map(c => `<tr><td>${c.student_name}</td><td>${subjectNames[c.subject]}</td><td>${c.body}</td><td><span class="pill pill-${c.status}">${c.status === 'answered' ? 'تم الرد' : 'قيد المراجعة'}</span></td><td>${c.status === 'review' ? `<button class="mark-btn" onclick="markAnswered(${c.id})">تم الرد</button>` : ''}</td></tr>`).join('')}</tbody></table>`;
 
+  document.getElementById('reviewsTable').innerHTML = reviews.length === 0
+    ? '<div class="empty">ما في آراء مرسلة بعد</div>'
+    : `<table><thead><tr><th>الطالب</th><th>التقييم</th><th>الرأي</th><th>الحالة</th><th></th></tr></thead>
+       <tbody>${reviews.map(r => `<tr>
+         <td>${escapeHtml(r.student_name)}</td>
+         <td class="review-stars">${starsHtml(r.rating)}</td>
+         <td>${escapeHtml(r.text)}</td>
+         <td><span class="pill ${r.status === 'approved' ? 'pill-approved' : 'pill-pending'}">${r.status === 'approved' ? 'منشور' : 'قيد المراجعة'}</span></td>
+         <td>
+           ${r.status !== 'approved' ? `<button class="mark-btn" onclick="approveReview(${r.id})">نشر</button>` : ''}
+           <button class="del-btn" onclick="deleteReview(${r.id}, '${escapeAttr(r.student_name)}')">حذف</button>
+         </td>
+       </tr>`).join('')}</tbody></table>`;
+
   await loadTestRequests();
+}
+
+function starsHtml(rating) {
+  return '★'.repeat(rating) + '☆'.repeat(5 - rating);
+}
+
+async function approveReview(id) {
+  await fetch(`/api/reviews/${id}/approve`, { method: 'PUT' });
+  loadAll();
+}
+
+async function deleteReview(id, name) {
+  const result = await Swal.fire({
+    title: `حذف رأي ${name}؟`,
+    text: 'ما بقدر نتراجع عن هالعملية',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'نعم، احذف',
+    cancelButtonText: 'إلغاء',
+    confirmButtonColor: '#B3492B'
+  });
+  if (!result.isConfirmed) return;
+
+  await fetch(`/api/reviews/${id}`, { method: 'DELETE' });
+  loadAll();
 }
 
 async function loadTestRequests() {

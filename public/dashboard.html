@@ -295,6 +295,17 @@
     color: var(--ink-soft); font-size: 14px; padding: 26px 18px; text-align: center;
     background: #fff; border: 1.5px dashed var(--line); border-radius: 16px;
   }
+
+  /* ===== تقييم بالنجوم (شاركنا رأيك) ===== */
+  .star-rating { display: flex; justify-content: center; gap: 8px; margin-bottom: 8px; }
+  .star-rating .star {
+    background: none; border: none; cursor: pointer; padding: 2px;
+    font-size: 36px; line-height: 1; color: var(--line);
+    transition: color .15s ease, transform .15s ease;
+  }
+  .star-rating .star:hover { transform: scale(1.12); }
+  .star-rating .star.filled { color: var(--route); }
+  .review-hint { text-align: center; font-size: 12.5px; color: var(--ink-soft); margin: 0 0 22px; font-weight: 600; }
   .empty .empty-icon { font-size: 28px; display: block; margin-bottom: 8px; opacity: .7; }
 
   input[type="date"], input[type="time"] {
@@ -519,6 +530,26 @@
       </div>
     </div>
     <div id="myComplaints">جاري التحميل...</div>
+  </div>
+
+  <div class="reveal" id="student-review">
+    <div class="section-head">
+      <div class="section-icon icon-gold">⭐</div>
+      <div>
+        <h2>شاركنا رأيك</h2>
+        <div class="section-sub">تجربتك بتهمنا، شاركنا رأيك بمدرسة الوطن</div>
+      </div>
+    </div>
+    <div class="card">
+      <div id="reviewMsg" class="msg"></div>
+      <div class="star-rating" id="reviewStars"></div>
+      <div class="review-hint">اضغط على النجوم لاختيار تقييمك</div>
+
+      <label>رأيك</label>
+      <textarea id="reviewText" placeholder="شو رأيك بتجربتك معنا؟"></textarea>
+
+      <button class="submit-btn" onclick="submitReview()">إرسال رأيي</button>
+    </div>
   </div>
 </div>
 
@@ -768,6 +799,65 @@ async function loadMyFinance() {
     remainingEl.className = 'value ' + (s.remaining > 0 ? 'due' : 'clear');
   }
 }
+
+/* ===== شاركنا رأيك (تقييم بالنجوم) ===== */
+let selectedRating = 0;
+
+function renderStarInput() {
+  const container = document.getElementById('reviewStars');
+  container.innerHTML = [1, 2, 3, 4, 5].map(v => `<button type="button" class="star" data-value="${v}">★</button>`).join('');
+
+  container.querySelectorAll('.star').forEach(btn => {
+    btn.addEventListener('click', () => {
+      selectedRating = parseInt(btn.dataset.value, 10);
+      paintStars(selectedRating);
+    });
+    btn.addEventListener('mouseenter', () => paintStars(parseInt(btn.dataset.value, 10)));
+  });
+  container.addEventListener('mouseleave', () => paintStars(selectedRating));
+}
+
+function paintStars(value) {
+  document.querySelectorAll('#reviewStars .star').forEach(btn => {
+    btn.classList.toggle('filled', parseInt(btn.dataset.value, 10) <= value);
+  });
+}
+
+async function submitReview() {
+  const text = document.getElementById('reviewText').value.trim();
+  const msgEl = document.getElementById('reviewMsg');
+
+  if (selectedRating < 1) {
+    msgEl.className = 'msg error';
+    msgEl.textContent = 'يرجى اختيار تقييم بالنجوم';
+    return;
+  }
+  if (!text) {
+    msgEl.className = 'msg error';
+    msgEl.textContent = 'يرجى كتابة رأيك';
+    return;
+  }
+
+  const res = await fetch('/api/reviews', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ student_name: student.name, rating: selectedRating, text })
+  });
+  const result = await res.json();
+
+  if (result.success) {
+    msgEl.className = 'msg success';
+    msgEl.textContent = 'شكراً إلك! رح تظهر مراجعتك بالموقع بعد ما توافق عليها الإدارة.';
+    document.getElementById('reviewText').value = '';
+    selectedRating = 0;
+    paintStars(0);
+  } else {
+    msgEl.className = 'msg error';
+    msgEl.textContent = result.message || 'صار خطأ، جرب تاني';
+  }
+}
+
+renderStarInput();
 
 loadNotifications();
 loadTeachers();
