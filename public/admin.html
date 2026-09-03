@@ -20,6 +20,7 @@
   .navbar .nav-links{display:flex;gap:20px;align-items:center;flex-wrap:wrap;}
   .navbar a{color:var(--paper);text-decoration:none;font-size:14.5px;font-weight:800;}
   .navbar a:hover{color:var(--route);}
+  .nav-hidden{display:none !important;}
   .nav-toggle{display:none;background:none;border:none;color:var(--route);font-size:26px;cursor:pointer;padding:0 4px;}
   @media(max-width:640px){
     .navbar .nav-links{display:none;position:absolute;top:100%;right:0;left:0;background:var(--ink);flex-direction:column;align-items:flex-start;padding:14px 20px 20px;gap:16px;border-top:1px solid rgba(246,243,236,.1);}
@@ -250,8 +251,9 @@
   <span class="brand">🚗 مدرسة الوطن</span>
   <div class="nav-links" id="navLinks">
     <a href="/">الرئيسية</a>
-    <a href="/login.html">دخول الطالب</a>
-    <a href="/dashboard.html">حسابي</a>
+    <a href="/login.html" id="navLogin">دخول الطالب</a>
+    <a href="/dashboard.html" id="navAccount" class="nav-hidden">حسابي</a>
+    <a href="#" id="navLogout" class="nav-hidden" onclick="return navStudentLogout(event)">خروج</a>
     <a href="/about.html">من نحن</a>
     <a href="/faq.html">الأسئلة الشائعة</a>
     <a href="/admin.html">الإدارة</a>
@@ -347,6 +349,19 @@ const dayNames = ['الأحد','الاثنين','الثلاثاء','الأربع
 document.getElementById('navToggle').addEventListener('click', () => {
   document.getElementById('navLinks').classList.toggle('open');
 });
+
+function navStudentLogout(e) {
+  e.preventDefault();
+  sessionStorage.removeItem('student');
+  window.location.href = '/';
+  return false;
+}
+(function() {
+  const isLoggedIn = !!sessionStorage.getItem('student');
+  document.getElementById('navLogin')?.classList.toggle('nav-hidden', isLoggedIn);
+  document.getElementById('navAccount')?.classList.toggle('nav-hidden', !isLoggedIn);
+  document.getElementById('navLogout')?.classList.toggle('nav-hidden', !isLoggedIn);
+})();
 
 const revealEls = document.querySelectorAll('.reveal');
 const revealIO = new IntersectionObserver((entries) => {

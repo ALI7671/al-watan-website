@@ -21,7 +21,7 @@
     --shadow: 0 30px 70px rgba(0,0,0,.45), 0 0 0 6px rgba(233,185,62,.08);
   }
   * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
+  html, body { height: 100%; }
   body {
     font-family: 'Cairo', 'Tajawal', Arial, sans-serif;
     background: var(--ink);
@@ -29,44 +29,35 @@
     margin: 0;
     padding: 0;
   }
-  .navbar {
-    background: var(--ink);
-    padding: 16px 24px;
-    display: flex;
+
+  /* ===== رابط العودة للرئيسية ===== */
+  .back-link {
+    position: fixed;
+    top: 20px;
+    right: 24px;
+    z-index: 20;
+    display: inline-flex;
     align-items: center;
-    gap: 18px;
-    position: sticky;
-    top: 0;
-    z-index: 500;
-    box-shadow: 0 6px 20px rgba(0,0,0,.3);
+    gap: 6px;
+    color: var(--paper);
+    opacity: .75;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    transition: opacity .2s ease, color .2s ease;
   }
-  .navbar .brand { color: var(--route); font-size: 17px; font-weight: 900; margin-left: auto; white-space: nowrap; letter-spacing: -.3px; }
-  .navbar .nav-links { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
-  .navbar a { color: var(--paper); text-decoration: none; font-size: 14.5px; font-weight: 800; transition: color 0.2s; }
-  .navbar a:hover { color: var(--route); }
-  .nav-toggle { display: none; background: none; border: none; color: var(--route); font-size: 26px; cursor: pointer; padding: 0 4px; }
-  @media (max-width: 640px) {
-    .navbar .nav-links {
-      display: none; position: absolute; top: 100%; right: 0; left: 0;
-      background: var(--ink); flex-direction: column; align-items: flex-start;
-      padding: 14px 20px 20px; gap: 16px; border-top: 1px solid rgba(246,243,236,.1);
-    }
-    .navbar .nav-links.open { display: flex; }
-    .nav-toggle { display: block; }
-    .navbar .brand { font-size: 15px; }
-  }
+  .back-link:hover { opacity: 1; color: var(--route); }
 
   .reveal { opacity: 0; transform: translateY(30px); transition: opacity .7s cubic-bezier(.2,.8,.2,1), transform .7s cubic-bezier(.2,.8,.2,1); }
   .reveal.in-view { opacity: 1; transform: none; }
 
-  /* ===== خلفية داكنة كاملة مع سيارة خافتة ===== */
+  /* ===== بوابة دخول: خلفية داكنة كاملة الشاشة مع سيارة خافتة ===== */
   .login-wrap {
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: calc(100vh - 72px);
-    padding: 56px 18px 70px;
+    min-height: 100vh;
+    padding: 70px 18px;
     position: relative;
     overflow: hidden;
     background:
@@ -88,42 +79,13 @@
     user-select: none;
   }
 
-  /* ===== شعار ونص ترحيبي ضخم فوق الفورم ===== */
-  .login-hero { text-align: center; margin-bottom: 38px; position: relative; z-index: 1; }
-  .brand-badge {
-    width: 76px; height: 76px; border-radius: 50%; margin: 0 auto 22px;
-    background: var(--route); display: flex; align-items: center; justify-content: center;
-    font-size: 34px; box-shadow: 0 14px 34px rgba(233,185,62,.4);
-    animation: badgePulse 2.6s ease-in-out infinite;
-  }
-  @keyframes badgePulse {
-    0%, 100% { box-shadow: 0 14px 34px rgba(233,185,62,.4); }
-    50% { box-shadow: 0 14px 46px rgba(233,185,62,.65); }
-  }
-  .login-hero h1 {
-    color: #fff;
-    font-size: clamp(34px, 7vw, 58px);
-    font-weight: 900;
-    margin: 0 0 12px;
-    letter-spacing: -1px;
-    line-height: 1.1;
-  }
-  .login-hero h1 span { color: var(--route); }
-  .login-hero .tagline {
-    color: #C7CDD2;
-    font-size: 15px;
-    font-weight: 600;
-    margin: 0 auto;
-    max-width: 420px;
-  }
-
-  /* ===== بطاقة الفورم البارزة ===== */
+  /* ===== بطاقة تسجيل الدخول - وحيدة ومركزية ===== */
   .login-box {
     background: var(--paper-card);
     border: 2.5px solid var(--route);
     border-radius: 26px;
-    padding: 40px 32px;
-    max-width: 420px;
+    padding: 44px 34px;
+    max-width: 400px;
     width: 100%;
     text-align: center;
     box-shadow: var(--shadow);
@@ -133,28 +95,31 @@
   }
   .login-box:hover { transform: translateY(-6px); box-shadow: 0 40px 80px rgba(0,0,0,.5), 0 0 0 6px rgba(233,185,62,.16); }
 
-  .road {
-    height: 100px;
-    border-radius: 14px;
-    background: linear-gradient(135deg, var(--ink) 0%, #2A333B 100%);
-    margin-bottom: 26px;
-    position: relative;
-    overflow: hidden;
-    box-shadow: inset 0 2px 6px rgba(0,0,0,0.2);
+  .brand-badge {
+    width: 72px; height: 72px; border-radius: 50%; margin: 0 auto 20px;
+    background: var(--route); display: flex; align-items: center; justify-content: center;
+    font-size: 32px; box-shadow: 0 14px 34px rgba(233,185,62,.4);
+    animation: badgePulse 2.6s ease-in-out infinite;
   }
-  .road .strip {
-    position: absolute;
-    bottom: 24px;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background-image: repeating-linear-gradient(90deg, var(--route) 0 22px, transparent 22px 40px);
-    animation: drive 1.4s linear infinite;
+  @keyframes badgePulse {
+    0%, 100% { box-shadow: 0 14px 34px rgba(233,185,62,.4); }
+    50% { box-shadow: 0 14px 46px rgba(233,185,62,.65); }
   }
-  @keyframes drive { from { background-position: 0 0; } to { background-position: -62px 0; } }
-  .road .car { position: absolute; bottom: 30px; right: 34px; font-size: 26px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
-
-  .sub { color: var(--ink-soft); font-size: 14px; margin: 0 0 26px 0; font-weight: 700; }
+  .login-box h1 {
+    color: var(--ink);
+    font-size: clamp(26px, 6vw, 32px);
+    font-weight: 900;
+    margin: 0 0 10px;
+    letter-spacing: -.5px;
+    line-height: 1.15;
+  }
+  .login-box h1 span { color: var(--route); }
+  .login-box .tagline {
+    color: var(--ink-soft);
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0 0 30px;
+  }
 
   label {
     display: block;
@@ -212,33 +177,13 @@
 </head>
 <body>
 
-<div class="navbar">
-  <button class="nav-toggle" id="navToggle" aria-label="القائمة">☰</button>
-  <span class="brand">🚗 مدرسة الوطن</span>
-  <div class="nav-links" id="navLinks">
-    <a href="/">الرئيسية</a>
-    <a href="/login.html">دخول الطالب</a>
-    <a href="/dashboard.html">حسابي</a>
-    <a href="/about.html">من نحن</a>
-    <a href="/faq.html">الأسئلة الشائعة</a>
-    <a href="/admin.html">الإدارة</a>
-  </div>
-</div>
+<a href="/" class="back-link">→ العودة للرئيسية</a>
 
 <div class="login-wrap">
-  <div class="login-hero reveal">
+  <div class="login-box reveal">
     <div class="brand-badge">🚗</div>
     <h1>مدرسة <span>الوطن</span></h1>
     <p class="tagline">خطوتك الأولى نحو رخصة القيادة تبدأ من هون</p>
-  </div>
-
-  <div class="login-box reveal">
-    <div class="road">
-      <div class="strip"></div>
-      <div class="car">🚗</div>
-    </div>
-
-    <p class="sub">سجّل دخولك برقم موبايلك</p>
 
     <div id="loginMessage" class="msg"></div>
 
@@ -250,10 +195,6 @@
 </div>
 
 <script>
-document.getElementById('navToggle').addEventListener('click', () => {
-  document.getElementById('navLinks').classList.toggle('open');
-});
-
 const revealEls = document.querySelectorAll('.reveal');
 const revealIO = new IntersectionObserver((entries) => {
   entries.forEach(entry => {

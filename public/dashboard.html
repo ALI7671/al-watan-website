@@ -19,6 +19,8 @@
     --olive-soft: #E4EAE2;
     --rust: #B3492B;
     --rust-soft: #F3E0D8;
+    --sky: #3E6B8A;
+    --sky-soft: #E1EAEF;
     --line: rgba(27,33,38,.14);
     --shadow-md: 0 12px 30px rgba(27,33,38,.10);
     --shadow-gold: 0 0 0 2px var(--route), 0 22px 44px rgba(27,33,38,.22);
@@ -47,6 +49,7 @@
   .navbar .nav-links { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
   .navbar a { color: var(--paper); text-decoration: none; font-size: 14.5px; font-weight: 800; }
   .navbar a:hover { color: var(--route); }
+  .nav-hidden { display: none !important; }
   .nav-toggle { display: none; background: none; border: none; color: var(--route); font-size: 26px; cursor: pointer; padding: 0 4px; }
   @media (max-width: 640px) {
     .navbar .nav-links {
@@ -143,6 +146,7 @@
   .icon-olive { background: var(--olive); color: #fff; }
   .icon-ink { background: var(--ink); color: var(--route); }
   .icon-rust { background: var(--rust); color: #fff; }
+  .icon-sky { background: var(--sky); color: #fff; }
   h2 { font-size: 19px; margin: 0; font-weight: 900; letter-spacing: -.2px; }
   .section-sub { font-size: 12.5px; color: var(--ink-soft); font-weight: 600; margin-top: 3px; }
 
@@ -315,7 +319,7 @@
   .notif-item {
     background: #fff;
     border: 1px solid var(--line);
-    border-right: 5px solid var(--olive);
+    border-right: 5px solid var(--sky);
     border-radius: 16px;
     padding: 14px 17px;
     margin-bottom: 12px;
@@ -328,7 +332,7 @@
   }
   .notif-item:hover { transform: translateY(-4px); box-shadow: var(--shadow-gold); }
   .notif-icon {
-    width: 40px; height: 40px; border-radius: 12px; background: var(--olive-soft);
+    width: 40px; height: 40px; border-radius: 12px; background: var(--sky-soft);
     display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;
   }
   .notif-item.unread { background: #FFFBF0; }
@@ -382,8 +386,9 @@
   <span class="brand">🚗 مدرسة الوطن</span>
   <div class="nav-links" id="navLinks">
     <a href="/">الرئيسية</a>
-    <a href="/login.html">دخول الطالب</a>
-    <a href="/dashboard.html">حسابي</a>
+    <a href="/login.html" id="navLogin">دخول الطالب</a>
+    <a href="/dashboard.html" id="navAccount" class="nav-hidden">حسابي</a>
+    <a href="#" id="navLogout" class="nav-hidden" onclick="return navStudentLogout(event)">خروج</a>
     <a href="/about.html">من نحن</a>
     <a href="/faq.html">الأسئلة الشائعة</a>
     <a href="/admin.html">الإدارة</a>
@@ -459,7 +464,7 @@
 
   <div class="reveal">
     <div class="section-head">
-      <div class="section-icon icon-olive">🔔</div>
+      <div class="section-icon icon-sky">🔔</div>
       <div>
         <h2>الإشعارات</h2>
         <div class="section-sub">آخر التحديثات من إدارة المدرسة</div>
@@ -557,6 +562,19 @@ document.getElementById('studentAvatar').textContent = student.name.charAt(0);
 document.getElementById('navToggle').addEventListener('click', () => {
   document.getElementById('navLinks').classList.toggle('open');
 });
+
+function navStudentLogout(e) {
+  e.preventDefault();
+  sessionStorage.removeItem('student');
+  window.location.href = '/';
+  return false;
+}
+(function() {
+  const isLoggedIn = !!sessionStorage.getItem('student');
+  document.getElementById('navLogin')?.classList.toggle('nav-hidden', isLoggedIn);
+  document.getElementById('navAccount')?.classList.toggle('nav-hidden', !isLoggedIn);
+  document.getElementById('navLogout')?.classList.toggle('nav-hidden', !isLoggedIn);
+})();
 
 const revealEls = document.querySelectorAll('.reveal');
 const revealIO = new IntersectionObserver((entries) => {

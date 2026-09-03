@@ -71,6 +71,7 @@
     transition: color .2s ease;
   }
   .navbar a:hover { color: var(--route); }
+  .nav-hidden { display: none !important; }
   .navbar a.active { color: var(--route); }
   .nav-toggle {
     display: none;
@@ -277,8 +278,9 @@
   <div class="nav-links" id="navLinks">
     <a href="/">الرئيسية</a>
     <a href="/#license-steps">خطوات الحصول على الرخصة</a>
-    <a href="/login.html">دخول الطالب</a>
-    <a href="/dashboard.html">حسابي</a>
+    <a href="/login.html" id="navLogin">دخول الطالب</a>
+    <a href="/dashboard.html" id="navAccount" class="nav-hidden">حسابي</a>
+    <a href="#" id="navLogout" class="nav-hidden" onclick="return navStudentLogout(event)">خروج</a>
     <a href="/about.html">من نحن</a>
     <a href="/faq.html" class="active">الأسئلة الشائعة</a>
     <a href="/admin.html">الإدارة</a>
@@ -311,6 +313,19 @@
 <script>
 const WA_PHONE = "972599254574";
 document.getElementById('waFloat').href = `https://wa.me/${WA_PHONE}?text=${encodeURIComponent('مرحباً، بدي استفسر عن دروس السياقة بمدرسة الوطن')}`;
+
+function navStudentLogout(e) {
+  e.preventDefault();
+  sessionStorage.removeItem('student');
+  window.location.href = '/';
+  return false;
+}
+(function() {
+  const isLoggedIn = !!sessionStorage.getItem('student');
+  document.getElementById('navLogin')?.classList.toggle('nav-hidden', isLoggedIn);
+  document.getElementById('navAccount')?.classList.toggle('nav-hidden', !isLoggedIn);
+  document.getElementById('navLogout')?.classList.toggle('nav-hidden', !isLoggedIn);
+})();
 
 document.getElementById('navToggle').addEventListener('click', () => {
   document.getElementById('navLinks').classList.toggle('open');
