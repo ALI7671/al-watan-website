@@ -238,8 +238,13 @@
     to { opacity: 1; transform: none; }
   }
 
-  /* ===== Hero slide (السلايد الأول) ===== */
-  .slide.hero-slide img {
+  /* ===== Hero slide (السلايد الأول) - صورة بانر1 كخلفية ===== */
+  .slide.hero-slide .hero-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     animation: kenBurns 16s ease-in-out infinite alternate;
   }
   @keyframes kenBurns {
@@ -247,6 +252,7 @@
     to { transform: scale(1.09); }
   }
   .slide.hero-slide::before {
+    /* تدرج داكن يتركز أسفل السلايد عشان النص يضل واضح فوق الصورة */
     background: linear-gradient(180deg, rgba(27,33,38,.12) 0%, rgba(27,33,38,.3) 40%, rgba(27,33,38,.95) 100%);
   }
   .hero-caption {
@@ -938,7 +944,7 @@ function heroPlaceholderImg(bg1 = '1B2126', bg2 = '3A434B') {
 
 /* ===== (2) Hero slider — reads car photos from /images in the public folder ===== */
 const sliderImages = [
-  { type: 'hero', src: '/images/hero-1.jpg', title: 'مدرسة الوطن <span>لتعليم السياقة</span>', subtitle: 'تعلّم القيادة باحتراف مع مدربين خبرة وسيارات حديثة', types: 'أوتوماتيك • جير • شحن خفيف' },
+  { type: 'hero', src: '/banner1.png', title: 'مدرسة الوطن <span>لتعليم السياقة</span>', subtitle: 'تعلّم القيادة باحتراف مع مدربين خبرة وسيارات حديثة', types: 'أوتوماتيك • جير • شحن خفيف' },
   { src: '/banner2.png', title: 'مدربون محترفون <span>وسيارات حديثة</span>', text: 'نساعدك تنجح من أول مرة بالفحص النظري والعملي' },
   { type: 'cta', title: 'ابدأ رحلتك <span>معنا</span>', text: 'اختر الخطوة التالية وابدأ فوراً' },
 ];
@@ -968,7 +974,7 @@ function buildSlider() {
     if (s.type === 'hero') {
       return `
     <div class="slide hero-slide">
-      <img src="${s.src}" onerror="this.onerror=null; this.src=heroPlaceholderImg();" alt="${s.title.replace(/<[^>]*>/g,'')}">
+      <div class="hero-bg" style="background-image:url('${s.src}')" role="img" aria-label="${s.title.replace(/<[^>]*>/g,'')}"></div>
       <div class="slide-caption hero-caption">
         <h1>${s.title}</h1>
         <p class="hero-subtitle">${s.subtitle}</p>
