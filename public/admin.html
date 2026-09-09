@@ -401,7 +401,7 @@ function handleAdminAuth(e) {
 
 async function loadAll() {
   const [studentsRes, bookingsRes, teachersRes, complaintsRes, availRes, salariesRes, reviewsRes] = await Promise.all([
-    fetch('/api/students'), fetch('/api/bookings'), fetch('/api/teachers'),
+    fetch('/api/students'), fetch('/api/bookings'), fetch('/api/teachers/summary'),
     fetch('/api/complaints'), fetch('/api/availability'), fetch('/api/salaries'), fetch('/api/reviews')
   ]);
 
@@ -498,8 +498,18 @@ async function loadAll() {
       </div>`;
   }
 
-  document.getElementById('teachersTable').innerHTML = `<table><thead><tr><th>الاسم</th><th>الأنواع اللي بعلمها</th></tr></thead>
-    <tbody>${teachers.map(t => `<tr><td>${t.name}</td><td>${t.types.split(',').map(x => typeNames[x]).join(' • ')}</td></tr>`).join('')}</tbody></table>`;
+  document.getElementById('teachersTable').innerHTML = `<table><thead><tr>
+      <th>الاسم</th><th>الموبايل</th><th>الأنواع اللي بعلمها</th><th>دروس مكتملة</th><th>المبلغ المحصّل</th><th>حساب الدخول</th><th></th>
+    </tr></thead>
+    <tbody>${teachers.map(t => `<tr>
+      <td>${escapeHtml(t.name)}</td>
+      <td>${escapeHtml(t.phone || '—')}</td>
+      <td>${t.types.split(',').map(x => typeNames[x]).join(' • ')}</td>
+      <td>${t.lessons_done_count}</td>
+      <td>${t.collected_total} ₪</td>
+      <td><span class="pill ${t.has_password ? 'pill-answered' : 'pill-review'}">${t.has_password ? 'مفعّل' : 'بدون كلمة مرور'}</span></td>
+      <td><button class="mark-btn" data-action="teacher-credentials" data-id="${t.id}" data-name="${escapeAttr(t.name)}" data-phone="${escapeAttr(t.phone || '')}">كلمة المرور</button></td>
+    </tr>`).join('')}</tbody></table>`;
 
   function renderSalaries(list) {
     document.getElementById('salariesTable').innerHTML = list.length === 0
@@ -736,6 +746,43 @@ document.getElementById('studentsTable').addEventListener('click', (e) => {
   if (action === 'payment') openPaymentModal(id, name);
   else if (action === 'package') openPackageModal(id, name, current);
   else if (action === 'testdate') openTestDateModal(id, name, current);
+});
+
+/* ===== بيانات دخول المعلمين ===== */
+function openTeacherCredentialsModal(id, name, phone) {
+  openModal(`بيانات دخول المعلم — ${name}`, `
+    <label>رقم الموبايل (للدخول)</label>
+    <input type="tel" id="teacherPhone" placeholder="0599123456" value="${escapeAttr(phone || '')}">
+    <label>كلمة المرور الجديدة</label>
+    <input type="password" id="teacherPassword" placeholder="6 أحرف على الأقل">
+    <div id="modalError" class="modal-error"></div>
+    <button class="modal-btn" onclick="submitTeacherCredentials(${id})">حفظ</button>
+  `);
+}
+
+async function submitTeacherCredentials(id) {
+  const phone = document.getElementById('teacherPhone').value.trim();
+  const password = document.getElementById('teacherPassword').value;
+
+  const res = await fetch(`/api/teachers/${id}/credentials`, {
+    method: 'PUT', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ phone, password })
+  });
+  const result = await res.json();
+
+  if (result.success) {
+    closeModal();
+    loadAll();
+  } else {
+    showModalError(result.message || 'صار خطأ أثناء الحفظ');
+  }
+}
+
+document.getElementById('teachersTable').addEventListener('click', (e) => {
+  const btn = e.target.closest('button[data-action]');
+  if (!btn) return;
+  const { action, id, name, phone } = btn.dataset;
+  if (action === 'teacher-credentials') openTeacherCredentialsModal(id, name, phone);
 });
 
 /* ===== رواتب الموظفين والمعلمين ===== */

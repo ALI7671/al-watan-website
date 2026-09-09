@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/favicon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>دخول المعلم - مدرسة الوطن</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1B2126;
+    --ink-soft: #3A434B;
+    --paper: #F6F3EC;
+    --paper-card: #FFFFFF;
+    --route: #E9B93E;
+    --rust: #B3492B;
+    --rust-soft: #F3E0D8;
+    --line: rgba(27,33,38,.10);
+    --shadow: 0 30px 70px rgba(0,0,0,.45), 0 0 0 6px rgba(233,185,62,.08);
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Cairo', 'Tajawal', Arial, sans-serif;
+    background: var(--ink);
+    color: var(--ink);
+    margin: 0;
+    padding: 0;
+  }
+
+  .back-link {
+    position: fixed;
+    top: 20px;
+    right: 24px;
+    z-index: 20;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--paper);
+    opacity: .75;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    transition: opacity .2s ease, color .2s ease;
+  }
+  .back-link:hover { opacity: 1; color: var(--route); }
+
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity .7s cubic-bezier(.2,.8,.2,1), transform .7s cubic-bezier(.2,.8,.2,1); }
+  .reveal.in-view { opacity: 1; transform: none; }
+
+  .login-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 70px 18px;
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse 900px 600px at 12% -8%, rgba(233,185,62,.20), transparent 60%),
+      radial-gradient(ellipse 700px 550px at 105% 112%, rgba(233,185,62,.12), transparent 60%),
+      var(--ink);
+  }
+  .login-wrap::before {
+    content: '👨‍🏫';
+    position: absolute;
+    font-size: 480px;
+    line-height: 1;
+    bottom: -140px;
+    left: -90px;
+    opacity: .05;
+    color: var(--route);
+    transform: rotate(-10deg);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .login-box {
+    background: var(--paper-card);
+    border: 2.5px solid var(--route);
+    border-radius: 26px;
+    padding: 44px 34px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    box-shadow: var(--shadow);
+    position: relative;
+    z-index: 1;
+    transition: transform .3s ease, box-shadow .3s ease;
+  }
+  .login-box:hover { transform: translateY(-6px); box-shadow: 0 40px 80px rgba(0,0,0,.5), 0 0 0 6px rgba(233,185,62,.16); }
+
+  .brand-badge {
+    width: 72px; height: 72px; border-radius: 50%; margin: 0 auto 20px;
+    background: var(--route); display: flex; align-items: center; justify-content: center;
+    font-size: 32px; box-shadow: 0 14px 34px rgba(233,185,62,.4);
+    animation: badgePulse 2.6s ease-in-out infinite;
+  }
+  @keyframes badgePulse {
+    0%, 100% { box-shadow: 0 14px 34px rgba(233,185,62,.4); }
+    50% { box-shadow: 0 14px 46px rgba(233,185,62,.65); }
+  }
+  .login-box h1 {
+    color: var(--ink);
+    font-size: clamp(24px, 6vw, 30px);
+    font-weight: 900;
+    margin: 0 0 10px;
+    letter-spacing: -.5px;
+    line-height: 1.15;
+  }
+  .login-box h1 span { color: var(--route); }
+  .login-box .tagline {
+    color: var(--ink-soft);
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0 0 30px;
+  }
+
+  label {
+    display: block;
+    text-align: right;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--ink-soft);
+  }
+  input {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1.5px solid var(--line);
+    font-size: 15px;
+    margin-bottom: 20px;
+    font-family: inherit;
+    background: #faf8f5;
+    transition: all 0.2s ease;
+  }
+  input:focus { outline: none; background: #fff; border-color: var(--route); box-shadow: 0 0 0 3px rgba(233, 185, 62, 0.15); }
+
+  button {
+    background: var(--route);
+    color: var(--ink);
+    border: none;
+    border-radius: 13px;
+    padding: 17px;
+    font-size: 16px;
+    font-weight: 800;
+    width: 100%;
+    cursor: pointer;
+    font-family: inherit;
+    box-shadow: 0 12px 26px rgba(233,185,62,.35);
+    transition: transform 0.2s cubic-bezier(.2,.8,.2,1), box-shadow 0.25s ease, background 0.2s ease;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  button::after {
+    content: '';
+    position: absolute; inset: 0 auto 0 -60%;
+    width: 50%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,.6), transparent);
+    transform: skewX(-20deg);
+    transition: left .6s ease;
+  }
+  button:hover::after { left: 130%; }
+  button:hover { background: #f0c458; transform: translateY(-3px) scale(1.02); box-shadow: 0 18px 36px rgba(233,185,62,.5); }
+  button:active { transform: scale(0.97); }
+
+  .msg { padding: 13px; border-radius: 10px; margin-bottom: 20px; display: none; font-size: 14px; font-weight: 700; }
+  .msg.error { background: var(--rust-soft); color: var(--rust); display: block; border: 1px solid rgba(179,73,43,0.15); }
+
+  .switch-link { font-size: 13.5px; color: var(--ink-soft); font-weight: 600; margin: 18px 0 0; }
+  .switch-link a { color: var(--route); font-weight: 800; text-decoration: none; }
+  .switch-link a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<a href="/" class="back-link">→ العودة للرئيسية</a>
+
+<div class="login-wrap">
+  <div class="login-box reveal">
+    <div class="brand-badge">👨‍🏫</div>
+    <h1>بوابة <span>المعلمين</span></h1>
+    <p class="tagline">تابع حجوزاتك ودروسك ودفعاتك من هون</p>
+
+    <div id="loginMessage" class="msg"></div>
+
+    <label>الاسم أو رقم الموبايل</label>
+    <input type="text" id="teacherIdentifier" placeholder="مثال: أبو سامح أو 0599123456">
+
+    <label>كلمة المرور</label>
+    <input type="password" id="teacherPassword" placeholder="••••••••">
+
+    <button onclick="teacherLogin()">دخول</button>
+
+    <p class="switch-link">مش معلم؟ <a href="/login.html">دخول الطالب</a></p>
+  </div>
+</div>
+
+<script>
+const revealEls = document.querySelectorAll('.reveal');
+const revealIO = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) { entry.target.classList.add('in-view'); revealIO.unobserve(entry.target); }
+  });
+}, { threshold: 0.12 });
+revealEls.forEach(el => revealIO.observe(el));
+
+async function teacherLogin() {
+  const identifier = document.getElementById('teacherIdentifier').value.trim();
+  const password = document.getElementById('teacherPassword').value;
+  const msgEl = document.getElementById('loginMessage');
+
+  if (!identifier || !password) {
+    msgEl.className = 'msg error';
+    msgEl.textContent = 'يرجى إدخال الاسم أو الموبايل وكلمة المرور';
+    return;
+  }
+
+  const res = await fetch('/api/teacher-login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ identifier, password })
+  });
+
+  const result = await res.json();
+
+  if (result.success) {
+    sessionStorage.setItem('teacher', JSON.stringify(result.teacher));
+    window.location.href = '/teacher.html';
+    return;
+  }
+
+  msgEl.className = 'msg error';
+  msgEl.textContent = result.message;
+}
+
+document.getElementById('teacherPassword').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') teacherLogin();
+});
+</script>
+</body>
+</html>

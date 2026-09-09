@@ -15,8 +15,132 @@ app.use(express.static('public'));
 
 // ترجع كل المعلمين
 app.get('/api/teachers', (req, res) => {
-  const teachers = db.prepare('SELECT * FROM teachers').all();
+  const teachers = db.prepare('SELECT id, name, types, phone FROM teachers').all();
   res.json(teachers);
+});
+
+// ملخص المعلمين (عدد الدروس المكتملة والمبلغ المحصّل) - للإدارة
+app.get('/api/teachers/summary', (req, res) => {
+  const teachers = db.prepare(`
+    SELECT t.id, t.name, t.phone, t.types,
+      (t.password IS NOT NULL) AS has_password,
+      (SELECT COUNT(*) FROM bookings b WHERE b.teacher_id = t.id AND b.status = 'done') AS lessons_done_count,
+      COALESCE((SELECT SUM(b.collected_amount) FROM bookings b WHERE b.teacher_id = t.id), 0) AS collected_total
+    FROM teachers t
+    ORDER BY t.id
+  `).all();
+  res.json(teachers);
+});
+
+// تعيين/تحديث رقم موبايل وكلمة مرور معلم (الإدارة)
+app.put('/api/teachers/:id/credentials', async (req, res) => {
+  const { id } = req.params;
+  const { phone, password } = req.body;
+
+  const teacher = db.prepare('SELECT * FROM teachers WHERE id = ?').get(id);
+  if (!teacher) {
+    return res.json({ success: false, message: 'هذا المعلم غير موجود' });
+  }
+  if (!password || password.length < MIN_PASSWORD_LENGTH) {
+    return res.json({ success: false, message: `كلمة المرور يجب أن تكون ${MIN_PASSWORD_LENGTH} أحرف على الأقل` });
+  }
+  if (phone) {
+    const phoneTaken = db.prepare('SELECT id FROM teachers WHERE phone = ? AND id != ?').get(phone, id);
+    if (phoneTaken) {
+      return res.json({ success: false, message: 'رقم الموبايل هذا مستخدم لمعلم آخر' });
+    }
+  }
+
+  const passwordHash = await bcrypt.hash(password, BCRYPT_ROUNDS);
+  db.prepare('UPDATE teachers SET password = ?, phone = COALESCE(?, phone) WHERE id = ?').run(passwordHash, phone || null, id);
+
+  res.json({ success: true });
+});
+
+// تسجيل دخول المعلم بالاسم أو الموبايل + كلمة المرور
+app.post('/api/teacher-login', async (req, res) => {
+  const { identifier, password } = req.body;
+
+  if (!identifier || !password) {
+    return res.json({ success: false, message: 'يرجى إدخال الاسم أو الموبايل وكلمة المرور' });
+  }
+
+  const teacher = db.prepare('SELECT * FROM teachers WHERE name = ? OR phone = ?').get(identifier, identifier);
+  if (!teacher) {
+    return res.json({ success: false, message: 'بيانات الدخول غير صحيحة' });
+  }
+  if (!teacher.password) {
+    return res.json({ success: false, message: 'ما في كلمة مرور لحسابك بعد، تواصل مع الإدارة' });
+  }
+
+  const match = await bcrypt.compare(password, teacher.password);
+  if (!match) {
+    return res.json({ success: false, message: 'بيانات الدخول غير صحيحة' });
+  }
+
+  delete teacher.password;
+  res.json({ success: true, teacher });
+});
+
+// لوحة تحكم معلم معين: حجوزاته فقط + ملخص الشهر (يتأكد إن المعلم موجود قبل الإرجاع)
+app.get('/api/teacher/:teacherId/dashboard', (req, res) => {
+  const { teacherId } = req.params;
+
+  const teacher = db.prepare('SELECT id, name, phone, types FROM teachers WHERE id = ?').get(teacherId);
+  if (!teacher) {
+    return res.json({ success: false, message: 'هذا المعلم غير موجود' });
+  }
+
+  const bookings = db.prepare(`
+    SELECT * FROM bookings WHERE teacher_id = ? AND status != 'cancelled'
+    ORDER BY date ASC, time ASC
+  `).all(teacherId);
+
+  const summary = db.prepare(`
+    SELECT
+      COUNT(CASE WHEN status = 'done' AND strftime('%Y-%m', date) = strftime('%Y-%m', 'now') THEN 1 END) AS lessonsThisMonth,
+      COALESCE(SUM(CASE WHEN strftime('%Y-%m', date) = strftime('%Y-%m', 'now') THEN collected_amount ELSE 0 END), 0) AS collectedThisMonth
+    FROM bookings WHERE teacher_id = ? AND status != 'cancelled'
+  `).get(teacherId);
+
+  res.json({ success: true, teacher, bookings, summary });
+});
+
+// تسجيل مبلغ محصّل من طالب عن حجز معيّن - يتحقق إن الحجز فعلاً يخص هذا المعلم
+app.put('/api/teacher/:teacherId/bookings/:bookingId/collect', (req, res) => {
+  const { teacherId, bookingId } = req.params;
+  const amount = parseInt(req.body.collected_amount, 10);
+
+  if (isNaN(amount) || amount < 0) {
+    return res.json({ success: false, message: 'يرجى إدخال مبلغ صحيح' });
+  }
+
+  const booking = db.prepare('SELECT * FROM bookings WHERE id = ?').get(bookingId);
+  if (!booking) {
+    return res.json({ success: false, message: 'هذا الحجز غير موجود' });
+  }
+  if (String(booking.teacher_id) !== String(teacherId)) {
+    return res.status(403).json({ success: false, message: 'غير مصرح لك بتعديل هذا الحجز' });
+  }
+
+  db.prepare('UPDATE bookings SET collected_amount = ? WHERE id = ?').run(amount, bookingId);
+  res.json({ success: true });
+});
+
+// تحديد حجز كـ "تم" من طرف المعلم - يتحقق إن الحجز فعلاً يخصه
+app.put('/api/teacher/:teacherId/bookings/:bookingId/complete', (req, res) => {
+  const { teacherId, bookingId } = req.params;
+
+  const booking = db.prepare('SELECT * FROM bookings WHERE id = ?').get(bookingId);
+  if (!booking) {
+    return res.json({ success: false, message: 'هذا الحجز غير موجود' });
+  }
+  if (String(booking.teacher_id) !== String(teacherId)) {
+    return res.status(403).json({ success: false, message: 'غير مصرح لك بتعديل هذا الحجز' });
+  }
+
+  db.prepare("UPDATE bookings SET status = 'done' WHERE id = ?").run(bookingId);
+  res.json({ success: true });
 });
 
 // إنشاء حجز جديد

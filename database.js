@@ -31,6 +31,30 @@ try {
   // العمود موجود أصلاً، عادي
 }
 
+// نضيف عمود المبلغ اللي قبضه المعلم عن هالحجز لو مش موجود
+try {
+  db.exec('ALTER TABLE bookings ADD COLUMN collected_amount INTEGER DEFAULT 0');
+  console.log('تمت إضافة عمود المبلغ المحصّل ✅');
+} catch (e) {
+  // العمود موجود أصلاً، عادي
+}
+
+// نضيف عمود رقم موبايل المعلم لو مش موجود (يستخدم لتسجيل الدخول)
+try {
+  db.exec('ALTER TABLE teachers ADD COLUMN phone TEXT');
+  console.log('تمت إضافة عمود موبايل المعلم ✅');
+} catch (e) {
+  // العمود موجود أصلاً، عادي
+}
+
+// نضيف عمود كلمة مرور المعلم (مشفّرة بـ bcrypt) لو مش موجود
+try {
+  db.exec('ALTER TABLE teachers ADD COLUMN password TEXT');
+  console.log('تمت إضافة عمود كلمة مرور المعلم ✅');
+} catch (e) {
+  // العمود موجود أصلاً، عادي
+}
+
 // جدول الطلاب
 db.exec(`
   CREATE TABLE IF NOT EXISTS students (
