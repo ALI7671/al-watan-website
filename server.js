@@ -42,6 +42,63 @@ app.post('/api/bookings', (req, res) => {
 
   res.json({ success: true, bookingId: result.lastInsertRowid, price });
 });
+
+// حجز درس مع إنشاء حساب تلقائي لزائر غير مسجل من الصفحة الرئيسية
+app.post('/api/bookings/signup', async (req, res) => {
+  const { name, phone, license_type, password, teacher_id, lesson_type, date, time } = req.body;
+
+  if (!name || !phone || !license_type || !password || !teacher_id || !date || !time) {
+    return res.json({ success: false, message: 'يرجى تعبئة جميع الحقول' });
+  }
+  if (password.length < MIN_PASSWORD_LENGTH) {
+    return res.json({ success: false, message: `كلمة المرور يجب أن تكون ${MIN_PASSWORD_LENGTH} أحرف على الأقل` });
+  }
+
+  const existing = db.prepare('SELECT * FROM students WHERE phone = ?').get(phone);
+  if (existing) {
+    return res.json({ success: false, existingAccount: true, message: 'هذا الرقم مسجّل عندنا، سجّل دخولك عشان تكمل الحجز' });
+  }
+
+  // نتأكد إذا المعلم محجوز بنفس الوقت (نتجاهل الحجوزات الملغاة)
+  const conflict = db.prepare(
+    "SELECT * FROM bookings WHERE teacher_id = ? AND date = ? AND time = ? AND status != 'cancelled'"
+  ).get(teacher_id, date, time);
+  if (conflict) {
+    return res.json({ success: false, message: 'هذا المعلم محجوز بهذا الموعد، اختر وقت ثاني' });
+  }
+
+  const passwordHash = await bcrypt.hash(password, BCRYPT_ROUNDS);
+  const price = lesson_type === 'heavy' ? 130 : 110;
+
+  const createStudentAndBooking = db.transaction(() => {
+    const studentResult = db.prepare(
+      'INSERT INTO students (name, phone, license_type, password) VALUES (?, ?, ?, ?)'
+    ).run(name, phone, license_type, passwordHash);
+
+    const bookingResult = db.prepare(`
+      INSERT INTO bookings (teacher_id, student_name, lesson_type, date, time, price)
+      VALUES (?, ?, ?, ?, ?, ?)
+    `).run(teacher_id, name, lesson_type, date, time, price);
+
+    return { studentId: studentResult.lastInsertRowid, bookingId: bookingResult.lastInsertRowid };
+  });
+
+  let studentId, bookingId;
+  try {
+    ({ studentId, bookingId } = createStudentAndBooking());
+  } catch (e) {
+    if (String(e.message).includes('UNIQUE')) {
+      return res.json({ success: false, existingAccount: true, message: 'هذا الرقم مسجّل عندنا، سجّل دخولك عشان تكمل الحجز' });
+    }
+    throw e;
+  }
+
+  const student = db.prepare('SELECT * FROM students WHERE id = ?').get(studentId);
+  delete student.password;
+
+  res.json({ success: true, student, bookingId, price });
+});
+
   // ترجع كل الحجوزات (مع اسم المعلم)
 app.get('/api/bookings', (req, res) => {
   const bookings = db.prepare(`

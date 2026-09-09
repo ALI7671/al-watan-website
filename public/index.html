@@ -649,6 +649,8 @@
     background: var(--paper-dim); border-radius: 10px; padding: 10px 12px;
   }
   .booking-locked-hint.show { display: flex; }
+  .field-hint { font-weight: 600; color: var(--ink-soft); opacity: .75; font-size: 11.5px; }
+  .hidden-field { display: none; }
 
   #cars, #license-steps, #lesson-booking, #theory-request, #test-request { scroll-margin-top: 90px; }
 
@@ -888,15 +890,23 @@
     <div class="grid-2col">
       <div class="card">
         <h2 style="margin:0 0 14px; font-size:15px;">احجز درسك</h2>
+        <div class="booking-locked-hint" id="bookingLockedHint">🔒 معبّى تلقائياً من حسابك</div>
         <label>اسمك</label>
         <input type="text" id="studentName" placeholder="مثال: محمد أحمد">
-        <div class="booking-locked-hint" id="bookingLockedHint">🔒 معبّى تلقائياً من حسابك</div>
+        <div id="bookingPhoneWrap">
+          <label>رقم الموبايل</label>
+          <input type="tel" id="studentPhone" placeholder="0599123456">
+        </div>
         <label>نوع الرخصة</label>
         <select id="lessonType" onchange="updatePrice()">
           <option value="automatic">أوتوماتيك</option>
           <option value="manual">جير</option>
           <option value="heavy">شحن خفيف</option>
         </select>
+        <div id="bookingPasswordWrap">
+          <label>كلمة المرور <span class="field-hint">(لإنشاء حسابك)</span></label>
+          <input type="password" id="studentPassword" placeholder="6 أحرف على الأقل">
+        </div>
         <label>المعلم</label>
         <select id="teacherSelect"><option>جاري التحميل...</option></select>
         <label>التاريخ</label>
@@ -933,17 +943,14 @@
   <svg viewBox="0 0 32 32" fill="#fff"><path d="M16.001 3C9.373 3 4 8.373 4 15c0 2.51.79 4.84 2.14 6.76L4.6 28.4l6.79-1.5A11.9 11.9 0 0 0 16 27c6.628 0 12-5.373 12-12S22.629 3 16.001 3zm0 21.6c-1.85 0-3.58-.5-5.07-1.37l-.36-.21-4.03.89.9-3.92-.24-.37A9.56 9.56 0 0 1 5.4 15c0-5.85 4.76-10.6 10.6-10.6S26.6 9.15 26.6 15 21.85 24.6 16 24.6zm5.83-7.94c-.32-.16-1.89-.93-2.18-1.04-.29-.11-.5-.16-.72.16-.21.32-.82 1.04-1 1.25-.19.21-.37.24-.68.08-.32-.16-1.34-.49-2.55-1.57-.94-.84-1.58-1.87-1.76-2.19-.19-.32-.02-.49.14-.65.14-.14.32-.37.48-.55.16-.19.21-.32.32-.53.11-.21.05-.4-.03-.55-.08-.16-.72-1.74-.99-2.38-.26-.62-.53-.54-.72-.55h-.61c-.21 0-.55.08-.84.4-.29.32-1.1 1.08-1.1 2.63 0 1.55 1.13 3.05 1.29 3.26.16.21 2.22 3.39 5.38 4.75.75.32 1.34.52 1.79.66.75.24 1.44.21 1.98.13.6-.09 1.89-.77 2.16-1.51.27-.75.27-1.39.19-1.52-.08-.14-.29-.21-.61-.37z"/></svg>
 </a>
 
-<!-- نافذة تنبيه تسجيل الدخول قبل حجز الدرس -->
+<!-- نافذة تنبيه عامة (مثلاً: الرقم مسجّل مسبقاً) -->
 <div class="auth-gate-overlay" id="authGateOverlay">
   <div class="auth-gate-card">
     <button type="button" class="auth-gate-close" onclick="closeAuthGate()" aria-label="إغلاق">✕</button>
-    <div class="auth-gate-icon">🔒</div>
-    <h3>لازم تسجل دخول الأول</h3>
-    <p>لازم تعمل حساب أول عشان تقدر تحجز درسك وتتابع مواعيدك ودفعاتك</p>
-    <div class="auth-gate-actions">
-      <a href="/register.html?redirect=lesson-booking" class="btn-gold">إنشاء حساب</a>
-      <a href="/login.html?redirect=lesson-booking" class="auth-gate-btn-outline">تسجيل دخول</a>
-    </div>
+    <div class="auth-gate-icon" id="authGateIcon">🔒</div>
+    <h3 id="authGateTitle">لازم تسجل دخول الأول</h3>
+    <p id="authGateMessage">لازم تعمل حساب أول عشان تقدر تحجز درسك وتتابع مواعيدك ودفعاتك</p>
+    <div class="auth-gate-actions" id="authGateActions"></div>
   </div>
 </div>
 
@@ -963,27 +970,48 @@ function navStudentLogout(e) {
   window.location.href = '/';
   return false;
 }
-(function() {
-  const studentRaw = sessionStorage.getItem('student');
-  const isLoggedIn = !!studentRaw;
+function updateAuthNav() {
+  const isLoggedIn = !!sessionStorage.getItem('student');
   document.getElementById('navLogin')?.classList.toggle('nav-hidden', isLoggedIn);
   document.getElementById('navAccount')?.classList.toggle('nav-hidden', !isLoggedIn);
   document.getElementById('navLogout')?.classList.toggle('nav-hidden', !isLoggedIn);
+}
 
-  if (isLoggedIn) {
-    try {
-      const student = JSON.parse(studentRaw);
-      const nameInput = document.getElementById('studentName');
-      if (nameInput && student.name) {
-        nameInput.value = student.name;
-        nameInput.readOnly = true;
-        document.getElementById('bookingLockedHint')?.classList.add('show');
-      }
-    } catch (e) {}
+function applyLoggedInBookingForm(student) {
+  const nameInput = document.getElementById('studentName');
+  const phoneInput = document.getElementById('studentPhone');
+  if (nameInput && student.name) {
+    nameInput.value = student.name;
+    nameInput.readOnly = true;
+  }
+  if (phoneInput && student.phone) {
+    phoneInput.value = student.phone;
+    phoneInput.readOnly = true;
+  }
+  document.getElementById('bookingPasswordWrap')?.classList.add('hidden-field');
+  document.getElementById('bookingLockedHint')?.classList.add('show');
+}
+
+function resetBookingFormToGuestMode() {
+  document.getElementById('bookingPasswordWrap')?.classList.remove('hidden-field');
+  document.getElementById('bookingLockedHint')?.classList.remove('show');
+}
+
+(function() {
+  updateAuthNav();
+  const studentRaw = sessionStorage.getItem('student');
+  if (studentRaw) {
+    try { applyLoggedInBookingForm(JSON.parse(studentRaw)); } catch (e) {}
   }
 })();
 
-function openAuthGate() {
+function showAuthGate({ icon = '🔒', title, message, actions = [] }) {
+  document.getElementById('authGateIcon').textContent = icon;
+  document.getElementById('authGateTitle').textContent = title;
+  document.getElementById('authGateMessage').textContent = message;
+  document.getElementById('authGateActions').innerHTML = actions
+    .map(a => `<a href="${a.href}" class="${a.className}">${a.label}</a>`)
+    .join('');
   document.getElementById('authGateOverlay')?.classList.add('show');
 }
 function closeAuthGate() {
@@ -1003,6 +1031,22 @@ function showWhatsAppConfirm(boxId, message) {
     <a class="wa-confirm-btn" href="${url}" target="_blank" rel="noopener">
       ${WA_ICON_SVG} أكّد حجزك عبر واتساب
     </a>`;
+  box.classList.add('show');
+}
+
+function showBookingSuccess(boxId, message, opts = {}) {
+  const box = document.getElementById(boxId);
+  const url = `https://wa.me/${WA_PHONE}?text=${encodeURIComponent(message)}`;
+  const title = opts.accountCreated ? 'تم حجز درسك وإنشاء حسابك بنجاح!' : 'تم الحجز بنجاح!';
+  const dashboardBtn = opts.accountCreated
+    ? `<a href="/dashboard.html" class="btn-gold" style="display:block;text-align:center;text-decoration:none;margin-top:10px;">روح لحسابي</a>`
+    : '';
+  box.innerHTML = `
+    <div class="success-text">✅ ${title}</div>
+    <a class="wa-confirm-btn" href="${url}" target="_blank" rel="noopener">
+      ${WA_ICON_SVG} أكّد حجزك عبر واتساب
+    </a>
+    ${dashboardBtn}`;
   box.classList.add('show');
 }
 
@@ -1264,11 +1308,7 @@ async function loadTeachers() {
 const LESSON_TYPE_LABELS = { automatic: 'أوتوماتيك', manual: 'جير', heavy: 'شحن خفيف' };
 
 async function submitBooking() {
-  if (!sessionStorage.getItem('student')) {
-    openAuthGate();
-    return;
-  }
-
+  const isLoggedIn = !!sessionStorage.getItem('student');
   const student_name = document.getElementById('studentName').value.trim();
   const lesson_type = document.getElementById('lessonType').value;
   const teacherSelect = document.getElementById('teacherSelect');
@@ -1282,20 +1322,61 @@ async function submitBooking() {
     return;
   }
 
-  const res = await fetch('/api/bookings', {
+  const typeLabel = LESSON_TYPE_LABELS[lesson_type] || lesson_type;
+  const message = `مرحبا، أنا ${student_name} حجزت درس ${typeLabel} مع المعلم ${teacher_name} بتاريخ ${date} الساعة ${time}. بدي أأكد الحجز.`;
+
+  if (isLoggedIn) {
+    const res = await fetch('/api/bookings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ teacher_id, student_name, lesson_type, date, time })
+    });
+
+    const result = await res.json();
+    if (result.success) {
+      showToast('تم الحجز بنجاح!');
+      showBookingSuccess('lessonSuccessBox', message);
+    } else {
+      showToast(result.message || 'حدث خطأ أثناء الحجز');
+    }
+    return;
+  }
+
+  // زائر غير مسجل: ننشئ له حساب ونربط الحجز فيه بنفس الخطوة
+  const phone = document.getElementById('studentPhone').value.trim();
+  const password = document.getElementById('studentPassword').value;
+
+  if (!phone || !password) {
+    showToast('يرجى تعبئة رقم الموبايل وكلمة المرور');
+    return;
+  }
+  if (password.length < 6) {
+    showToast('كلمة المرور يجب أن تكون 6 أحرف على الأقل');
+    return;
+  }
+
+  const res = await fetch('/api/bookings/signup', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ teacher_id, student_name, lesson_type, date, time })
+    body: JSON.stringify({ name: student_name, phone, license_type: lesson_type, password, teacher_id, lesson_type, date, time })
   });
 
   const result = await res.json();
+
   if (result.success) {
-    showToast('تم الحجز بنجاح!');
-    const typeLabel = LESSON_TYPE_LABELS[lesson_type] || lesson_type;
-    const message = `مرحبا، أنا ${student_name} حجزت درس ${typeLabel} مع المعلم ${teacher_name} بتاريخ ${date} الساعة ${time}. بدي أأكد الحجز.`;
-    showWhatsAppConfirm('lessonSuccessBox', message);
+    sessionStorage.setItem('student', JSON.stringify(result.student));
+    updateAuthNav();
+    applyLoggedInBookingForm(result.student);
+    showBookingSuccess('lessonSuccessBox', message, { accountCreated: true });
+  } else if (result.existingAccount) {
+    showAuthGate({
+      icon: '📱',
+      title: 'الرقم مسجّل مسبقاً',
+      message: result.message,
+      actions: [{ href: '/login.html?redirect=lesson-booking', className: 'btn-gold', label: 'تسجيل دخول' }]
+    });
   } else {
-    showToast('حدث خطأ أثناء الحجز');
+    showToast(result.message || 'حدث خطأ أثناء الحجز');
   }
 }
 
