@@ -213,7 +213,7 @@
 
       <button onclick="login()">دخول</button>
 
-      <p class="switch-link">ليس لديك حساب؟ <a href="/register.html">سجّل الآن</a></p>
+      <p class="switch-link">ليس لديك حساب؟ <a href="/register.html" id="registerLink">سجّل الآن</a></p>
     </div>
 
     <div id="setupForm" style="display:none;">
@@ -241,6 +241,19 @@ revealEls.forEach(el => revealIO.observe(el));
 
 let pendingPhone = '';
 
+function getPostAuthUrl() {
+  const redirect = new URLSearchParams(window.location.search).get('redirect');
+  return redirect === 'lesson-booking' ? '/#lesson-booking' : '/dashboard.html';
+}
+
+(function() {
+  const redirect = new URLSearchParams(window.location.search).get('redirect');
+  if (redirect) {
+    const link = document.getElementById('registerLink');
+    if (link) link.href = `/register.html?redirect=${encodeURIComponent(redirect)}`;
+  }
+})();
+
 async function login() {
   const phone = document.getElementById('loginPhone').value.trim();
   const password = document.getElementById('loginPassword').value;
@@ -267,7 +280,7 @@ async function login() {
 
   if (result.success) {
     sessionStorage.setItem('student', JSON.stringify(result.student));
-    window.location.href = '/dashboard.html';
+    window.location.href = getPostAuthUrl();
     return;
   }
 
@@ -310,7 +323,7 @@ async function setupPassword() {
 
   if (result.success) {
     sessionStorage.setItem('student', JSON.stringify(result.student));
-    window.location.href = '/dashboard.html';
+    window.location.href = getPostAuthUrl();
   } else {
     msgEl.className = 'msg error';
     msgEl.textContent = result.message;

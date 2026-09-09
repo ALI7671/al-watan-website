@@ -600,6 +600,56 @@
 
   .grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 
+  /* ===== نافذة "لازم تسجل دخول" لحجز الدرس ===== */
+  .auth-gate-overlay {
+    display: none;
+    position: fixed; inset: 0; z-index: 2000;
+    background: rgba(27,33,38,.72);
+    backdrop-filter: blur(3px);
+    align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .auth-gate-overlay.show { display: flex; }
+  .auth-gate-card {
+    background: #fff;
+    border: 2.5px solid var(--route);
+    border-radius: 22px;
+    padding: 38px 28px 30px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 30px 70px rgba(0,0,0,.45), 0 0 0 6px rgba(233,185,62,.12);
+    position: relative;
+    animation: authGatePop .35s cubic-bezier(.2,.8,.2,1);
+  }
+  @keyframes authGatePop { from { opacity: 0; transform: translateY(18px) scale(.96); } to { opacity: 1; transform: none; } }
+  .auth-gate-icon {
+    width: 60px; height: 60px; border-radius: 50%; margin: 0 auto 16px;
+    background: var(--route); display: flex; align-items: center; justify-content: center;
+    font-size: 26px; box-shadow: 0 12px 28px rgba(233,185,62,.4);
+  }
+  .auth-gate-card h3 { margin: 0 0 10px; font-size: 18px; font-weight: 900; color: var(--ink); }
+  .auth-gate-card p { margin: 0 0 24px; font-size: 14.5px; font-weight: 700; color: var(--ink-soft); line-height: 1.8; }
+  .auth-gate-actions { display: flex; gap: 10px; }
+  .auth-gate-actions .btn-gold, .auth-gate-actions .auth-gate-btn-outline { flex: 1; }
+  .auth-gate-btn-outline {
+    background: #fff; color: var(--ink); border: 1.5px solid var(--line); border-radius: 13px;
+    padding: 16px 10px; font-size: 14.5px; font-weight: 800; text-decoration: none;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .2s ease;
+  }
+  .auth-gate-btn-outline:hover { border-color: var(--route); color: var(--route); background: rgba(233,185,62,.08); }
+  .auth-gate-close {
+    position: absolute; top: 12px; left: 14px; background: none; border: none; font-size: 20px;
+    color: var(--ink-soft); cursor: pointer; line-height: 1; padding: 4px;
+  }
+  .booking-locked-hint {
+    display: none; align-items: center; gap: 8px; margin: -6px 0 16px;
+    font-size: 12.5px; font-weight: 700; color: var(--ink-soft);
+    background: var(--paper-dim); border-radius: 10px; padding: 10px 12px;
+  }
+  .booking-locked-hint.show { display: flex; }
+
   #cars, #license-steps, #lesson-booking, #theory-request, #test-request { scroll-margin-top: 90px; }
 
   footer {
@@ -840,6 +890,7 @@
         <h2 style="margin:0 0 14px; font-size:15px;">احجز درسك</h2>
         <label>اسمك</label>
         <input type="text" id="studentName" placeholder="مثال: محمد أحمد">
+        <div class="booking-locked-hint" id="bookingLockedHint">🔒 معبّى تلقائياً من حسابك</div>
         <label>نوع الرخصة</label>
         <select id="lessonType" onchange="updatePrice()">
           <option value="automatic">أوتوماتيك</option>
@@ -882,6 +933,20 @@
   <svg viewBox="0 0 32 32" fill="#fff"><path d="M16.001 3C9.373 3 4 8.373 4 15c0 2.51.79 4.84 2.14 6.76L4.6 28.4l6.79-1.5A11.9 11.9 0 0 0 16 27c6.628 0 12-5.373 12-12S22.629 3 16.001 3zm0 21.6c-1.85 0-3.58-.5-5.07-1.37l-.36-.21-4.03.89.9-3.92-.24-.37A9.56 9.56 0 0 1 5.4 15c0-5.85 4.76-10.6 10.6-10.6S26.6 9.15 26.6 15 21.85 24.6 16 24.6zm5.83-7.94c-.32-.16-1.89-.93-2.18-1.04-.29-.11-.5-.16-.72.16-.21.32-.82 1.04-1 1.25-.19.21-.37.24-.68.08-.32-.16-1.34-.49-2.55-1.57-.94-.84-1.58-1.87-1.76-2.19-.19-.32-.02-.49.14-.65.14-.14.32-.37.48-.55.16-.19.21-.32.32-.53.11-.21.05-.4-.03-.55-.08-.16-.72-1.74-.99-2.38-.26-.62-.53-.54-.72-.55h-.61c-.21 0-.55.08-.84.4-.29.32-1.1 1.08-1.1 2.63 0 1.55 1.13 3.05 1.29 3.26.16.21 2.22 3.39 5.38 4.75.75.32 1.34.52 1.79.66.75.24 1.44.21 1.98.13.6-.09 1.89-.77 2.16-1.51.27-.75.27-1.39.19-1.52-.08-.14-.29-.21-.61-.37z"/></svg>
 </a>
 
+<!-- نافذة تنبيه تسجيل الدخول قبل حجز الدرس -->
+<div class="auth-gate-overlay" id="authGateOverlay">
+  <div class="auth-gate-card">
+    <button type="button" class="auth-gate-close" onclick="closeAuthGate()" aria-label="إغلاق">✕</button>
+    <div class="auth-gate-icon">🔒</div>
+    <h3>لازم تسجل دخول الأول</h3>
+    <p>لازم تعمل حساب أول عشان تقدر تحجز درسك وتتابع مواعيدك ودفعاتك</p>
+    <div class="auth-gate-actions">
+      <a href="/register.html?redirect=lesson-booking" class="btn-gold">إنشاء حساب</a>
+      <a href="/login.html?redirect=lesson-booking" class="auth-gate-btn-outline">تسجيل دخول</a>
+    </div>
+  </div>
+</div>
+
 <script>
 document.getElementById('lessonDate').min = new Date().toISOString().split('T')[0];
 
@@ -899,11 +964,34 @@ function navStudentLogout(e) {
   return false;
 }
 (function() {
-  const isLoggedIn = !!sessionStorage.getItem('student');
+  const studentRaw = sessionStorage.getItem('student');
+  const isLoggedIn = !!studentRaw;
   document.getElementById('navLogin')?.classList.toggle('nav-hidden', isLoggedIn);
   document.getElementById('navAccount')?.classList.toggle('nav-hidden', !isLoggedIn);
   document.getElementById('navLogout')?.classList.toggle('nav-hidden', !isLoggedIn);
+
+  if (isLoggedIn) {
+    try {
+      const student = JSON.parse(studentRaw);
+      const nameInput = document.getElementById('studentName');
+      if (nameInput && student.name) {
+        nameInput.value = student.name;
+        nameInput.readOnly = true;
+        document.getElementById('bookingLockedHint')?.classList.add('show');
+      }
+    } catch (e) {}
+  }
 })();
+
+function openAuthGate() {
+  document.getElementById('authGateOverlay')?.classList.add('show');
+}
+function closeAuthGate() {
+  document.getElementById('authGateOverlay')?.classList.remove('show');
+}
+document.getElementById('authGateOverlay')?.addEventListener('click', (e) => {
+  if (e.target.id === 'authGateOverlay') closeAuthGate();
+});
 
 const WA_ICON_SVG = '<svg viewBox="0 0 32 32" fill="#fff"><path d="M16.001 3C9.373 3 4 8.373 4 15c0 2.51.79 4.84 2.14 6.76L4.6 28.4l6.79-1.5A11.9 11.9 0 0 0 16 27c6.628 0 12-5.373 12-12S22.629 3 16.001 3zm0 21.6c-1.85 0-3.58-.5-5.07-1.37l-.36-.21-4.03.89.9-3.92-.24-.37A9.56 9.56 0 0 1 5.4 15c0-5.85 4.76-10.6 10.6-10.6S26.6 9.15 26.6 15 21.85 24.6 16 24.6zm5.83-7.94c-.32-.16-1.89-.93-2.18-1.04-.29-.11-.5-.16-.72.16-.21.32-.82 1.04-1 1.25-.19.21-.37.24-.68.08-.32-.16-1.34-.49-2.55-1.57-.94-.84-1.58-1.87-1.76-2.19-.19-.32-.02-.49.14-.65.14-.14.32-.37.48-.55.16-.19.21-.32.32-.53.11-.21.05-.4-.03-.55-.08-.16-.72-1.74-.99-2.38-.26-.62-.53-.54-.72-.55h-.61c-.21 0-.55.08-.84.4-.29.32-1.1 1.08-1.1 2.63 0 1.55 1.13 3.05 1.29 3.26.16.21 2.22 3.39 5.38 4.75.75.32 1.34.52 1.79.66.75.24 1.44.21 1.98.13.6-.09 1.89-.77 2.16-1.51.27-.75.27-1.39.19-1.52-.08-.14-.29-.21-.61-.37z"/></svg>';
 
@@ -1176,6 +1264,11 @@ async function loadTeachers() {
 const LESSON_TYPE_LABELS = { automatic: 'أوتوماتيك', manual: 'جير', heavy: 'شحن خفيف' };
 
 async function submitBooking() {
+  if (!sessionStorage.getItem('student')) {
+    openAuthGate();
+    return;
+  }
+
   const student_name = document.getElementById('studentName').value.trim();
   const lesson_type = document.getElementById('lessonType').value;
   const teacherSelect = document.getElementById('teacherSelect');

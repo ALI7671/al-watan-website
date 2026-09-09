@@ -215,7 +215,7 @@
 
     <button onclick="register()">إنشاء الحساب</button>
 
-    <p class="switch-link">عندك حساب أصلاً؟ <a href="/login.html">سجّل دخولك</a></p>
+    <p class="switch-link">عندك حساب أصلاً؟ <a href="/login.html" id="loginLink">سجّل دخولك</a></p>
   </div>
 </div>
 
@@ -227,6 +227,19 @@ const revealIO = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.12 });
 revealEls.forEach(el => revealIO.observe(el));
+
+function getPostAuthUrl() {
+  const redirect = new URLSearchParams(window.location.search).get('redirect');
+  return redirect === 'lesson-booking' ? '/#lesson-booking' : '/dashboard.html';
+}
+
+(function() {
+  const redirect = new URLSearchParams(window.location.search).get('redirect');
+  if (redirect) {
+    const link = document.getElementById('loginLink');
+    if (link) link.href = `/login.html?redirect=${encodeURIComponent(redirect)}`;
+  }
+})();
 
 async function register() {
   const name = document.getElementById('regName').value.trim();
@@ -262,7 +275,7 @@ async function register() {
 
   if (result.success) {
     sessionStorage.setItem('student', JSON.stringify(result.student));
-    window.location.href = '/dashboard.html';
+    window.location.href = getPostAuthUrl();
   } else {
     msgEl.className = 'msg error';
     msgEl.textContent = result.message;
