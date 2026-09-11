@@ -1,5 +1,14 @@
+const fs = require('fs');
+const path = require('path');
 const Database = require('better-sqlite3');
-const db = new Database('alwatan.db');
+
+// على Render نستخدم الـ Persistent Disk (مونت على /var/data) حتى تضل قاعدة
+// البيانات موجودة بعد كل نشر جديد. محليًا (أو لو الديسك مش موجود) نستخدم ملف بجانب المشروع.
+const PERSISTENT_DIR = '/var/data';
+const dbDir = fs.existsSync(PERSISTENT_DIR) ? PERSISTENT_DIR : __dirname;
+const dbPath = path.join(dbDir, 'alwatan.db');
+
+const db = new Database(dbPath);
 
 // جدول المعلمين
 db.exec(`
