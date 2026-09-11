@@ -232,13 +232,40 @@
     margin: 0 0 18px;
     color: var(--ink);
   }
+  .q-image-wrap {
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto 18px;
+  }
   .q-image {
     width: 100%;
     max-height: 260px;
     object-fit: contain;
     border-radius: 14px;
-    margin-bottom: 18px;
+    display: block;
+    margin: 0 auto;
     background: var(--paper-dim);
+    box-shadow: var(--shadow-md);
+  }
+  .q-image-placeholder {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 180px;
+    border: 2px dashed var(--line);
+    border-radius: 14px;
+    background: var(--paper-dim);
+    color: var(--ink-soft);
+    text-align: center;
+    padding: 16px;
+  }
+  .q-image-placeholder .ph-icon { font-size: 30px; opacity: .6; }
+  .q-image-placeholder p { margin: 0; font-size: 13px; font-weight: 800; }
+  @media (max-width: 640px) {
+    .q-image-wrap { max-width: 100%; }
+    .q-image-placeholder { height: 150px; }
   }
   .options-list { display: flex; flex-direction: column; gap: 12px; }
   .option-btn {
@@ -455,7 +482,13 @@
       </div>
       <div class="q-card">
         <span class="q-topic" id="qTopic">الموضوع</span>
-        <img class="q-image" id="qImage" style="display:none" alt="صورة السؤال">
+        <div class="q-image-wrap" id="qImageWrap" style="display:none">
+          <img class="q-image" id="qImage" alt="صورة السؤال">
+          <div class="q-image-placeholder" id="qImagePlaceholder">
+            <span class="ph-icon">🚧</span>
+            <p>الصورة قيد الإضافة</p>
+          </div>
+        </div>
         <p class="q-text" id="qText"></p>
         <div class="options-list" id="optionsList"></div>
       </div>
@@ -515,9 +548,10 @@ document.getElementById('navToggle').addEventListener('click', () => {
 
 /* ===================== بيانات ووصف الفئات ===================== */
 const CATEGORIES = [
-  { key: 'private',     file: '/private_questions.json',     icon: '🚘', title: 'خصوصي',     desc: 'رخصة القيادة الخصوصي (B)' },
-  { key: 'light_truck',  file: '/light_truck_questions.json', icon: '🚚', title: 'شحن خفيف',   desc: 'رخصة الشحن الخفيف (C1)' },
-  { key: 'general',      file: null,                            icon: '🚛', title: 'عمومي',      desc: 'قريباً' },
+  { key: 'private',       file: '/private_questions.json',           icon: '🚘', title: 'خصوصي',          desc: 'رخصة القيادة الخصوصي (B)' },
+  { key: 'light_truck',    file: '/light_truck_questions.json',       icon: '🚚', title: 'شحن خفيف',        desc: 'رخصة الشحن الخفيف (C1)' },
+  { key: 'traffic_signs',  file: '/west_bank_sign_questions.json',    icon: '🚦', title: 'إشارات المرور',   desc: 'معنى وتصنيف الشواخص المرورية' },
+  { key: 'general',        file: null,                                icon: '🚛', title: 'عمومي',           desc: 'قريباً' },
 ];
 const QUESTIONS_PER_SET = 30;
 const PASS_THRESHOLD = 0.8; // 80%
@@ -548,7 +582,11 @@ async function loadCategory(cat) {
   const res = await fetch(cat.file);
   if (!res.ok) throw new Error('تعذر تحميل الأسئلة');
   const data = await res.json();
-  questionBank[cat.key] = data.questions || [];
+  questionBank[cat.key] = (data.questions || []).map(q => ({
+    ...q,
+    topic: q.topic || q.category || '',
+    image: q.image ? `/${q.image.replace(/^\.?\//, '')}` : null,
+  }));
   return questionBank[cat.key];
 }
 
@@ -639,12 +677,26 @@ function renderQuestion() {
   document.getElementById('qTopic').textContent = q.topic || '';
   document.getElementById('qText').textContent = q.question;
 
+  const imgWrap = document.getElementById('qImageWrap');
   const imgEl = document.getElementById('qImage');
+  const imgPlaceholder = document.getElementById('qImagePlaceholder');
   if (q.image) {
-    imgEl.src = q.image;
+    imgWrap.style.display = 'block';
     imgEl.style.display = 'block';
+    imgPlaceholder.style.display = 'none';
+    imgEl.onerror = () => {
+      imgEl.style.display = 'none';
+      imgPlaceholder.style.display = 'flex';
+    };
+    imgEl.onload = () => {
+      imgEl.style.display = 'block';
+      imgPlaceholder.style.display = 'none';
+    };
+    imgEl.src = q.image;
   } else {
-    imgEl.style.display = 'none';
+    imgWrap.style.display = 'none';
+    imgEl.onerror = null;
+    imgEl.onload = null;
     imgEl.removeAttribute('src');
   }
 
