@@ -1,842 +1,844 @@
-[
-  {
-    "file": "1.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "2.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "3.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "4.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "5.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "6.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "7.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "8.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "9.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "10.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "11.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "12.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "13.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "14.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "15.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "16.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "17.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "18.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "19.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "20.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "21.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "22.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "23.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "24.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "25.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "26.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "27.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "28.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "29.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "30.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "31.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "32.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "33.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "34.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "35.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "36.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "37.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "38.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "39.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "40.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "41.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "42.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "43.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "44.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "45.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "46.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "47.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "48.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "49.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "50.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "51.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "52.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "53.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "54.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "55.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "56.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "57.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "58.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "59.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "60.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "61.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "62.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "63.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "64.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "65.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "66.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "67.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "68.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "69.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "70.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "71.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "72.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "73.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "74.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "75.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "76.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "77.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "78.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "79.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "80.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "81.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "82.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "83.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "84.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "85.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "86.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "87.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "88.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "89.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "90.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "91.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "92.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "93.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "94.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "95.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "96.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "97.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "98.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "99.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "100.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "101.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "102.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "103.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "104.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "105.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "106.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "107.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "108.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "109.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "110.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "111.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "112.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "113.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "114.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "115.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "116.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "117.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "118.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "119.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "120.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "121.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "122.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "123.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "124.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "125.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "126.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "127.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "128.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "129.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "130.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "131.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "132.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "133.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "134.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "135.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "136.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "137.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "138.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "139.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  },
-  {
-    "file": "140.jpg",
-    "name": "",
-    "meaning": "",
-    "category": ""
-  }
-]
+{
+    "signs":  [
+                  {
+                      "file":  "1.jpg",
+                      "name":  "مطب صناعي أو طريق غير مستوي",
+                      "meaning":  "تحذير من وجود تحدب أو عدم استواء في سطح الطريق",
+                      "category":  "تحذيرية"
+                  },
+                  {
+                      "file":  "2.jpg",
+                      "name":  "منحنى خطير إلى اليمين",
+                      "meaning":  "تحذير من اقتراب منعطف حاد نحو اليمين",
+                      "category":  "تحذيرية"
+                  },
+                  {
+                      "file":  "3.jpg",
+                      "name":  "منحنى خطير إلى اليسار",
+                      "meaning":  "تحذير من اقتراب منعطف حاد نحو اليسار",
+                      "category":  "تحذيرية"
+                  },
+                  {
+                      "file":  "4.jpg",
+                      "name":  "منحنيات مزدوجة (الأول إلى اليمين)",
+                      "meaning":  "تسلسل منعطفات يبدأ باليمين ثم اليسار",
+                      "category":  "تحذيرية"
+                  },
+                  {
+                      "file":  "5.jpg",
+                      "name":  "منحنيات مزدوجة (الأول إلى اليسار)",
+                      "meaning":  "تسلسل منعطفات يبدأ باليسار ثم اليمين",
+                      "category":  "تحذيرية"
+                  },
+                  {
+                      "file":  "6.jpg",
+                      "name":  "طريق متعرج / منعرجات متتالية",
+                      "meaning":  "تحذير من كثرة الانحناءات الخطرة في الطريق",
+                      "category":  "تحذيرية"
+                  },
+                  {
+                      "file":  "7.jpg",
+                      "name":  "منحدر خطير (هبوط حاد)",
+                      "meaning":  "تحذير من نزول حاد يتطلب الحذر واستخدام الغيار المناسب",
+                      "category":  "تحذيرية"
+                  },
+                  {
+                      "file":  "8.jpg",
+                      "name":  "صعود حاد (مرتفع خطر)",
+                      "meaning":  "تحذير من صعود قاسي يؤثر على عزم المركبات",
+                      "category":  "تحذيرية"
+                  },
+                  {
+                      "file":  "9.jpg",
+                      "name":  "طريق زلق عند البلل",
+                      "meaning":  "تحذير من فقدان الإطارات لقوة التماسك في الأجواء الماطرة",
+                      "category":  "تحذيرية"
+                  },
+                  {
+                      "file":  "10.jpg",
+                      "name":  "تقاطع طرق متكافئة",
+                      "meaning":  "تحذير من تقاطع طرق تتساوى فيه الأولوية",
+                      "category":  "تحذيرية"
+                  },
+                  {
+                      "file":  "11.jpg",
+                      "name":  "تقاطع طريق على شكل حرف T",
+                      "meaning":  "تحذير من نهاية الطريق وتفرعه يميناً ويساراً",
+                      "category":  "تحذيرية"
+                  },
+                  {
+                      "file":  "12.jpg",
+                      "name":  "تقاطع طريق على شكل حرف Y",
+                      "meaning":  "تحذير من تفرع الطريق باتجاهين",
+                      "category":  "تحذيرية"
+                  },
+                  {
+                      "file":  "13.jpg",
+                      "name":  "تقاطع مع طريق فرعي جانبي",
+                      "meaning":  "تحذير من اندماج طريق فرعي بالجانب",
+                      "category":  "تحذيرية"
+                  },
+                  {
+                      "file":  "14.jpg",
+                      "name":  "دوار أمامي",
+                      "meaning":  "تحذير من اقتراب تقاطع ينظم حركة المرور بنظام الدوار",
+                      "category":  "تحذيرية"
+                  },
+                  {
+                      "file":  "15.jpg",
+                      "name":  "إشارات ضوئية أمامية",
+                      "meaning":  "تحذير من وجود إشارات مرور ضوئية قادمة",
+                      "category":  "تحذيرية"
+                  },
+                  {
+                      "file":  "16.jpg",
+                      "name":  "عبور مشاة / أطفال",
+                      "meaning":  "تحذير من احتمال وجود حركة مشاة أو عبور أطفال",
+                      "category":  "تحذيرية"
+                  },
+                  {
+                      "file":  "17.jpg",
+                      "name":  "أشغال في الطريق",
+                      "meaning":  "تحذير من وجود عمال وآليات تعمل في حرم الطريق",
+                      "category":  "تحذيرية"
+                  },
+                  {
+                      "file":  "18.jpg",
+                      "name":  "مرور دراجات هوائية",
+                      "meaning":  "تحذير من احتمال تواجد دراجات هوائية",
+                      "category":  "تحذيرية"
+                  },
+                  {
+                      "file":  "19.jpg",
+                      "name":  "تساقط صخور",
+                      "meaning":  "تحذير من احتمالية سقوط صخور من الجوانب المرتفعة",
+                      "category":  "تحذيرية"
+                  },
+                  {
+                      "file":  "20.jpg",
+                      "name":  "طريق ضيق من الجانبين",
+                      "meaning":  "تحذير من تضيق عرض الطريق من اليمين واليسار معاً",
+                      "category":  "تحذيرية"
+                  },
+                  {
+                      "file":  "21.jpg",
+                      "name":  "تضيق الطريق من اليمين",
+                      "meaning":  "تحذير من انكماش عرض الطريق من جهة اليمين",
+                      "category":  "تحذيرية"
+                  },
+                  {
+                      "file":  "22.jpg",
+                      "name":  "تضيق الطريق من اليسار",
+                      "meaning":  "تحذير من انكماش عرض الطريق من جهة اليسار",
+                      "category":  "تحذيرية"
+                  },
+                  {
+                      "file":  "23.jpg",
+                      "name":  "جسر متحرك",
+                      "meaning":  "تحذير من اقتراب جسر قابل للفتح والإغلاق لعبور السفن",
+                      "category":  "تحذيرية"
+                  },
+                  {
+                      "file":  "24.jpg",
+                      "name":  "نهاية الطريق بمياه",
+                      "meaning":  "تحذير من أن الطريق ينتهي عند رصيف بحري أو نهر",
+                      "category":  "تحذيرية"
+                  },
+                  {
+                      "file":  "25.jpg",
+                      "name":  "تطاير حصى",
+                      "meaning":  "تحذير من خطر تناثر الحصى والحجارة الصغيرة تحت الإطارات",
+                      "category":  "تحذيرية"
+                  },
+                  {
+                      "file":  "26.jpg",
+                      "name":  "عبور حيوانات أليفة (ماشية)",
+                      "meaning":  "تحذير من احتمال عبور حيوانات للمزرعة",
+                      "category":  "تحذيرية"
+                  },
+                  {
+                      "file":  "27.jpg",
+                      "name":  "عبور حيوانات برية",
+                      "meaning":  "تحذير من تواجد حيوانات برية أو غزلان",
+                      "category":  "تحذيرية"
+                  },
+                  {
+                      "file":  "28.jpg",
+                      "name":  "منطقة مدارس",
+                      "meaning":  "تحذير خاص بوجود مدرسة ومكان تجمع أطفال",
+                      "category":  "تحذيرية"
+                  },
+                  {
+                      "file":  "29.jpg",
+                      "name":  "طريق ذو اتجاهين",
+                      "meaning":  "تحذير من الانتقال من طريق باتجاه واحد إلى طريق ذي اتجاهين",
+                      "category":  "تحذيرية"
+                  },
+                  {
+                      "file":  "30.jpg",
+                      "name":  "تحليق طائرات منخفضة",
+                      "meaning":  "تحذير من مرور طائرات على ارتفاع منخفض بالقرب من المطارات",
+                      "category":  "تحذيرية"
+                  },
+                  {
+                      "file":  "31.jpg",
+                      "name":  "انتبه خطر (أخطار متنوعة)",
+                      "meaning":  "تحذير عام بوجود خطر غير مصنف بإشارة محددة",
+                      "category":  "تحذيرية"
+                  },
+                  {
+                      "file":  "32.jpg",
+                      "name":  "لوحة تحذيرية: تمهل (SLOW)",
+                      "meaning":  "تنبيه لخفض السرعة والاستعداد للتوقف أو الحذر",
+                      "category":  "تحذيرية"
+                  },
+                  {
+                      "file":  "33.jpg",
+                      "name":  "تقاطع طريق رئيسي وفرعي / أولوية",
+                      "meaning":  "تحديد أولوية المرور عند التقاطعات",
+                      "category":  "أولوية"
+                  },
+                  {
+                      "file":  "34.jpg",
+                      "name":  "إشارة تحذيرية تنظيمية خاصة",
+                      "meaning":  "لتنظيم حركة المرور والتوجيه المتقاطع",
+                      "category":  "تنظيمية"
+                  },
+                  {
+                      "file":  "35.jpg",
+                      "name":  "نهاية كافة أنواع المنع",
+                      "meaning":  "إعلان انتهاء العمل بجميع القيود والمنع السابقة",
+                      "category":  "تنظيمية"
+                  },
+                  {
+                      "file":  "36.jpg",
+                      "name":  "ممنوع الدخول",
+                      "meaning":  "إشارة قطعية تحظر دخول أي مركبة من هذا الاتجاه",
+                      "category":  "منع"
+                  },
+                  {
+                      "file":  "37.jpg",
+                      "name":  "ممنوع المرور في الاتجاهين",
+                      "meaning":  "حظر حركة مرور المركبات بالكامل في كلا الاتجاهين",
+                      "category":  "منع"
+                  },
+                  {
+                      "file":  "38.jpg",
+                      "name":  "ممنوع الانعطاف نحو اليسار",
+                      "meaning":  "يحظر الالتفاف أو الاتجاه يساراً",
+                      "category":  "منع"
+                  },
+                  {
+                      "file":  "39.jpg",
+                      "name":  "ممنوع الاستدارة للوراء (U-Turn)",
+                      "meaning":  "يحظر الالتفاف العكسي للخلف",
+                      "category":  "منع"
+                  },
+                  {
+                      "file":  "40.jpg",
+                      "name":  "ممنوع تجاوز المركبات",
+                      "meaning":  "يحظر على المركبات تجاوز بعضها البعض",
+                      "category":  "منع"
+                  },
+                  {
+                      "file":  "41.jpg",
+                      "name":  "نهاية منع التجاوز",
+                      "meaning":  "انتهاء فترة الحظر والسماح بالتجاوز مجدداً",
+                      "category":  "تنظيمية"
+                  },
+                  {
+                      "file":  "42.jpg",
+                      "name":  "ممنوع تجاوز الشاحنات",
+                      "meaning":  "حظر التجاوز خاص بالشاحنات الثقيلة",
+                      "category":  "منع"
+                  },
+                  {
+                      "file":  "43.jpg",
+                      "name":  "نهاية منع تجاوز الشاحنات",
+                      "meaning":  "السماح للشاحنات بالتجاوز مجدداً",
+                      "category":  "تنظيمية"
+                  },
+                  {
+                      "file":  "44.jpg",
+                      "name":  "ممنوع مرور المركبات الآلية المحددة",
+                      "meaning":  "حظر فئات معينة من المركبات",
+                      "category":  "منع"
+                  },
+                  {
+                      "file":  "45.jpg",
+                      "name":  "ممنوع مرور الدراجات النارية",
+                      "meaning":  "حظر دخول الدراجات النارية تماماً",
+                      "category":  "منع"
+                  },
+                  {
+                      "file":  "46.jpg",
+                      "name":  "ممنوع مرور الشاحنات",
+                      "meaning":  "حظر دخول الشاحنات والمركبات الثقيلة",
+                      "category":  "منع"
+                  },
+                  {
+                      "file":  "47.jpg",
+                      "name":  "ممنوع مرور كافة المركبات الآلية",
+                      "meaning":  "طريق مخصص للمشاة فقط أو محظور آلياً",
+                      "category":  "منع"
+                  },
+                  {
+                      "file":  "48.jpg",
+                      "name":  "حد السرعة القصوى",
+                      "meaning":  "تحديد أقصى سرعة مسموحة (حسب الرقم داخل الإشارة)",
+                      "category":  "تنظيمية"
+                  },
+                  {
+                      "file":  "49.jpg",
+                      "name":  "تحديد السرعة أو المسافة",
+                      "meaning":  "قيود تنظيمية للسرعة والمسافات",
+                      "category":  "تنظيمية"
+                  },
+                  {
+                      "file":  "50.jpg",
+                      "name":  "حد السرعة القصوى 30",
+                      "meaning":  "تقييد السرعة بـ 30 كم/س",
+                      "category":  "تنظيمية"
+                  },
+                  {
+                      "file":  "51.jpg",
+                      "name":  "حد السرعة القصوى 50",
+                      "meaning":  "تقييد السرعة بـ 50 كم/س",
+                      "category":  "تنظيمية"
+                  },
+                  {
+                      "file":  "52.jpg",
+                      "name":  "نهاية تحديد السرعة",
+                      "meaning":  "انتهاء منطقة السرعة المقيدة السابقة",
+                      "category":  "تنظيمية"
+                  },
+                  {
+                      "file":  "53.jpg",
+                      "name":  "أولوية المرور للمركبات المقابلة",
+                      "meaning":  "إجبار السائق على إفساح المجال للسيارات القادمة بالاتجاه المعاكس",
+                      "category":  "أولوية"
+                  },
+                  {
+                      "file":  "54.jpg",
+                      "name":  "إشارة تنظيمية مانعة",
+                      "meaning":  "تحظر وقوف أو التوقف المفاجئ في مقطع معين",
+                      "category":  "منع"
+                  },
+                  {
+                      "file":  "55.jpg",
+                      "name":  "ممنوع الوقوف والانتظار نهائياً",
+                      "meaning":  "يحظر التوقف لأي سبب وبأي وقت",
+                      "category":  "منع"
+                  },
+                  {
+                      "file":  "56.jpg",
+                      "name":  "ممنوع الانتظار",
+                      "meaning":  "يسمح بالتوقف المؤقت لإنزال الركاب ولكن يُحظر إيقاف السيارة وتركها",
+                      "category":  "منع"
+                  },
+                  {
+                      "file":  "57.jpg",
+                      "name":  "تنظيم الانتظار حسب الأيام/الفترات",
+                      "meaning":  "تقييد الوقوف بأوقات محددة",
+                      "category":  "تنظيمية"
+                  },
+                  {
+                      "file":  "58.jpg",
+                      "name":  "ممنوع الانتظار (لوحة إضافية)",
+                      "meaning":  "تنظيم فترات الحظر",
+                      "category":  "تنظيمية"
+                  },
+                  {
+                      "file":  "59.jpg",
+                      "name":  "إشارة إجبارية تنظيمية",
+                      "meaning":  "توجيه إلزامي لمسار محدد",
+                      "category":  "إلزامية"
+                  },
+                  {
+                      "file":  "60.jpg",
+                      "name":  "مسار إلزامي / ممر خاص",
+                      "meaning":  "فرض الاتجاه أو الممر على السائقين",
+                      "category":  "إلزامية"
+                  },
+                  {
+                      "file":  "61.jpg",
+                      "name":  "إشارة تنظيمية خاصة",
+                      "meaning":  "تحديد اتجاه ومسار حركة السير",
+                      "category":  "تنظيمية"
+                  },
+                  {
+                      "file":  "62.jpg",
+                      "name":  "موقف حافلات (النقل العام)",
+                      "meaning":  "مكان مخصص لوقوف الباصات",
+                      "category":  "إرشادية"
+                  },
+                  {
+                      "file":  "63.jpg",
+                      "name":  "أفسح الطريق (Give Way)",
+                      "meaning":  "إلزام السائق بإعطاء الأولوية للسيارات في الطريق الرئيسي",
+                      "category":  "أولوية"
+                  },
+                  {
+                      "file":  "64.jpg",
+                      "name":  "إشارة قف (STOP)",
+                      "meaning":  "التوقف التام والإلزامي والتأكد من خلو الطريق قبل العبور",
+                      "category":  "أولوية"
+                  },
+                  {
+                      "file":  "65.jpg",
+                      "name":  "ممنوع الدخول",
+                      "meaning":  "دائرة حمراء تتوسطها عارضة بيضاء أفقية تحظر دخول المركبات",
+                      "category":  "منع"
+                  },
+                  {
+                      "file":  "66.jpg",
+                      "name":  "إشارة مرور حرة / تحرك مسموح (GO)",
+                      "meaning":  "إذن بالمرور",
+                      "category":  "تنظيمية"
+                  },
+                  {
+                      "file":  "67.jpg",
+                      "name":  "اتجاه إلزامي إلى الأمام فقط",
+                      "meaning":  "إجبار السائق على الاستمرار للأمام",
+                      "category":  "إلزامية"
+                  },
+                  {
+                      "file":  "68.jpg",
+                      "name":  "انعطاف إلزامي إلى اليمين",
+                      "meaning":  "إجبار الاتجاه يميناً",
+                      "category":  "إلزامية"
+                  },
+                  {
+                      "file":  "69.jpg",
+                      "name":  "اتجاه إلزامي للأمام أو الاستمرار",
+                      "meaning":  "إجبار السير للأمام أو الاستمرار بنفس المسار",
+                      "category":  "إلزامية"
+                  },
+                  {
+                      "file":  "70.jpg",
+                      "name":  "انعطاف إلزامي إلى اليسار",
+                      "meaning":  "إجبار الاتجاه يساراً",
+                      "category":  "إلزامية"
+                  },
+                  {
+                      "file":  "71.jpg",
+                      "name":  "اتجاه إلزامي إلى الأمام أو اليسار",
+                      "meaning":  "السماح بالاتجاه للأمام أو الانعطاف يساراً فقط",
+                      "category":  "إلزامية"
+                  },
+                  {
+                      "file":  "72.jpg",
+                      "name":  "دوران إلزامي (دوار)",
+                      "meaning":  "إجبار السير حول الجزيرة باتجاه السهم",
+                      "category":  "إلزامية"
+                  },
+                  {
+                      "file":  "73.jpg",
+                      "name":  "إجباري الانعطاف يميناً أو يساراً",
+                      "meaning":  "إلزام السائق بالانعطاف يميناً أو يساراً",
+                      "category":  "إلزامية"
+                  },
+                  {
+                      "file":  "74.jpg",
+                      "name":  "إلزامي المرور من الجانب الأيمن للحاجز",
+                      "meaning":  "إجبار المرور من يمين الحاجز أو الجزيرة",
+                      "category":  "إلزامية"
+                  },
+                  {
+                      "file":  "75.jpg",
+                      "name":  "طريق مخصص للسيارات الآلية",
+                      "meaning":  "طريق مخصص لمرور المركبات الآلية فقط",
+                      "category":  "تنظيمية"
+                  },
+                  {
+                      "file":  "76.jpg",
+                      "name":  "حد أدنى للسرعة (50 كم/س)",
+                      "meaning":  "يمنع السير بأقل من هذه السرعة",
+                      "category":  "إلزامية"
+                  },
+                  {
+                      "file":  "77.jpg",
+                      "name":  "بداية طريق سريع (أوتوستراد)",
+                      "meaning":  "إعلان بداية الطريق السريع وقوانينه",
+                      "category":  "إرشادية"
+                  },
+                  {
+                      "file":  "78.jpg",
+                      "name":  "نهاية الطريق السريع",
+                      "meaning":  "إعلان انتهاء الطريق السريع",
+                      "category":  "إرشادية"
+                  },
+                  {
+                      "file":  "79.jpg",
+                      "name":  "موقف سيارات أجرة (تاكسي)",
+                      "meaning":  "مكان مخصص لوقوف سيارات الأجرة",
+                      "category":  "إرشادية"
+                  },
+                  {
+                      "file":  "80.jpg",
+                      "name":  "تنظيم وقوف أو نهاية موقف التاكسي",
+                      "meaning":  "تنظيم منطقة وقوف التاكسي أو نهايتها",
+                      "category":  "تنظيمية"
+                  },
+                  {
+                      "file":  "81.jpg",
+                      "name":  "نهاية منطقة منع خاصة / تنظيم مروري",
+                      "meaning":  "انتهاء منطقة المنع أو التنظيم السابق",
+                      "category":  "تنظيمية"
+                  },
+                  {
+                      "file":  "82.jpg",
+                      "name":  "ممنوع مرور الدراجات النارية",
+                      "meaning":  "حظر مرور الدراجات النارية",
+                      "category":  "منع"
+                  },
+                  {
+                      "file":  "83.jpg",
+                      "name":  "ممنوع مرور الدواب",
+                      "meaning":  "حظر مرور الخيول والحيوانات الراكبة",
+                      "category":  "منع"
+                  },
+                  {
+                      "file":  "84.jpg",
+                      "name":  "ممنوع مرور الدراجات الهوائية",
+                      "meaning":  "حظر مرور الدراجات الهوائية",
+                      "category":  "منع"
+                  },
+                  {
+                      "file":  "85.jpg",
+                      "name":  "مسار إلزامي مخصص للدراجات الهوائية",
+                      "meaning":  "مسار خاص بالدراجات الهوائية فقط",
+                      "category":  "إلزامية"
+                  },
+                  {
+                      "file":  "86.jpg",
+                      "name":  "مسار مشترك للمشاة والدراجات الهوائية",
+                      "meaning":  "مسار يشترك فيه المشاة والدراجات",
+                      "category":  "إلزامية"
+                  },
+                  {
+                      "file":  "87.jpg",
+                      "name":  "طريق مخصص للمشاة والدراجات",
+                      "meaning":  "طريق خاص بالمشاة والدراجات فقط",
+                      "category":  "تنظيمية"
+                  },
+                  {
+                      "file":  "88.jpg",
+                      "name":  "ممنوع مرور المشاة نهائياً",
+                      "meaning":  "حظر دخول المشاة لهذا الطريق",
+                      "category":  "منع"
+                  },
+                  {
+                      "file":  "89.jpg",
+                      "name":  "ممر مشاة إلزامي / طريق للمشاة",
+                      "meaning":  "ممر مخصص لعبور وسير المشاة",
+                      "category":  "إلزامية"
+                  },
+                  {
+                      "file":  "90.jpg",
+                      "name":  "ممنوع دخول العربات اليدوية أو المشاة",
+                      "meaning":  "حظر دخول العربات اليدوية والمشاة",
+                      "category":  "منع"
+                  },
+                  {
+                      "file":  "91.jpg",
+                      "name":  "موقف سيارات (Parking)",
+                      "meaning":  "إرشاد لمكان مخصص لصف المركبات",
+                      "category":  "إرشادية"
+                  },
+                  {
+                      "file":  "92.jpg",
+                      "name":  "لوحة إرشادية / معلم خط سير",
+                      "meaning":  "لوحة توضح خط السير والاتجاهات",
+                      "category":  "إرشادية"
+                  },
+                  {
+                      "file":  "93.jpg",
+                      "name":  "أولوية المرور للمركبات القادمة بالاتجاه المعاكس",
+                      "meaning":  "إفساح المجال للمركبات المقابلة في الأماكن الضيقة",
+                      "category":  "أولوية"
+                  },
+                  {
+                      "file":  "94.jpg",
+                      "name":  "طريق ذو اتجاه واحد",
+                      "meaning":  "الطريق مخصص لاتجاه واحد فقط",
+                      "category":  "إرشادية"
+                  },
+                  {
+                      "file":  "95.jpg",
+                      "name":  "أولوية المرور لاتجاهك على المركبات المقابلة",
+                      "meaning":  "لك حق الأولوية على المركبات القادمة بالاتجاه المعاكس",
+                      "category":  "أولوية"
+                  },
+                  {
+                      "file":  "96.jpg",
+                      "name":  "منطقة مدارس / تحذير عبور أطفال",
+                      "meaning":  "تنبيه بوجود مدرسة واحتمال عبور أطفال",
+                      "category":  "تحذيرية"
+                  },
+                  {
+                      "file":  "97.jpg",
+                      "name":  "لوحة إرشادية لاتجاه مدينة (القدس)",
+                      "meaning":  "إرشاد لاتجاه المدينة",
+                      "category":  "إرشادية"
+                  },
+                  {
+                      "file":  "98.jpg",
+                      "name":  "لوحة إرشادية للمسافات والمدن (القدس)",
+                      "meaning":  "إرشاد للمسافات والاتجاهات نحو المدن",
+                      "category":  "إرشادية"
+                  },
+                  {
+                      "file":  "99.jpg",
+                      "name":  "موقف مخصص لذوي الاحتياجات الخاصة",
+                      "meaning":  "مكان وقوف خاص بذوي الإعاقة",
+                      "category":  "إرشادية"
+                  },
+                  {
+                      "file":  "100.jpg",
+                      "name":  "اتجاه تحويلة إجبارية / مسار طوارئ",
+                      "meaning":  "توجيه لمسار التحويلة أو الطوارئ",
+                      "category":  "إرشادية"
+                  },
+                  {
+                      "file":  "101.jpg",
+                      "name":  "مخرج طوارئ أو اتجاه بديل",
+                      "meaning":  "إرشاد لمخرج الطوارئ أو الطريق البديل",
+                      "category":  "إرشادية"
+                  },
+                  {
+                      "file":  "102.jpg",
+                      "name":  "معلومات عن الخدمات العامة",
+                      "meaning":  "إرشاد لاستراحة أو ورشة صيانة أو خدمات",
+                      "category":  "إرشادية"
+                  },
+                  {
+                      "file":  "103.jpg",
+                      "name":  "إرشاد لمنطقة سكنية أو خدمات عائلية",
+                      "meaning":  "توجيه نحو منطقة سكنية أو خدمات",
+                      "category":  "إرشادية"
+                  },
+                  {
+                      "file":  "104.jpg",
+                      "name":  "منطقة سكنية هادئة",
+                      "meaning":  "تهدئة السرعة داخل الأحياء السكنية",
+                      "category":  "إرشادية"
+                  },
+                  {
+                      "file":  "105.jpg",
+                      "name":  "خط أرضي متصل",
+                      "meaning":  "يحظر تجاوزه أو تخطيه نهائياً",
+                      "category":  "علامات أرضية"
+                  },
+                  {
+                      "file":  "106.jpg",
+                      "name":  "خط أرضي متقطع",
+                      "meaning":  "يسمح بالتجاوز عند أمن الطريق",
+                      "category":  "علامات أرضية"
+                  },
+                  {
+                      "file":  "107.jpg",
+                      "name":  "خطوط أرضية مزدوجة متصلة",
+                      "meaning":  "منع تام للتجاوز من الاتجاهين",
+                      "category":  "علامات أرضية"
+                  },
+                  {
+                      "file":  "108.jpg",
+                      "name":  "خطوط أرضية مختلطة (متصل ومتقطع)",
+                      "meaning":  "التجاوز مسموح من جهة الخط المتقطع فقط",
+                      "category":  "علامات أرضية"
+                  },
+                  {
+                      "file":  "109.jpg",
+                      "name":  "خطوط تحذيرية أرضية لانكماش الطريق",
+                      "meaning":  "تنبيه أرضي لتضيق الطريق",
+                      "category":  "علامات أرضية"
+                  },
+                  {
+                      "file":  "110.jpg",
+                      "name":  "خطوط إنذار بنهاية المسار",
+                      "meaning":  "تحذير أرضي من انتهاء المسار",
+                      "category":  "علامات أرضية"
+                  },
+                  {
+                      "file":  "111.jpg",
+                      "name":  "خط الوقوف الأرضي",
+                      "meaning":  "إيقاف إلزامي قبل التقاطع",
+                      "category":  "علامات أرضية"
+                  },
+                  {
+                      "file":  "112.jpg",
+                      "name":  "أسهم توجيهية أرضية للمسارات",
+                      "meaning":  "توضح اتجاه كل مسار",
+                      "category":  "علامات أرضية"
+                  },
+                  {
+                      "file":  "113.jpg",
+                      "name":  "أسهم أرضية للانحراف الإجباري",
+                      "meaning":  "توجيه إلزامي للانحراف",
+                      "category":  "علامات أرضية"
+                  },
+                  {
+                      "file":  "114.jpg",
+                      "name":  "خطوط عبور المشاة (الزبرا)",
+                      "meaning":  "مكان عبور المشاة الآمن",
+                      "category":  "علامات أرضية"
+                  },
+                  {
+                      "file":  "115.jpg",
+                      "name":  "منطقة تخفيف سرعة أرضية",
+                      "meaning":  "مطب صناعي مخطط لتخفيف السرعة",
+                      "category":  "علامات أرضية"
+                  },
+                  {
+                      "file":  "116.jpg",
+                      "name":  "أعمدة تحديد الاتجاه والمخارج",
+                      "meaning":  "تحدد الاتجاهات والمخارج",
+                      "category":  "علامات أرضية"
+                  },
+                  {
+                      "file":  "117.jpg",
+                      "name":  "علامات عاكسة للطرق والأشغال المؤقتة",
+                      "meaning":  "علامات عاكسة للتنبيه في مناطق العمل",
+                      "category":  "علامات أرضية"
+                  },
+                  {
+                      "file":  "118.jpg",
+                      "name":  "حواجز تحذيرية مؤقتة",
+                      "meaning":  "حواجز مخططة بالأحمر والأبيض للتحذير",
+                      "category":  "علامات أرضية"
+                  },
+                  {
+                      "file":  "119.jpg",
+                      "name":  "لوحة تحديد المسافات للتقاطعات والسكك",
+                      "meaning":  "توضح المسافة المتبقية للتقاطع أو السكة",
+                      "category":  "علامات أرضية"
+                  },
+                  {
+                      "file":  "120.jpg",
+                      "name":  "علامة تحذيرية أرضية للتقاطعات والخطوط الحديدية",
+                      "meaning":  "تنبيه أرضي قبل التقاطع أو السكة",
+                      "category":  "علامات أرضية"
+                  },
+                  {
+                      "file":  "121.jpg",
+                      "name":  "علامة أرضية لتحديد المسافة بين المركبات",
+                      "meaning":  "تحدد المسافة الآمنة بين المركبات",
+                      "category":  "علامات أرضية"
+                  },
+                  {
+                      "file":  "122.jpg",
+                      "name":  "لوحة إرشادية زرقاء للطرق الرئيسية",
+                      "meaning":  "إرشاد للطرق الرئيسية",
+                      "category":  "إرشادية"
+                  },
+                  {
+                      "file":  "123.jpg",
+                      "name":  "لوحة إرشادية متعددة المسارات",
+                      "meaning":  "توضح اتجاه كل مسار",
+                      "category":  "إرشادية"
+                  },
+                  {
+                      "file":  "124.jpg",
+                      "name":  "إشارة ضوئية - الضوء الأحمر",
+                      "meaning":  "توقف تام إلزامي",
+                      "category":  "ضوئية"
+                  },
+                  {
+                      "file":  "125.jpg",
+                      "name":  "إشارة ضوئية - الضوء الأصفر",
+                      "meaning":  "استعداد للتوقف أو الحركة",
+                      "category":  "ضوئية"
+                  },
+                  {
+                      "file":  "126.jpg",
+                      "name":  "إشارة ضوئية - الضوء الأخضر",
+                      "meaning":  "السماح بالمرور",
+                      "category":  "ضوئية"
+                  },
+                  {
+                      "file":  "127.jpg",
+                      "name":  "عمود إشارات ضوئية متكامل",
+                      "meaning":  "عمود يحمل الإشارات الضوئية الثلاث",
+                      "category":  "ضوئية"
+                  },
+                  {
+                      "file":  "128.jpg",
+                      "name":  "إشارة ضوئية خاصة بالمشاة أو اتجاهات خاصة",
+                      "meaning":  "تنظم حركة المشاة أو اتجاهات محددة",
+                      "category":  "ضوئية"
+                  },
+                  {
+                      "file":  "129.jpg",
+                      "name":  "إشارات ضوئية تحذيرية صفراء عمودية",
+                      "meaning":  "مصابيح وميضية للتنبيه عند التقاطعات الخطرة أو مناطق العمل",
+                      "category":  "ضوئية"
+                  },
+                  {
+                      "file":  "130.jpg",
+                      "name":  "إشارات وميضية تحذيرية أفقية",
+                      "meaning":  "ضوءان أصفران متقطعان للتحذير قبل معابر المشاة أو المدارس",
+                      "category":  "ضوئية"
+                  },
+                  {
+                      "file":  "131.jpg",
+                      "name":  "إشارة ضوئية تحذيرية مع إضاءة حمراء",
+                      "meaning":  "تنبيه للإيقاف الإلزامي في الحالات الطارئة أو عند المعابر",
+                      "category":  "ضوئية"
+                  },
+                  {
+                      "file":  "132.jpg",
+                      "name":  "إشارة ضوئية خاصة بالمشاة",
+                      "meaning":  "تنظم عبور المشاة (أحمر للتوقف، أخضر للعبور)",
+                      "category":  "ضوئية"
+                  },
+                  {
+                      "file":  "133.jpg",
+                      "name":  "إشارات تحذيرية ضوئية حمراء مزدوجة",
+                      "meaning":  "تومض بالتناوب عند تقاطعات السكك الحديدية أو الجسور المتحركة",
+                      "category":  "ضوئية"
+                  },
+                  {
+                      "file":  "134.jpg",
+                      "name":  "حاجز طريق أفقي أو خط إغلاق",
+                      "meaning":  "علامة تحدد حدود إغلاق المسارات أو مناطق العمل",
+                      "category":  "علامات أرضية"
+                  },
+                  {
+                      "file":  "135.jpg",
+                      "name":  "حاجز بوابي متحرك للطريق",
+                      "meaning":  "بوابة إغلاق تستخدم عند معابر القطارات أو الطرق المغلقة",
+                      "category":  "علامات أرضية"
+                  },
+                  {
+                      "file":  "136.jpg",
+                      "name":  "لوحات توجيه المنحنيات الخطرة",
+                      "meaning":  "لوحات عاكسة توضح زاوية الانحناء الحادة",
+                      "category":  "تحذيرية"
+                  },
+                  {
+                      "file":  "137.jpg",
+                      "name":  "علامات ومسارات أرضية محددة",
+                      "meaning":  "خطوط تفصل بين المسارات أو تحدد مناطق التجاوز الممنوع",
+                      "category":  "علامات أرضية"
+                  },
+                  {
+                      "file":  "138.jpg",
+                      "name":  "إشارة تحذيرية لتقاطع سكة حديدية",
+                      "meaning":  "تنبيه بوجود سكة حديد أمامية",
+                      "category":  "تحذيرية"
+                  },
+                  {
+                      "file":  "139.jpg",
+                      "name":  "لوحات إرشادية لاتجاه التحويلة أو العوائق",
+                      "meaning":  "أسهم توضح الجهة الآمنة لتجاوز عائق",
+                      "category":  "إرشادية"
+                  },
+                  {
+                      "file":  "140.jpg",
+                      "name":  "لوحة تحذيرية لتغيير المسار الإجباري",
+                      "meaning":  "توضح بداية التحويلة وتوجيه السير نحو المسار المفتوح",
+                      "category":  "تحذيرية"
+                  }
+              ]
+}
