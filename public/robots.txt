@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /teacher.html
+Disallow: /teacher-login.html
+Disallow: /dashboard.html
+
+Sitemap: https://www.alwatandrivingschool.com/sitemap.xml
