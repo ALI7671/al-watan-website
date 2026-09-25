@@ -12,6 +12,50 @@
 <meta property="og:image" content="https://www.alwatandrivingschool.com/banner1.png">
 <meta property="og:url" content="https://www.alwatandrivingschool.com/faq.html">
 <meta property="og:locale" content="ar_PS">
+<!-- Keep in sync with faqData in the script below -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "شو العمر القانوني لرخصة السيارة الخصوصي؟",
+      "acceptedAnswer": { "@type": "Answer", "text": "17 سنة." }
+    },
+    {
+      "@type": "Question",
+      "name": "شو العمر القانوني لرخصة الشحن؟",
+      "acceptedAnswer": { "@type": "Answer", "text": "17 سنة ونص (17.5)." }
+    },
+    {
+      "@type": "Question",
+      "name": "كم درس بحتاج للحصول على الرخصة في الضفة؟",
+      "acceptedAnswer": { "@type": "Answer", "text": "15 درساً عملياً." }
+    },
+    {
+      "@type": "Question",
+      "name": "شو أنواع الرخص اللي بتعلّموها؟",
+      "acceptedAnswer": { "@type": "Answer", "text": "نعلّم رخصة الأوتوماتيك، الجير العادي، والشحن الخفيف." }
+    },
+    {
+      "@type": "Question",
+      "name": "كم سعر الدرس؟",
+      "acceptedAnswer": { "@type": "Answer", "text": "110 شيكل لدرس الأوتوماتيك والجير، و130 شيكل لدرس الشحن الخفيف." }
+    },
+    {
+      "@type": "Question",
+      "name": "كيف بحجز درس؟",
+      "acceptedAnswer": { "@type": "Answer", "text": "تقدر تحجز أونلاين من الموقع مباشرة، باختيار المعلم والتاريخ والوقت المناسب لك." }
+    },
+    {
+      "@type": "Question",
+      "name": "شو الأوراق المطلوبة للتسجيل؟",
+      "acceptedAnswer": { "@type": "Answer", "text": "صورة عن الهوية الشخصية (أو هوية ولي الأمر لمن هم دون السن القانونية)، صورتان شخصيتان، فحص نظر، وتعبئة نموذج التسجيل في المدرسة." }
+    }
+  ]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -248,6 +292,7 @@
     font-weight: 700;
   }
   footer span { color: var(--route); }
+  .footer-hours { color: var(--paper); line-height: 1.9; margin-bottom: 10px; }
 
   /* ===== Responsive ===== */
   @media (max-width: 760px) {
@@ -312,7 +357,13 @@
   </div>
 </section>
 
-<footer>مدرسة الوطن لتعليم السياقة — رام الله <span>★</span> جميع الحقوق محفوظة</footer>
+<footer>
+  <div class="footer-hours">
+    <div>السبت - الخميس: 7:00 صباحاً - 6:00 مساءً</div>
+    <div>الجمعة: مغلق</div>
+  </div>
+  مدرسة الوطن لتعليم السياقة — رام الله <span>★</span> جميع الحقوق محفوظة
+</footer>
 
 <!-- زر واتساب عائم -->
 <a class="wa-float" id="waFloat" href="#" target="_blank" aria-label="تواصل عبر واتساب">

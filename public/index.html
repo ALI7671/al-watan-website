@@ -12,6 +12,57 @@
 <meta property="og:image" content="https://www.alwatandrivingschool.com/banner1.png">
 <meta property="og:url" content="https://www.alwatandrivingschool.com/">
 <meta property="og:locale" content="ar_PS">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "DrivingSchool",
+  "name": "مدرسة الوطن لتعليم السياقة",
+  "url": "https://www.alwatandrivingschool.com/",
+  "image": "https://www.alwatandrivingschool.com/banner1.png",
+  "telephone": "+972599254574",
+  "priceRange": "₪₪",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "البيرة",
+    "addressRegion": "الضفة الغربية",
+    "addressCountry": "PS"
+  },
+  "areaServed": [
+    { "@type": "City", "name": "البيرة" },
+    { "@type": "City", "name": "رام الله" },
+    { "@type": "City", "name": "نابلس" }
+  ],
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
+      "opens": "07:00",
+      "closes": "18:00"
+    }
+  ],
+  "makesOffer": [
+    {
+      "@type": "Offer",
+      "itemOffered": { "@type": "Service", "name": "دروس أوتوماتيك" },
+      "price": "110",
+      "priceCurrency": "ILS"
+    },
+    {
+      "@type": "Offer",
+      "itemOffered": { "@type": "Service", "name": "دروس جير" },
+      "price": "110",
+      "priceCurrency": "ILS"
+    },
+    {
+      "@type": "Offer",
+      "itemOffered": { "@type": "Service", "name": "دروس شحن خفيف" },
+      "price": "130",
+      "priceCurrency": "ILS"
+    }
+  ],
+  "sameAs": []
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -678,6 +729,7 @@
     font-weight: 700;
   }
   footer span { color: var(--route); }
+  .footer-hours { color: var(--paper); line-height: 1.9; margin-bottom: 10px; }
 
   /* ===== Responsive ===== */
   @media (max-width: 760px) {
@@ -955,7 +1007,13 @@
   </div>
 </section>
 
-<footer>مدرسة الوطن لتعليم السياقة — رام الله <span>★</span> جميع الحقوق محفوظة</footer>
+<footer>
+  <div class="footer-hours">
+    <div>السبت - الخميس: 7:00 صباحاً - 6:00 مساءً</div>
+    <div>الجمعة: مغلق</div>
+  </div>
+  مدرسة الوطن لتعليم السياقة — رام الله <span>★</span> جميع الحقوق محفوظة
+</footer>
 
 <!-- (9) زر واتساب عائم -->
 <a class="wa-float" id="waFloat" href="#" target="_blank" aria-label="تواصل عبر واتساب">
