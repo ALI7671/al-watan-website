@@ -193,6 +193,11 @@
     flex: 0 0 100%;
     height: 100%;
   }
+  .slide picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
   .slide img {
     width: 100%;
     height: 100%;
@@ -463,6 +468,7 @@
     transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease;
   }
   .car-card:hover { transform: translateY(-10px) scale(1.03); box-shadow: var(--shadow-gold); }
+  .car-card picture { display: block; }
   .car-card .car-photo {
     width: 100%;
     height: 130px;
@@ -1087,8 +1093,8 @@ function heroPlaceholderImg(bg1 = '1B2126', bg2 = '3A434B') {
 
 /* ===== (2) Hero slider — reads car photos from /images in the public folder ===== */
 const sliderImages = [
-  { type: 'hero', src: '/banner1.png', title: 'مدرسة الوطن <span>لتعليم السياقة</span>', subtitle: 'تعلّم القيادة باحتراف مع مدربين خبرة وسيارات حديثة', types: 'أوتوماتيك • جير • شحن خفيف' },
-  { src: '/banner2.png', title: 'مدربون محترفون <span>وسيارات حديثة</span>', text: 'نساعدك تنجح من أول مرة بالفحص النظري والعملي' },
+  { type: 'hero', src: '/banner1.png', webp: '/banner1.webp', width: 1536, height: 1024, title: 'مدرسة الوطن <span>لتعليم السياقة</span>', subtitle: 'تعلّم القيادة باحتراف مع مدربين خبرة وسيارات حديثة', types: 'أوتوماتيك • جير • شحن خفيف' },
+  { src: '/banner2.png', webp: '/banner2.webp', width: 1402, height: 1122, title: 'مدربون محترفون <span>وسيارات حديثة</span>', text: 'نساعدك تنجح من أول مرة بالفحص النظري والعملي' },
   { type: 'cta', title: 'ابدأ رحلتك <span>معنا</span>', text: 'اختر الخطوة التالية وابدأ فوراً' },
 ];
 
@@ -1117,7 +1123,7 @@ function buildSlider() {
     if (s.type === 'hero') {
       return `
     <div class="slide hero-slide">
-      <div class="hero-bg" style="background-image:url('${s.src}')" role="img" aria-label="${s.title.replace(/<[^>]*>/g,'')}"></div>
+      <div class="hero-bg" style="background-image:url('${s.src}');background-image:-webkit-image-set(url('${s.webp}') 1x type('image/webp'), url('${s.src}') 1x type('image/png'));background-image:image-set(url('${s.webp}') 1x type('image/webp'), url('${s.src}') 1x type('image/png'))" role="img" aria-label="${s.title.replace(/<[^>]*>/g,'')}"></div>
       <div class="slide-caption hero-caption">
         <h1>${s.title}</h1>
         <p class="hero-subtitle">${s.subtitle}</p>
@@ -1129,7 +1135,10 @@ function buildSlider() {
     }
     return `
     <div class="slide">
-      <img src="${s.src}" onerror="this.onerror=null; this.src=heroPlaceholderImg();" alt="${s.title.replace(/<[^>]*>/g,'')}">
+      <picture>
+        <source srcset="${s.webp}" type="image/webp">
+        <img src="${s.src}" width="${s.width}" height="${s.height}" loading="lazy" onerror="this.onerror=null; this.closest('picture')?.querySelectorAll('source').forEach(el=>el.remove()); this.src=heroPlaceholderImg();" alt="${s.title.replace(/<[^>]*>/g,'')}">
+      </picture>
       <div class="slide-caption">
         <h1>${s.title}</h1>
         <p>${s.text}</p>
@@ -1172,16 +1181,19 @@ function resetSliderTimer() {
 
 /* ===== (3) سيارات المدرسة ===== */
 const schoolCars = [
-  { name: 'نيسان كاشكاي', year: 2024, type: 'أوتوماتيك', img: '/nissan-qashqai.jpg' },
-  { name: 'سيات أرونا', year: 2022, type: 'أوتوماتيك', img: '/seat-arona.png' },
-  { name: 'سكودا أوكتافيا', year: 2019, type: 'جير', img: '/skoda-octavia.jpg' },
-  { name: 'مان', year: 2020, type: 'شحن خفيف', img: '/man-truck.jpg' },
+  { name: 'نيسان كاشكاي', year: 2024, type: 'أوتوماتيك', img: '/nissan-qashqai.jpg', webp: '/nissan-qashqai.webp', width: 1600, height: 2133 },
+  { name: 'سيات أرونا', year: 2022, type: 'أوتوماتيك', img: '/seat-arona.jpg', webp: '/seat-arona.webp', width: 1007, height: 866 },
+  { name: 'سكودا أوكتافيا', year: 2019, type: 'جير', img: '/skoda-octavia.jpg', webp: '/skoda-octavia.webp', width: 1600, height: 2133 },
+  { name: 'مان', year: 2020, type: 'شحن خفيف', img: '/man-truck.jpg', webp: '/man-truck.webp', width: 1600, height: 2133 },
 ];
 
 function buildCars() {
   document.getElementById('carsGrid').innerHTML = schoolCars.map(c => `
     <div class="car-card">
-      <img class="car-photo" src="${c.img}" onerror="this.onerror=null; this.src=placeholderImg('${c.name}');" alt="${c.name}">
+      <picture>
+        <source srcset="${c.webp}" type="image/webp">
+        <img class="car-photo" src="${c.img}" width="${c.width}" height="${c.height}" loading="lazy" onerror="this.onerror=null; this.closest('picture')?.querySelectorAll('source').forEach(el=>el.remove()); this.src=placeholderImg('${c.name}');" alt="${c.name}">
+      </picture>
       <div class="car-info">
         <div class="car-name">${c.name}</div>
         <div class="car-tags">
