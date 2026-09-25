@@ -4,7 +4,14 @@
 <meta charset="UTF-8">
 <link rel="icon" type="image/png" href="/favicon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>مدرسة الوطن لتعليم السياقة</title>
+<title>مدرسة الوطن لتعليم السياقة | البيرة ونابلس</title>
+<meta name="description" content="مدرسة الوطن لتعليم السياقة في رام الله والبيرة: دروس أوتوماتيك وجير وشحن خفيف مع مدربين محترفين. احجز درسك أونلاين الآن وابدأ رحلتك نحو رخصة القيادة بثقة.">
+<link rel="canonical" href="https://www.alwatandrivingschool.com/">
+<meta property="og:title" content="مدرسة الوطن لتعليم السياقة | البيرة ونابلس">
+<meta property="og:description" content="مدرسة الوطن لتعليم السياقة في رام الله والبيرة: دروس أوتوماتيك وجير وشحن خفيف مع مدربين محترفين. احجز درسك أونلاين الآن وابدأ رحلتك نحو رخصة القيادة بثقة.">
+<meta property="og:image" content="https://www.alwatandrivingschool.com/banner1.png">
+<meta property="og:url" content="https://www.alwatandrivingschool.com/">
+<meta property="og:locale" content="ar_PS">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -219,7 +226,8 @@
     text-align: center;
     padding: 0 24px;
   }
-  .slide .slide-caption h1 {
+  .slide .slide-caption h1,
+  .slide .slide-caption h2 {
     color: #fff;
     font-size: clamp(32px, 7vw, 78px);
     line-height: 1.12;
@@ -229,7 +237,8 @@
     text-shadow: 0 4px 24px rgba(0,0,0,.35);
     animation: heroUp .9s cubic-bezier(.2,.8,.2,1) both;
   }
-  .slide .slide-caption h1 span { color: var(--route); }
+  .slide .slide-caption h1 span,
+  .slide .slide-caption h2 span { color: var(--route); }
   .slide .slide-caption p {
     margin: 0;
     font-size: clamp(15px, 2.1vw, 21px);
@@ -1093,7 +1102,7 @@ function heroPlaceholderImg(bg1 = '1B2126', bg2 = '3A434B') {
 
 /* ===== (2) Hero slider — reads car photos from /images in the public folder ===== */
 const sliderImages = [
-  { type: 'hero', src: '/banner1.png', webp: '/banner1.webp', width: 1536, height: 1024, title: 'مدرسة الوطن <span>لتعليم السياقة</span>', subtitle: 'تعلّم القيادة باحتراف مع مدربين خبرة وسيارات حديثة', types: 'أوتوماتيك • جير • شحن خفيف' },
+  { type: 'hero', src: '/banner1.png', webp: '/banner1.webp', width: 1536, height: 1024, title: 'مدرسة الوطن <span>لتعليم السياقة</span> في رام الله والبيرة', subtitle: 'تعلّم القيادة باحتراف مع مدربين خبرة وسيارات حديثة', types: 'أوتوماتيك • جير • شحن خفيف' },
   { src: '/banner2.png', webp: '/banner2.webp', width: 1402, height: 1122, title: 'مدربون محترفون <span>وسيارات حديثة</span>', text: 'نساعدك تنجح من أول مرة بالفحص النظري والعملي' },
   { type: 'cta', title: 'ابدأ رحلتك <span>معنا</span>', text: 'اختر الخطوة التالية وابدأ فوراً' },
 ];
@@ -1109,7 +1118,7 @@ function buildSlider() {
       return `
     <div class="slide cta-slide">
       <div class="slide-caption cta-caption">
-        <h1>${s.title}</h1>
+        <h2>${s.title}</h2>
         <p>${s.text}</p>
         <div class="cta-buttons">
           <button type="button" class="cta-btn primary" onclick="scrollToSection('lesson-booking')"><span class="cta-icon">🚗</span> احجز درس</button>
@@ -1140,7 +1149,7 @@ function buildSlider() {
         <img src="${s.src}" width="${s.width}" height="${s.height}" loading="lazy" onerror="this.onerror=null; this.closest('picture')?.querySelectorAll('source').forEach(el=>el.remove()); this.src=heroPlaceholderImg();" alt="${s.title.replace(/<[^>]*>/g,'')}">
       </picture>
       <div class="slide-caption">
-        <h1>${s.title}</h1>
+        <h2>${s.title}</h2>
         <p>${s.text}</p>
       </div>
     </div>
